@@ -7,6 +7,8 @@
 #include "GameFramework/Pawn.h"
 #include "PPlayerController.h"
 #include "PSwipeDelegates.h"
+#include "Engine/World.h"
+#include "PUmbrella.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -24,6 +26,7 @@ APPlayer::APPlayer()
 	}
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	bScreenTouched = false;
 }
 
 // Called when the game starts or when spawned
@@ -37,16 +40,20 @@ void APPlayer::BeginPlay()
 	UPSwipeDelegates::SwipeUpDelegate.AddUObject(this, &APPlayer::OnSwipeUp);
 	UPSwipeDelegates::SwipeDownDelegate.AddUObject(this, &APPlayer::OnSwipeDown);
 
-	// Set Defaults:
-	StartLoc = GetActorLocation();
-	
+	UPSwipeDelegates::TouchBeganDelegate.AddUObject(this, &APPlayer::OnTouchBegin);
+	UPSwipeDelegates::TouchEndedDelegate.AddUObject(this, &APPlayer::OnTouchEnd);
+
+	if (UmbrellaClass) {
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(), SpawnParams);
+	}
 }
 
 // Called every frame
 void APPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -77,6 +84,22 @@ void APPlayer::OnSwipeDown()
 
 void APPlayer::OnDoubleTap()
 {
+}
+
+void APPlayer::OnTouchBegin()
+{
+	bScreenTouched = true;
+	if (Umbrella) {
+		Umbrella->MoveToPosition(UTouchPosition);
+	}
+}
+
+void APPlayer::OnTouchEnd()
+{
+	bScreenTouched = false;
+	if (Umbrella) {
+		Umbrella->MoveToPosition(UReleasePosition);
+	}
 }
 
 void APPlayer::Zoom(float AxisValue)

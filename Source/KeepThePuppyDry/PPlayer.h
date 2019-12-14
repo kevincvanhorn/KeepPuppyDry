@@ -50,10 +50,35 @@ public:
 		void OnDoubleTap();
 
 	UFUNCTION()
+		void OnTouchBegin();
+
+	UFUNCTION()
+		void OnTouchEnd();
+
+	UFUNCTION()
 		void Zoom(float AxisValue);
 
 private:
 	FVector StartLoc;
 
 	FVector2D TouchLoc;
+
+	bool bScreenTouched;
+
+// Umbrella
+public:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
+		TSubclassOf<class APUmbrella> UmbrellaClass;
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
+		FVector UmbrellaSpawnLoc;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
+		FVector UTouchPosition;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
+		FVector UReleasePosition;
+
+private:
+	class APUmbrella* Umbrella;
 };

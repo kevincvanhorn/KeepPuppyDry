@@ -16,5 +16,15 @@ class KEEPTHEPUPPYDRY_API APUmbrella : public AStaticMeshActor
 
 public:
 	APUmbrella();
-	
+
+	void MoveToPosition(FVector Target);
+
+	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
+		float MoveSpeed;
+
+private:
+	bool bMoving;
+	FVector TargetPosition;
 };
