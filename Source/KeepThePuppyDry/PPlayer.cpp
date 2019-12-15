@@ -46,7 +46,7 @@ void APPlayer::BeginPlay()
 	if (UmbrellaClass) {
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(), SpawnParams);
+		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(0,0,0), SpawnParams);
 		if (Umbrella) {
 			Umbrella->SetMPC(MPC);
 			Umbrella->Initialize(UTouchPosition, UReleasePosition);
