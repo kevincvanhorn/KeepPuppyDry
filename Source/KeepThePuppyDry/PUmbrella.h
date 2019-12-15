@@ -17,6 +17,8 @@ class KEEPTHEPUPPYDRY_API APUmbrella : public AStaticMeshActor
 public:
 	APUmbrella();
 
+	void Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn);
+
 	void MoveToPosition(FVector Target);
 
 	virtual void Tick(float DeltaTime) override;
@@ -24,7 +26,20 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
 		float MoveSpeed;
 
+	void SetMPC(class UMaterialParameterCollection* MPC_In);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchLoc"))
+		void OnTouchLoc();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnReleaseLoc"))
+		void OnReleaseLoc();
+
 private:
+	class UMaterialParameterCollection* MPC;
+
+	FVector UTouchPosition;
+	FVector UReleasePosition;
+
 	bool bMoving;
 	FVector TargetPosition;
 };

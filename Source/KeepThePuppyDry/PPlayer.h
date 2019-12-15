@@ -79,6 +79,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
 		FVector UReleasePosition;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
+		UMaterialParameterCollection* MPC;
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUTouchBegin"))
+		void OnUTouchBegin();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUTouchEnd"))
+		void OnUTouchEnd();
+
 private:
 	class APUmbrella* Umbrella;
 };

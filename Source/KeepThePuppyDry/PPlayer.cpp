@@ -47,6 +47,10 @@ void APPlayer::BeginPlay()
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(), SpawnParams);
+		if (Umbrella) {
+			Umbrella->SetMPC(MPC);
+			Umbrella->Initialize(UTouchPosition, UReleasePosition);
+		}
 	}
 }
 
@@ -92,6 +96,7 @@ void APPlayer::OnTouchBegin()
 	if (Umbrella) {
 		Umbrella->MoveToPosition(UTouchPosition);
 	}
+	this->OnUTouchBegin();
 }
 
 void APPlayer::OnTouchEnd()
@@ -100,6 +105,7 @@ void APPlayer::OnTouchEnd()
 	if (Umbrella) {
 		Umbrella->MoveToPosition(UReleasePosition);
 	}
+	this->OnUTouchEnd();
 }
 
 void APPlayer::Zoom(float AxisValue)
