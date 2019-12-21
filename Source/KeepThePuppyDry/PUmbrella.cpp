@@ -18,6 +18,8 @@ void APUmbrella::Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn
 		FVector Cur = GetActorLocation();
 		UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(Cur.X, Cur.Y, 140, 0));
 	}
+
+	SetActorLocation(UReleasePosition);
 }
 
 void APUmbrella::MoveToPosition(FVector Target)
