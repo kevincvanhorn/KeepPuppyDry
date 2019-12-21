@@ -24,6 +24,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float Speed;
 
+	void OverrideDirection(FVector DirectionIn);
+
+	void OverrideSpeed(float SpeedIn);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

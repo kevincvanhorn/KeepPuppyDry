@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "PHumanSpawner.h"
 #include "Engine/World.h"
 #include "PHuman.h"
@@ -13,6 +10,10 @@ APHumanSpawner::APHumanSpawner()
 
 	CurSpawnIndex = 0;
 	SpawnRate = 1;
+
+	OverrideSpeed = 0;
+	OverrideDirection = FVector::ZeroVector;
+	bDifferentFirstSpawnLoc = false;
 }
 
 // Called when the game starts or when spawned
@@ -20,7 +21,9 @@ void APHumanSpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &APHumanSpawner::SpawnHuman, SpawnRate, false);
+	if (bDifferentFirstSpawnLoc) CurSpawnIndex = -1;
+
+	SpawnHuman();
 }
 
 void APHumanSpawner::SpawnHuman()
@@ -34,10 +37,27 @@ void APHumanSpawner::SpawnHuman()
 	if (HumanClass) {
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		if (bDifferentFirstSpawnLoc) {
+			if (CurSpawnIndex == 0) {
+				CurSpawnIndex++;
+				if (SpawnLocs.Num() <= 1) return;
+			}
+			else if (CurSpawnIndex == -1) CurSpawnIndex++;
+		}
+
 		APHuman* Human = (APHuman*)GetWorld()->SpawnActor<APHuman>(HumanClass, SpawnLocs[CurSpawnIndex], FRotator(0, 0, 0), SpawnParams);
 		if (Human) {
 			Human->SetActorEnableCollision(false);
+
+			if (OverrideSpeed != 0) {
+				Human->OverrideSpeed(OverrideSpeed);
+			}
+			if (OverrideDirection != FVector::ZeroVector) {
+				Human->OverrideDirection(OverrideDirection);
+			}
 		}
+		// Repeat spawn timer
 		GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &APHumanSpawner::SpawnHuman, SpawnRate, false);
 	}
 }

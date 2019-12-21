@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,14 +13,23 @@ public:
 	// Sets default values for this actor's properties
 	APHumanSpawner();
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<FVector> SpawnLocs;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float SpawnRate;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TSubclassOf<class APHuman> HumanClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float OverrideSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FVector OverrideDirection;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bDifferentFirstSpawnLoc; // for starting an initial spawn in the beginning of the screen.
 
 protected:
 	// Called when the game starts or when spawned

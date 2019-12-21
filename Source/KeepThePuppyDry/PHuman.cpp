@@ -14,11 +14,20 @@ APHuman::APHuman()
 	Speed = 1;
 }
 
+void APHuman::OverrideDirection(FVector DirectionIn)
+{
+	Direction = DirectionIn;
+}
+
+void APHuman::OverrideSpeed(float SpeedIn)
+{
+	Speed = SpeedIn;
+}
+
 // Called when the game starts or when spawned
 void APHuman::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
