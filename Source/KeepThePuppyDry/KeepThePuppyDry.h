@@ -4,3 +4,4 @@
 
 #include "CoreMinimal.h"
 
+static bool B_LEVEL_SIMPLE = false;

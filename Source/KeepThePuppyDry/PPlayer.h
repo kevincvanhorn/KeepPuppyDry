@@ -15,11 +15,16 @@ public:
 	// Sets default values for this pawn's properties
 	APPlayer();
 
+	void SetUserWidget(class UPUserWidget* WidgetIn) { PUserWidget = WidgetIn; }
+
 	class USpringArmComponent* GetSpringArmComponent() const { return SpringArm; }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		void PostBeginPlay();
 
 	UPROPERTY(EditAnywhere)
 		class USpringArmComponent* SpringArm;
@@ -28,6 +33,8 @@ protected:
 		class UCameraComponent* Camera;
 
 	class APPlayerController* PPlayerController;
+
+	class UPUserWidget* PUserWidget;
 
 public:	
 	// Called every frame
@@ -38,7 +45,7 @@ public:
 
 	void OnTouchMoved(const FVector2D& DeltaTouch);
 
-	void UpdateTouchLoc(FVector2D _TouchLoc);
+	void UpdateTouchLoc(FVector2D TouchLocIn);
 
 	UFUNCTION()
 		void OnSwipeUp();
@@ -80,7 +87,7 @@ public:
 		FVector UReleasePosition;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
-		UMaterialParameterCollection* MPC;
+		class UMaterialParameterCollection* MPC;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUTouchBegin"))
 		void OnUTouchBegin();
@@ -90,4 +97,5 @@ public:
 
 private:
 	class APUmbrella* Umbrella;
+
 };

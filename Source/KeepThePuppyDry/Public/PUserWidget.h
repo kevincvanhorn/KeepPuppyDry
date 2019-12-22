@@ -13,5 +13,16 @@ UCLASS()
 class KEEPTHEPUPPYDRY_API UPUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void NativeConstruct() override;
+
+	void SetTouchDragPosition(FVector2D TouchPos);
+
+	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "DebugTouchPosition"))
+		void DebugTouchPosition(FVector2D TouchPos);
+
+protected:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UScaleBox* HandWidget;
 };

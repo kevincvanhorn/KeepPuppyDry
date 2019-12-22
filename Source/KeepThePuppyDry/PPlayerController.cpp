@@ -6,6 +6,9 @@
 #include "PSwipeDelegates.h"
 #include "PPlayer.h"
 #include "Engine/World.h"
+#include "Blueprint/UserWidget.h"
+#include "Public/PUserWidget.h"
+#include "KeepThePuppyDry.h"
 
 APPlayerController::APPlayerController() {
 	bIgnoreInput = false;
@@ -23,6 +26,21 @@ void APPlayerController::PostInitializeComponents()
 
 void APPlayerController::BeginPlay() {
 	PPlayer = Cast<APPlayer>(GetPawn());
+
+	if (B_LEVEL_SIMPLE) {
+		return;
+	}
+
+	if (PUserWidgetClass) {
+		PUserWidget = CreateWidget<UPUserWidget>(GetWorld(), PUserWidgetClass);
+		if (PUserWidget) {
+			PUserWidget->AddToViewport();
+		}
+	}
+
+	if (PPlayer) {
+		PPlayer->SetUserWidget(PUserWidget);
+	}
 
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
 }

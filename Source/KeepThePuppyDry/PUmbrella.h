@@ -17,9 +17,12 @@ class KEEPTHEPUPPYDRY_API APUmbrella : public AStaticMeshActor
 public:
 	APUmbrella();
 
-	void Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn);
+	void Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn, class APPlayerController* PControllerIn);
 
 	void MoveToPosition(FVector Target);
+	
+	// Use screen location to move umbrella.
+	void MoveFromScreenLoc(FVector2D ScreenLoc);
 
 	virtual void Tick(float DeltaTime) override;
 
@@ -28,11 +31,17 @@ public:
 
 	void SetMPC(class UMaterialParameterCollection* MPC_In);
 
+protected:
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchLoc"))
 		void OnTouchLoc();
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnReleaseLoc"))
 		void OnReleaseLoc();
+
+protected:
+	class APPlayerController* PController;
 
 private:
 	class UMaterialParameterCollection* MPC;

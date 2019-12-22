@@ -9,6 +9,10 @@
 #include "PSwipeDelegates.h"
 #include "Engine/World.h"
 #include "PUmbrella.h"
+#include "Materials/MaterialParameterCollection.h"
+#include "Public/PUserWidget.h"
+
+#include "KeepThePuppyDry.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -39,6 +43,7 @@ void APPlayer::BeginPlay()
 	UPSwipeDelegates::DoubleTapDelegate.AddUObject(this, &APPlayer::OnDoubleTap);
 	UPSwipeDelegates::SwipeUpDelegate.AddUObject(this, &APPlayer::OnSwipeUp);
 	UPSwipeDelegates::SwipeDownDelegate.AddUObject(this, &APPlayer::OnSwipeDown);
+	UPSwipeDelegates::PostBeginPlayDelegate.AddUObject(this, &APPlayer::PostBeginPlay);
 
 	UPSwipeDelegates::TouchBeganDelegate.AddUObject(this, &APPlayer::OnTouchBegin);
 	UPSwipeDelegates::TouchEndedDelegate.AddUObject(this, &APPlayer::OnTouchEnd);
@@ -49,9 +54,13 @@ void APPlayer::BeginPlay()
 		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(0,0,0), SpawnParams);
 		if (Umbrella) {
 			Umbrella->SetMPC(MPC);
-			Umbrella->Initialize(UTouchPosition, UReleasePosition);
+			Umbrella->Initialize(UTouchPosition, UReleasePosition, PPlayerController);
 		}
 	}
+}
+
+void APPlayer::PostBeginPlay()
+{
 }
 
 // Called every frame
@@ -73,9 +82,19 @@ void APPlayer::OnTouchMoved(const FVector2D& DeltaTouch) {
 	
 }
 
-void APPlayer::UpdateTouchLoc(FVector2D _TouchLoc)
+void APPlayer::UpdateTouchLoc(FVector2D TouchLocIn)
 {
-	TouchLoc = _TouchLoc;
+	TouchLoc = TouchLocIn;
+
+	if (B_LEVEL_SIMPLE) return;
+
+	if (PUserWidget) {
+		PUserWidget->SetTouchDragPosition(TouchLocIn);
+	}
+
+	if (Umbrella) {
+		Umbrella->MoveFromScreenLoc(TouchLocIn);
+	}
 }
 
 void APPlayer::OnSwipeUp()
@@ -93,6 +112,7 @@ void APPlayer::OnDoubleTap()
 void APPlayer::OnTouchBegin()
 {
 	bScreenTouched = true;
+
 	if (Umbrella) {
 		Umbrella->MoveToPosition(UTouchPosition);
 	}

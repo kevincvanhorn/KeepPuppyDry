@@ -1,6 +1,7 @@
 #include "PHumanSpawner.h"
 #include "Engine/World.h"
 #include "PHuman.h"
+#include "TimerManager.h"
 
 // Sets default values
 APHumanSpawner::APHumanSpawner()
