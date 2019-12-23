@@ -86,6 +86,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
 		FVector UReleasePosition;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
+		float ClampZPos;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Umbrella")
+		float ClampZNeg;
+
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
 		class UMaterialParameterCollection* MPC;
 

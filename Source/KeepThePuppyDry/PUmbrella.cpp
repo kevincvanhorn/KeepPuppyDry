@@ -7,16 +7,35 @@
 #include "PPlayerController.h"
 #include "Engine/Classes/Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
-
+#include "KeepThePuppyDry.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
-	PrimaryActorTick.bCanEverTick = true; //We won't be ticked by default  
+	PrimaryActorTick.bCanEverTick = true; //We won't be ticked by default 
 }
 
 void APUmbrella::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+FVector APUmbrella::ScreenToWorldLoc(FVector2D ScreenLoc)
+{
+	FVector Intersect;
+	if (PController) {
+		FVector WorldLoc = FVector::ZeroVector;
+		FVector WorldDir;
+		UGameplayStatics::DeprojectScreenToWorld(PController, ScreenLoc, WorldLoc, WorldDir);
+
+		// Get Plane intersection of line from camera.
+		FVector PNormal = -1 * GetActorForwardVector();
+
+		float Dist = (FVector::DotProduct(PNormal, GetActorLocation() - WorldLoc) / FVector::DotProduct(PNormal, WorldDir));
+		Intersect = WorldLoc + WorldDir * Dist;
+		DrawDebugSphere(GetWorld(), Intersect, 2.0f, 4, FColor::Red, false, 0.1f);
+		//TargetZ = FMath::Clamp(Intersect.Z, ClampZPos, ClampZNeg);
+	}
+	return Intersect;
 }
 
 // PostBeginPlay - called from Controller
@@ -32,9 +51,11 @@ void APUmbrella::Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn
 	}
 
 	SetActorLocation(UReleasePosition);
+	TargetPosition = UReleasePosition;
+	//TargetZ = UReleasePosition.Z;
 }
 
-void APUmbrella::MoveToPosition(FVector Target)
+void APUmbrella::LerpToPosition(FVector Target)
 {
 	bMoving = true;
 	TargetPosition = Target;
@@ -42,12 +63,12 @@ void APUmbrella::MoveToPosition(FVector Target)
 
 void APUmbrella::MoveFromScreenLoc(FVector2D ScreenLoc)
 {
-	if (PController) {
-		FVector WorldLoc = FVector::ZeroVector;
-		FVector WorldDir;
-		UGameplayStatics::DeprojectScreenToWorld(PController, ScreenLoc, WorldLoc, WorldDir);
-		//DrawDebugSphere(GetWorld(), WorldLoc, 0.1f, 12, FColor::Red, true, 10.0f);
-	}
+	FVector Intersect = ScreenToWorldLoc(ScreenLoc);
+	TargetPosition = FVector(TargetPosition.X, Intersect.Y, TargetPosition.Z);
+	bMoving = true;
+	/*if (!bMoving) {
+		SetActorLocation(TargetPosition);
+	}*/
 }
 
 void APUmbrella::Tick(float DeltaTime)
@@ -61,7 +82,7 @@ void APUmbrella::Tick(float DeltaTime)
 		}
 		if (FVector::Dist(TargetPosition, GetActorLocation()) < 0.05f) {
 			bMoving = false;
-			if (TargetPosition == UTouchPosition) {
+			if (TargetPosition == UTouchPosition && B_LEVEL_SIMPLE) {
 				this->OnTouchLoc();
 			}
 			else if (TargetPosition == UReleasePosition) {
@@ -76,4 +97,14 @@ void APUmbrella::SetMPC(UMaterialParameterCollection* MPC_In)
 	MPC = MPC_In;
 }
 
+void APUmbrella::OnTouchBegin(FVector2D ScreenLoc)
+{
+	MoveSpeed = MaxMoveSpeed;
+	LerpToPosition(FVector(TargetPosition.X, ScreenToWorldLoc(ScreenLoc).Y, TargetPosition.Z));
+}
 
+void APUmbrella::OnTouchEnd()
+{
+	MoveSpeed = ReleaseSpeed;
+	LerpToPosition(FVector(UReleasePosition.X, UReleasePosition.Y, UReleasePosition.Z));
+}

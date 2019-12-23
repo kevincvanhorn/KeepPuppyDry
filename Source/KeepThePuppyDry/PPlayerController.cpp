@@ -64,6 +64,10 @@ bool APPlayerController::InputTouch(uint32 Handle, ETouchType::Type Type, const 
 		bIsSwiping = true;
 		SwipeDirection = Swipe::Direction::None;
 
+		/*if (PPlayer) {
+			PPlayer->UpdateTouchLoc(TouchLocation);
+		}*/
+
 		UPSwipeDelegates::TouchBeganDelegate.Broadcast();
 	}
 	else if (Type == ETouchType::Moved && bIsSwiping) {

@@ -31,6 +31,7 @@ APPlayer::APPlayer()
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bScreenTouched = false;
+	ClampZNeg = ClampZNeg = UReleasePosition.Z;
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +56,7 @@ void APPlayer::BeginPlay()
 		if (Umbrella) {
 			Umbrella->SetMPC(MPC);
 			Umbrella->Initialize(UTouchPosition, UReleasePosition, PPlayerController);
+			Umbrella->SetClampZValues(ClampZPos, ClampZNeg);
 		}
 	}
 }
@@ -114,7 +116,12 @@ void APPlayer::OnTouchBegin()
 	bScreenTouched = true;
 
 	if (Umbrella) {
-		Umbrella->MoveToPosition(UTouchPosition);
+		if (B_LEVEL_SIMPLE) {
+			Umbrella->LerpToPosition(UTouchPosition);
+		}
+		else {
+			Umbrella->OnTouchBegin(TouchLoc);
+		}
 	}
 	this->OnUTouchBegin();
 }
@@ -123,7 +130,7 @@ void APPlayer::OnTouchEnd()
 {
 	bScreenTouched = false;
 	if (Umbrella) {
-		Umbrella->MoveToPosition(UReleasePosition);
+		Umbrella->OnTouchEnd();
 	}
 	this->OnUTouchEnd();
 }
