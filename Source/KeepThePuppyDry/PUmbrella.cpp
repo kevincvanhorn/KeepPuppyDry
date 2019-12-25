@@ -8,6 +8,7 @@
 #include "Engine/Classes/Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "KeepThePuppyDry.h"
+#include "PProcedualMeshActor.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -17,6 +18,16 @@ APUmbrella::APUmbrella() {
 void APUmbrella::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (CylinderMeshClass) {
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		CylinderMesh = (APProcedualMeshActor*)GetWorld()->SpawnActor<APProcedualMeshActor>(CylinderMeshClass, CylinderOffset, FRotator(180, 0, 0), SpawnParams);
+		if (CylinderMesh) {
+			CylinderMesh->SetUParent(this); 
+			CylinderMesh->SetUOffset(CylinderOffset);
+		}
+	}
 }
 
 FVector APUmbrella::ScreenToWorldLoc(FVector2D ScreenLoc)

@@ -69,4 +69,16 @@ private:
 	float ClampZNeg;
 	float TargetZ;
 	float MoveSpeed;
+
+// God Ray
+public:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		TSubclassOf<class APProcedualMeshActor> CylinderMeshClass;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FVector CylinderOffset;
+
+
+protected:
+	class APProcedualMeshActor* CylinderMesh;
 };
