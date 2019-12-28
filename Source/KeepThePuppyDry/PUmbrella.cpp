@@ -77,6 +77,7 @@ void APUmbrella::MoveFromScreenLoc(FVector2D ScreenLoc)
 	FVector Intersect = ScreenToWorldLoc(ScreenLoc);
 	TargetPosition = FVector(TargetPosition.X, Intersect.Y, TargetPosition.Z);
 	bMoving = true;
+	SetActorLocation(TargetPosition);
 	/*if (!bMoving) {
 		SetActorLocation(TargetPosition);
 	}*/
