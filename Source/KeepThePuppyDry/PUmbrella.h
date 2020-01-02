@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #pragma once
 
@@ -55,6 +55,8 @@ protected:
 protected:
 	class APPlayerController* PController;
 
+	class APLevelScriptActor* Level;
+
 private:
 	class UMaterialParameterCollection* MPC;
 
@@ -74,10 +76,10 @@ private:
 public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		TSubclassOf<class APProcedualMeshActor> CylinderMeshClass;
-
+	
+protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		FVector CylinderOffset;
-
+		FVector CylinderSpawnLocation;
 
 protected:
 	class APProcedualMeshActor* CylinderMesh;

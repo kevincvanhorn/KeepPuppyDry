@@ -1,26 +1,85 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #include "PAIController.h"
+#include "PPuppyCharacter.h"
+#include "GameFramework/Actor.h"
+#include "TimerManager.h"
+#include "AI/NavigationSystemBase.h"
+#include "NavigationSystem.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "PSwipeDelegates.h"
 
 APAIController::APAIController() {
-
+	ActionDelay = 5.0f;
+	TimeSinceLastAction = 0;
+	SitProbability = 0.3f;
+	WaitProbability = 0.2f;
 }
 
-FVector APAIController::GetRandomWaypoint()
+void APAIController::BeginPlay()
 {
-	if (Waypoints.Num() > 0) {
-		int index = FMath::RandRange(0, Waypoints.Num() - 1);
-		return Waypoints[index];
-	}
-	else if (GetPawn()) {
-		return GetPawn()->GetActorLocation();
-	}
-	else return FVector::ZeroVector;
+	Super::BeginPlay();
 
+	Puppy = (APPuppyCharacter*)GetPawn();
+	Navigation = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+
+	// Start recursive action timer:
+	DoNextAction();
+}
+void APAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	TimeSinceLastAction += DeltaTime;
 }
 
-void APAIController::GoToRandomWaypoint()
+void APAIController::DoNextAction()
 {
-	MoveToLocation(GetRandomWaypoint());
+	bool bCanRequestMove = true; 
+	bool bMovedThisAction = false;
+	EPathFollowingStatus::Type MoveStatus = GetMoveStatus();
+
+	// Determine Action:
+	bool bWait = UKismetMathLibrary::RandomBoolWithWeight(WaitProbability);
+	bool bSit = UKismetMathLibrary::RandomBoolWithWeight(SitProbability); // Note: this is chained probability.
+
+	// Wait Action:
+	if (bWait) {
+		// Do nothing.
+	}
+	// Sit Action:
+	else if (bSit) {
+		UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+	}
+	// Move Action:
+	else if (Puppy && Navigation) {
+		UPSwipeDelegates::PuppyStandDelegate.Broadcast(); // Update Animation
+		FNavLocation  ProjectedPoint;
+		bCanRequestMove = Navigation->ProjectPointToNavigation(Puppy->GetNextRandomLocation(), ProjectedPoint);
+		if (bCanRequestMove) {
+			bMovedThisAction = true;
+			MoveToLocation(ProjectedPoint.Location);
+		}
+	}
+
+	// Recurse to next action:
+	if (!bMovedThisAction) {
+		GetWorldTimerManager().SetTimer(AITimerHandle, this, &APAIController::DoNextAction, ActionDelay, false);
+	}
+
+	TimeSinceLastAction = 0;
+}
+
+void APAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result)
+{
+	// Notify blueprint via event:
+	Super::OnMoveCompleted(RequestID, Result);
+
+	// Call next action:
+	float RemainingDelay = FMath::Clamp(ActionDelay - TimeSinceLastAction, 0.0f, ActionDelay);
+	if (RemainingDelay == 0) {
+		DoNextAction();
+	}
+	else {
+		GetWorldTimerManager().SetTimer(AITimerHandle, this, &APAIController::DoNextAction, RemainingDelay, false);
+	}
 }

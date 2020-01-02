@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #pragma once
 
@@ -18,12 +18,32 @@ public:
 	APAIController();
 
 protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		TArray<FVector> Waypoints;
+	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-		FVector GetRandomWaypoint();
+	virtual void Tick(float DeltaTime) override;
 
+protected:
 	UFUNCTION()
-		void GoToRandomWaypoint();
+		void DoNextAction();
+
+	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult& Result) override;
+
+protected:
+	FTimerHandle AITimerHandle;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float ActionDelay;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float WaitProbability;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float SitProbability;
+
+private:
+	class UNavigationSystemV1* Navigation;
+
+	class APPuppyCharacter* Puppy;
+
+	float TimeSinceLastAction;
 };

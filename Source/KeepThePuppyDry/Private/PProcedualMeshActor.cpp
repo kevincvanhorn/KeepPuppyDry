@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 
 #include "PProcedualMeshActor.h"
@@ -21,6 +21,12 @@ APProcedualMeshActor::APProcedualMeshActor()
 void APProcedualMeshActor::SetUParent(APUmbrella* UmbrellaIn)
 {
 	Umbrella = UmbrellaIn;
+}
+
+void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc)
+{
+	TopCapPosition.X = Loc.X;
+	TopCapPosition.Y = Loc.Y;
 }
 
 // Called when the game starts or when spawned

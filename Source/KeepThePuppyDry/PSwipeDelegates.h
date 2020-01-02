@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #pragma once
 
@@ -7,7 +7,7 @@
 #include "PSwipeDelegates.generated.h"
 
 /**
- * 
+ * Global delegates. TODO: Update class name.
  */
 UCLASS()
 class KEEPTHEPUPPYDRY_API UPSwipeDelegates : public UObject
@@ -31,4 +31,7 @@ public:
 	DECLARE_MULTICAST_DELEGATE(FLevelEventDelegate);
 
 	static FLevelEventDelegate PostBeginPlayDelegate;
+
+	static FLevelEventDelegate PuppySitDelegate;
+	static FLevelEventDelegate PuppyStandDelegate;
 };

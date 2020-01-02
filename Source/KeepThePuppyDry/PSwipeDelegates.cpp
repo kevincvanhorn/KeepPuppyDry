@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 
 #include "PSwipeDelegates.h"
@@ -18,4 +18,8 @@ UPSwipeDelegates::FTouchDelegate UPSwipeDelegates::SingleTapDelegate;
 UPSwipeDelegates::FTouchDelegate UPSwipeDelegates::DoubleTapDelegate;
 
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PostBeginPlayDelegate;
+
+UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppySitDelegate;
+UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppyStandDelegate;
+
 

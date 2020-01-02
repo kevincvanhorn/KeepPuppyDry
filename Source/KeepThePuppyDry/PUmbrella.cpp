@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #include "PUmbrella.h"
 #include "Kismet/KismetMaterialLibrary.h"
@@ -9,6 +9,7 @@
 #include "DrawDebugHelpers.h"
 #include "KeepThePuppyDry.h"
 #include "PProcedualMeshActor.h"
+#include "PLevelScriptActor.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -19,13 +20,18 @@ void APUmbrella::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Level = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
+
 	if (CylinderMeshClass) {
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		CylinderMesh = (APProcedualMeshActor*)GetWorld()->SpawnActor<APProcedualMeshActor>(CylinderMeshClass, CylinderOffset, FRotator(180, 0, 0), SpawnParams);
+		CylinderMesh = (APProcedualMeshActor*)GetWorld()->SpawnActor<APProcedualMeshActor>(CylinderMeshClass, CylinderSpawnLocation, FRotator(180, 0, 0), SpawnParams);
 		if (CylinderMesh) {
 			CylinderMesh->SetUParent(this); 
-			CylinderMesh->SetUOffset(CylinderOffset);
+			CylinderMesh->SetUOffset(CylinderSpawnLocation);
+			if (Level) {
+				Level->SetUmbrellaCylinder(CylinderMesh);
+			}
 		}
 	}
 }
