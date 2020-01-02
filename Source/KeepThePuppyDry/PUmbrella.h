@@ -83,4 +83,13 @@ protected:
 
 protected:
 	class APProcedualMeshActor* CylinderMesh;
+
+// Bottom sphere for particle collision:
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float FloorLocationZ;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		class USphereComponent* SphereComponent;
+
 };

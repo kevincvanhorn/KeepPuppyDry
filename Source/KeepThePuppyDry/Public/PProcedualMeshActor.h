@@ -24,6 +24,9 @@ public:
 
 	FVector GetCapLocation() const { return TopCapPosition; }
 
+	/** Get the intersection location of the ground level and cylinder mesh. */
+	void ProjectCapLocation(FVector& ProjectedLoc, float FloorHeight);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

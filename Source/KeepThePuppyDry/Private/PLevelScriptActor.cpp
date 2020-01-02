@@ -27,7 +27,7 @@ void APLevelScriptActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bMovingCylinder) {
+	if (bMovingCylinder && UmbrellaCylinder) {
 		CurRainDirection = FMath::Vector2DInterpTo(CurRainDirection, TargetRainDirection, DeltaTime, CylinderLerpSpeed);
 		UmbrellaCylinder->SetCapLocationXY(CurRainDirection);
 		if (FVector2D::Distance(TargetRainDirection, CurRainDirection) < 0.01f) {
@@ -39,7 +39,9 @@ void APLevelScriptActor::Tick(float DeltaTime)
 void APLevelScriptActor::ChangeRainDirection(FVector DirectionIn)
 {
 	for (APRainEmitter* Emitter : RainEmmitters) {
-		Emitter->SetAcceleration(DirectionIn);
+		if (Emitter) {
+			Emitter->SetAcceleration(DirectionIn);
+		}
 	}
 	TargetRainDirection = FVector2D(DirectionIn.X, DirectionIn.Y);
 	bMovingCylinder = true;

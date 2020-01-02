@@ -10,10 +10,14 @@
 #include "KeepThePuppyDry.h"
 #include "PProcedualMeshActor.h"
 #include "PLevelScriptActor.h"
+#include "Components/SphereComponent.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
-	PrimaryActorTick.bCanEverTick = true; //We won't be ticked by default 
+	PrimaryActorTick.bCanEverTick = true;
+
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("BotSphereComponent"));
+	FloorLocationZ = 140.0f;
 }
 
 void APUmbrella::BeginPlay()
@@ -64,7 +68,7 @@ void APUmbrella::Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn
 
 	if (MPC) {
 		FVector Cur = GetActorLocation();
-		UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(Cur.X, Cur.Y, 140, 0));
+		UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(Cur.X, Cur.Y, FloorLocationZ, 0));
 	}
 
 	SetActorLocation(UReleasePosition);
@@ -91,12 +95,21 @@ void APUmbrella::MoveFromScreenLoc(FVector2D ScreenLoc)
 
 void APUmbrella::Tick(float DeltaTime)
 {
+	FVector Cur = GetActorLocation();
+	FVector GroundLoc = FVector(Cur.X, Cur.Y, FloorLocationZ); // Location where the bottom of the cylinder is projected
+	if (CylinderMesh) {
+		CylinderMesh->ProjectCapLocation(GroundLoc, FloorLocationZ);
+	}
+
+	// Set location to block particles bottom of cylinder.
+	if (SphereComponent) {
+		SphereComponent->SetWorldLocation(GroundLoc);
+	}
+
 	if (bMoving) {
 		SetActorLocation(FMath::VInterpTo(GetActorLocation(), TargetPosition, DeltaTime, MoveSpeed));
 		if (MPC) {
-			FVector Cur = GetActorLocation();
-			
-			UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(Cur.X, Cur.Y, 140,0));
+			UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(GroundLoc.X, GroundLoc.Y, GroundLoc.Z,0));
 		}
 		if (FVector::Dist(TargetPosition, GetActorLocation()) < 0.05f) {
 			bMoving = false;

@@ -3,6 +3,7 @@
 
 #include "PProcedualMeshActor.h"
 #include "PUmbrella.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 APProcedualMeshActor::APProcedualMeshActor()
@@ -27,6 +28,13 @@ void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc)
 {
 	TopCapPosition.X = Loc.X;
 	TopCapPosition.Y = Loc.Y;
+}
+
+void APProcedualMeshActor::ProjectCapLocation(FVector& ProjectedLoc, float FloorHeight)
+{
+	FVector A = GetActorLocation();
+	FVector B = A + TopCapPosition*FVector(1,-1,1);
+	ProjectedLoc = A + ((FloorHeight-A.Z)/(B.Z - A.Z))*(B-A);
 }
 
 // Called when the game starts or when spawned
