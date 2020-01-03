@@ -85,6 +85,11 @@ protected:
 	class APProcedualMeshActor* CylinderMesh;
 
 // Bottom sphere for particle collision:
+public:
+	/** Get the location of the pawn overlapping sphere in world space.*/
+	UFUNCTION(BlueprintCallable)
+		FVector GetSphereLocation() const;
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float FloorLocationZ;

@@ -59,6 +59,14 @@ FVector APUmbrella::ScreenToWorldLoc(FVector2D ScreenLoc)
 	return Intersect;
 }
 
+FVector APUmbrella::GetSphereLocation() const
+{
+	if (SphereComponent) {
+		return SphereComponent->GetComponentLocation();
+	}
+	return FVector();
+}
+
 // PostBeginPlay - called from Controller
 void APUmbrella::Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn, APPlayerController* PControllerIn)
 {
