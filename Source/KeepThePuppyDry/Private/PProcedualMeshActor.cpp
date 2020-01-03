@@ -30,6 +30,14 @@ void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc)
 	TopCapPosition.Y = Loc.Y;
 }
 
+void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc, float CylinderOffset)
+{
+	TopCapPosition.X = Loc.X;
+	TopCapPosition.Y = Loc.Y;
+	//FVector A = GetActorLocation();
+	//FVector B = A + TopCapPosition.GetSafeNormal() * FVector(1, -1, 1)*1000;
+}
+
 void APProcedualMeshActor::ProjectCapLocation(FVector& ProjectedLoc, float FloorHeight)
 {
 	FVector A = GetActorLocation();

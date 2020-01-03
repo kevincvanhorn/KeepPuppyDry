@@ -90,9 +90,9 @@ void APPlayer::UpdateTouchLoc(FVector2D TouchLocIn)
 
 	if (B_LEVEL_SIMPLE) return;
 
-	if (PUserWidget) {
+	/*if (PUserWidget) {
 		PUserWidget->SetTouchDragPosition(TouchLocIn);
-	}
+	}*/
 
 	if (Umbrella) {
 		Umbrella->MoveFromScreenLoc(TouchLocIn);

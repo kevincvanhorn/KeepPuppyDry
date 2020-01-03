@@ -5,13 +5,15 @@
 #include "Particles/ParticleSystemComponent.h"
 
 APRainEmitter::APRainEmitter() {
-
 }
 
-void APRainEmitter::SetAcceleration(FVector DirectionIn)
+void APRainEmitter::SetAcceleration(FVector DirectionIn, float RainIntensity)
 {
 	if (ParticleSystemComp) {
-		ParticleSystemComp->SetVectorParameter("PRain_Accel", DirectionIn);
+		//ParticleSystemComp->SetVectorParameter("PRain_Accel", DirectionIn);
+		ParticleSystemComp->SetVectorParameter("PRain_Accel", DirectionIn * RainIntensity);
+		//ParticleSystemComp->SetVectorParameter("PRain_Velocity", DirectionIn * RainIntensity * 0.5f);
+		//UE_LOG(LogTemp, Warning, TEXT("Direction: %s"), *(DirectionIn.ToString()));
 	}
 }
 

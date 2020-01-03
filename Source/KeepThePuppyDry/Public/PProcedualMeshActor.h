@@ -22,6 +22,8 @@ public:
 
 	void SetCapLocationXY(const FVector2D& Loc);
 
+	void SetCapLocationXY(const FVector2D& Loc, float CylinderOffset);
+
 	FVector GetCapLocation() const { return TopCapPosition; }
 
 	/** Get the intersection location of the ground level and cylinder mesh. */

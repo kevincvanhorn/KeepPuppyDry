@@ -105,12 +105,14 @@ void APUmbrella::Tick(float DeltaTime)
 	if (SphereComponent) {
 		SphereComponent->SetWorldLocation(GroundLoc);
 	}
+	// MPC for grass material
+	if (MPC) {
+		UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(GroundLoc.X, GroundLoc.Y, GroundLoc.Z, 0));
+	}
 
+	// Respond to Touch Input
 	if (bMoving) {
 		SetActorLocation(FMath::VInterpTo(GetActorLocation(), TargetPosition, DeltaTime, MoveSpeed));
-		if (MPC) {
-			UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(GroundLoc.X, GroundLoc.Y, GroundLoc.Z,0));
-		}
 		if (FVector::Dist(TargetPosition, GetActorLocation()) < 0.05f) {
 			bMoving = false;
 			if (TargetPosition == UTouchPosition && B_LEVEL_SIMPLE) {

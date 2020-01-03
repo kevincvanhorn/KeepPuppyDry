@@ -33,12 +33,35 @@ protected:
 
 	class APProcedualMeshActor* UmbrellaCylinder;
 
-	float CylinderLerpSpeed;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float RainLerpSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float CylinderLerpSpeed;
+
+	/** Modifier for magnitude of Cylinder Direction.*/ // TODO: Rename.
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float RainSpeed;
+
+	/** Modifier for magnitude of Rain velocity.*/ 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float RainIntensity;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int EmitterUpdatePerNumFrames;
+
+	/** [0-1] Modifier for aligning cylinder at lower speeds.*/ // TODO
+	/*UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float CylinderOffset;*/
 
 private:
-	FVector2D CurRainDirection;
+	FVector2D CurRainDirection2D;
 
-	FVector2D TargetRainDirection;
+	FVector2D TargetRainDirection2D;
+	FVector CurRainDirection;
+	FVector TargetRainDirection;
+
+	int FramesSinceEmitterUpdate;
 
 	bool bMovingCylinder;
 };
