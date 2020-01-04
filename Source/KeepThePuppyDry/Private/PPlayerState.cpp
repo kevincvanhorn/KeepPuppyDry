@@ -4,7 +4,12 @@
 #include "PPlayerState.h"
 
 APPlayerState::APPlayerState() {
+	ScoreMultiplier = 1.0f;
+}
 
+int32 APPlayerState::ScoreFromTime(float TotalTime)
+{
+	return TotalTime * ScoreMultiplier;
 }
 
 void APPlayerState::BeginPlay()

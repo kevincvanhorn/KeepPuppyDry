@@ -17,6 +17,12 @@ class KEEPTHEPUPPYDRY_API APPlayerState : public APlayerState
 public:
 	APPlayerState();
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Score")
+		float ScoreMultiplier;
+
+	UFUNCTION(BlueprintCallable)
+		int32 ScoreFromTime(float TotalTime);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

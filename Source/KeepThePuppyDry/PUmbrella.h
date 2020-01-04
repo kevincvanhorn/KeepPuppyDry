@@ -17,7 +17,7 @@ class KEEPTHEPUPPYDRY_API APUmbrella : public AStaticMeshActor
 public:
 	APUmbrella();
 
-	void Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn, class APPlayerController* PControllerIn);
+	void Initialize(class APPlayer* PlayerIn, FVector UTouchPositionIn, FVector UReleasePositionIn, class APPlayerController* PControllerIn);
 
 	void LerpToPosition(FVector Target);
 	
@@ -56,6 +56,8 @@ protected:
 	class APPlayerController* PController;
 
 	class APLevelScriptActor* Level;
+
+	class APPlayer* PPlayer;
 
 private:
 	class UMaterialParameterCollection* MPC;

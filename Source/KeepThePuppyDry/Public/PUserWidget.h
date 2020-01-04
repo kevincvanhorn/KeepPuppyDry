@@ -22,6 +22,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "DebugTouchPosition"))
 		void DebugTouchPosition(FVector2D TouchPos);
 
+	void UpdateScore(int32 ScoreIn);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UScaleBox* HandWidget;

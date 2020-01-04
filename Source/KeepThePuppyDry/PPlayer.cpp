@@ -33,6 +33,8 @@ APPlayer::APPlayer()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bScreenTouched = false;
 	ClampZNeg = ClampZNeg = UReleasePosition.Z;
+	UOverlapTime = 0;
+	bUOverlapping = false;
 }
 
 void APPlayer::Initialize(APPlayerState* PlayerStateIn)
@@ -61,7 +63,7 @@ void APPlayer::BeginPlay()
 		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(0,0,0), SpawnParams);
 		if (Umbrella) {
 			Umbrella->SetMPC(MPC);
-			Umbrella->Initialize(UTouchPosition, UReleasePosition, PPlayerController);
+			Umbrella->Initialize(this, UTouchPosition, UReleasePosition, PPlayerController);
 			Umbrella->SetClampZValues(ClampZPos, ClampZNeg);
 		}
 	}
@@ -75,6 +77,13 @@ void APPlayer::PostBeginPlay()
 void APPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bUOverlapping) {
+		UOverlapTime += DeltaTime;
+		if (PPlayerState && PUserWidget) {
+			PUserWidget->UpdateScore(PPlayerState->ScoreFromTime(UOverlapTime));
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -143,4 +152,14 @@ void APPlayer::OnTouchEnd()
 
 void APPlayer::Zoom(float AxisValue)
 {
+}
+
+void APPlayer::OnUmbrellaOverlapBegin()
+{
+	bUOverlapping = true;
+}
+
+void APPlayer::OnUmbrellaOverlapEnd()
+{
+	bUOverlapping = false;
 }

@@ -12,6 +12,7 @@
 #include "PLevelScriptActor.h"
 #include "Components/SphereComponent.h"
 #include "PPuppyCharacter.h"
+#include "PPlayer.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -69,32 +70,34 @@ FVector APUmbrella::GetSphereLocation() const
 	if (SphereComponent) {
 		return SphereComponent->GetComponentLocation();
 	}
-	return FVector();
+	return FVector(); 
 }
 
 void APUmbrella::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	APPuppyCharacter* PuppyOverlap =  dynamic_cast<APPuppyCharacter*>(OtherActor);
-	if (PuppyOverlap) {
+	if (PuppyOverlap && PPlayer) {
 		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin %s"), *OtherActor->GetName());
+		PPlayer->OnUmbrellaOverlapBegin();
 	}
 }
 
 void APUmbrella::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	APPuppyCharacter* PuppyOverlap = dynamic_cast<APPuppyCharacter*>(OtherActor);
-	if (PuppyOverlap) {
+	if (PuppyOverlap && PPlayer) {
 		UE_LOG(LogTemp, Warning, TEXT("OverlapEnd %s"), *OtherActor->GetName());
-
+		PPlayer->OnUmbrellaOverlapEnd();
 	}
 }
 
 // PostBeginPlay - called from Controller
-void APUmbrella::Initialize(FVector UTouchPositionIn, FVector UReleasePositionIn, APPlayerController* PControllerIn)
+void APUmbrella::Initialize(APPlayer* PlayerIn,  FVector UTouchPositionIn, FVector UReleasePositionIn, APPlayerController* PControllerIn)
 {
 	UTouchPosition = UTouchPositionIn;
 	UReleasePosition = UReleasePositionIn;
 	PController = PControllerIn;
+	PPlayer = PlayerIn;
 
 	if (MPC) {
 		FVector Cur = GetActorLocation();

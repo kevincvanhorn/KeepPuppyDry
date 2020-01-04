@@ -108,4 +108,13 @@ public:
 private:
 	class APUmbrella* Umbrella;
 
+
+// SCORES ----------------------------
+public:
+	void OnUmbrellaOverlapBegin();
+	void OnUmbrellaOverlapEnd();
+
+private:
+	float UOverlapTime; // How long overlapping, 0 if not currently overlapping
+	bool bUOverlapping; // Overlapping umbrella?
 };

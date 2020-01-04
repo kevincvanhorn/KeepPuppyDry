@@ -42,6 +42,7 @@ void APPlayerController::BeginPlay() {
 
 	if (PPlayer) {
 		PPlayer->SetUserWidget(PUserWidget);
+		PPlayer->Initialize(PPlayerState);
 	}
 
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
