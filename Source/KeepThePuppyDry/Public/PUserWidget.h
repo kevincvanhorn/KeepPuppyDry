@@ -25,4 +25,7 @@ public:
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UScaleBox* HandWidget;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* ScoreTextWidget;
 };

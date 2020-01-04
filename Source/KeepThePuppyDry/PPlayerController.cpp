@@ -9,6 +9,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Public/PUserWidget.h"
 #include "KeepThePuppyDry.h"
+#include "PPlayerState.h"
 
 APPlayerController::APPlayerController() {
 	bIgnoreInput = false;
@@ -26,6 +27,7 @@ void APPlayerController::PostInitializeComponents()
 
 void APPlayerController::BeginPlay() {
 	PPlayer = Cast<APPlayer>(GetPawn());
+	PPlayerState = Cast<APPlayerState>(PlayerState);
 
 	if (B_LEVEL_SIMPLE) {
 		return;

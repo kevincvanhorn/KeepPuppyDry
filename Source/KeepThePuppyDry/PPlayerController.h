@@ -55,6 +55,8 @@ protected:
 
 	class APPlayer* PPlayer;
 
+	class APPlayerState* PPlayerState;
+
 private:
 	FVector2D SwipeStartLoc;
 

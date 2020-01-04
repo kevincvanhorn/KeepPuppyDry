@@ -11,6 +11,7 @@
 #include "PUmbrella.h"
 #include "Materials/MaterialParameterCollection.h"
 #include "Public/PUserWidget.h"
+#include "PPlayerState.h"
 
 #include "KeepThePuppyDry.h"
 
@@ -32,6 +33,11 @@ APPlayer::APPlayer()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	bScreenTouched = false;
 	ClampZNeg = ClampZNeg = UReleasePosition.Z;
+}
+
+void APPlayer::Initialize(APPlayerState* PlayerStateIn)
+{
+	PPlayerState = PlayerStateIn;
 }
 
 // Called when the game starts or when spawned

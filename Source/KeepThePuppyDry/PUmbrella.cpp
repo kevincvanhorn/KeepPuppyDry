@@ -11,12 +11,17 @@
 #include "PProcedualMeshActor.h"
 #include "PLevelScriptActor.h"
 #include "Components/SphereComponent.h"
+#include "PPuppyCharacter.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
 	PrimaryActorTick.bCanEverTick = true;
 
 	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("BotSphereComponent"));
+	if (SphereComponent) {
+		SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &APUmbrella::OnOverlapBegin);
+		SphereComponent->OnComponentEndOverlap.AddDynamic(this, &APUmbrella::OnOverlapEnd);
+	}
 	FloorLocationZ = 140.0f;
 }
 
@@ -65,6 +70,23 @@ FVector APUmbrella::GetSphereLocation() const
 		return SphereComponent->GetComponentLocation();
 	}
 	return FVector();
+}
+
+void APUmbrella::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APPuppyCharacter* PuppyOverlap =  dynamic_cast<APPuppyCharacter*>(OtherActor);
+	if (PuppyOverlap) {
+		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin %s"), *OtherActor->GetName());
+	}
+}
+
+void APUmbrella::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	APPuppyCharacter* PuppyOverlap = dynamic_cast<APPuppyCharacter*>(OtherActor);
+	if (PuppyOverlap) {
+		UE_LOG(LogTemp, Warning, TEXT("OverlapEnd %s"), *OtherActor->GetName());
+
+	}
 }
 
 // PostBeginPlay - called from Controller

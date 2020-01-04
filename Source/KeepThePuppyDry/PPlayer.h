@@ -19,6 +19,8 @@ public:
 
 	class USpringArmComponent* GetSpringArmComponent() const { return SpringArm; }
 
+	void Initialize(class APPlayerState* PlayerStateIn);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,6 +37,8 @@ protected:
 	class APPlayerController* PPlayerController;
 
 	class UPUserWidget* PUserWidget;
+	
+	class APPlayerState* PPlayerState;
 
 public:	
 	// Called every frame
