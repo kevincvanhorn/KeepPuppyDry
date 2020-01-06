@@ -20,10 +20,42 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Score")
 		float ScoreMultiplier;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Health")
+		float HPositiveRate;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Health")
+		float HNegativeRate;
+
+public:
 	UFUNCTION(BlueprintCallable)
 		int32 ScoreFromTime(float TotalTime);
+
+	UFUNCTION(BlueprintCallable)
+		float GetHealth() const; // [0-1]
+
+	UFUNCTION(BlueprintCallable)
+		float AddHealth(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+		float SubtractHealth(float DeltaTime);
+
+	UFUNCTION(BlueprintCallable)
+		void IncrementScore();
+
+	void SetPUserWidget(class UPUserWidget* PUserWidgetIn);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+		float Health;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+		int32 PScore;
+
+private:
+	class UPUserWidget* PUserWidget;
+
+	float UnclampedHealth;
 };

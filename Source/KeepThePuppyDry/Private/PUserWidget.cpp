@@ -6,6 +6,7 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/TextBlock.h"
+#include "Kismet/KismetMaterialLibrary.h"
 
 void UPUserWidget::NativeConstruct() {
 	Super::NativeConstruct();
@@ -30,5 +31,12 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 {
 	if (ScoreTextWidget) {
 		ScoreTextWidget->SetText(FText::AsNumber(ScoreIn));
+	}
+}
+
+void UPUserWidget::UpdateHealth(float HealthIn)
+{
+	if (MPC_Score) {
+		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC_Score, FName("Health"), HealthIn);
 	}
 }

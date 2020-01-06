@@ -37,6 +37,9 @@ void APPlayerController::BeginPlay() {
 		PUserWidget = CreateWidget<UPUserWidget>(GetWorld(), PUserWidgetClass);
 		if (PUserWidget) {
 			PUserWidget->AddToViewport();
+			if (PPlayerState) {
+				PPlayerState->SetPUserWidget(PUserWidget);
+			}
 		}
 	}
 

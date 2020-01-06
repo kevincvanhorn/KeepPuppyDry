@@ -97,7 +97,7 @@ public:
 		float ClampZNeg;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
-		class UMaterialParameterCollection* MPC;
+		class UMaterialParameterCollection* MPC_Umbrella;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUTouchBegin"))
 		void OnUTouchBegin();
@@ -117,4 +117,6 @@ public:
 private:
 	float UOverlapTime; // How long overlapping, 0 if not currently overlapping
 	bool bUOverlapping; // Overlapping umbrella?
+
+	class UMaterialParameterCollection* MPC;
 };

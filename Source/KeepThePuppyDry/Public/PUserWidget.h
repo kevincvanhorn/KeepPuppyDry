@@ -24,10 +24,15 @@ public:
 
 	void UpdateScore(int32 ScoreIn);
 
+	void UpdateHealth(float HealthIn);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UScaleBox* HandWidget;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UTextBlock* ScoreTextWidget;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		class UMaterialParameterCollection* MPC_Score;
 };

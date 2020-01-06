@@ -62,7 +62,7 @@ void APPlayer::BeginPlay()
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		Umbrella = (APUmbrella*)GetWorld()->SpawnActor<APUmbrella>(UmbrellaClass, UmbrellaSpawnLoc, FRotator(0,0,0), SpawnParams);
 		if (Umbrella) {
-			Umbrella->SetMPC(MPC);
+			Umbrella->SetMPC(MPC_Umbrella);
 			Umbrella->Initialize(this, UTouchPosition, UReleasePosition, PPlayerController);
 			Umbrella->SetClampZValues(ClampZPos, ClampZNeg);
 		}
@@ -81,7 +81,13 @@ void APPlayer::Tick(float DeltaTime)
 	if (bUOverlapping) {
 		UOverlapTime += DeltaTime;
 		if (PPlayerState && PUserWidget) {
-			PUserWidget->UpdateScore(PPlayerState->ScoreFromTime(UOverlapTime));
+			//PUserWidget->UpdateScore(PPlayerState->ScoreFromTime(UOverlapTime));
+			PUserWidget->UpdateHealth(PPlayerState->AddHealth(DeltaTime));
+		}
+	}
+	else {
+		if (PUserWidget) {
+			PUserWidget->UpdateHealth(PPlayerState->SubtractHealth(DeltaTime));
 		}
 	}
 }
