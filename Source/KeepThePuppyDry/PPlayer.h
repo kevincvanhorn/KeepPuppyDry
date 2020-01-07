@@ -21,12 +21,19 @@ public:
 
 	void Initialize(class APPlayerState* PlayerStateIn);
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
 		void PostBeginPlay();
+
+	UFUNCTION()
+		void OnDifficultyChangedInternal(int32 NewDifficulty);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
+		void OnDifficultyChanged(int32 DifficultyOut);
 
 	UPROPERTY(EditAnywhere)
 		class USpringArmComponent* SpringArm;

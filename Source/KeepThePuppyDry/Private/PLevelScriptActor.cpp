@@ -3,6 +3,7 @@
 #include "PLevelScriptActor.h"
 #include "PRainEmitter.h"
 #include "PProcedualMeshActor.h"
+#include "PSwipeDelegates.h"
 
 APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
@@ -15,6 +16,13 @@ APLevelScriptActor::APLevelScriptActor() {
 void APLevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APLevelScriptActor::OnDifficultyChangedInternal);
+}
+
+void APLevelScriptActor::OnDifficultyChangedInternal(int32 NewDifficulty)
+{
+	this->OnDifficultyChanged(NewDifficulty);
 }
 
 void APLevelScriptActor::SetUmbrellaCylinder(APProcedualMeshActor* CylinderIn)

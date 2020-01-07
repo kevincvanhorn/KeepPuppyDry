@@ -22,4 +22,6 @@ UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PostBeginPlayDelegate;
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppySitDelegate;
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppyStandDelegate;
 
+UPSwipeDelegates::FDifficultyChangedDelegate UPSwipeDelegates::DifficultySwitchDelegate;
+
 

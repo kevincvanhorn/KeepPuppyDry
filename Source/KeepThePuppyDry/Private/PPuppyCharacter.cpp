@@ -2,6 +2,7 @@
 
 #include "PPuppyCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "PSwipeDelegates.h"
 
 // Sets default values
 APPuppyCharacter::APPuppyCharacter()
@@ -20,6 +21,13 @@ APPuppyCharacter::APPuppyCharacter()
 void APPuppyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPuppyCharacter::OnDifficultyChangedInternal);
+}
+
+void APPuppyCharacter::OnDifficultyChangedInternal(int32 NewDifficulty)
+{
+	this->OnDifficultyChanged(NewDifficulty);
 }
 
 void APPuppyCharacter::Tick(float DeltaTime)

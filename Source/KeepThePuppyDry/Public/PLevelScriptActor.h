@@ -26,7 +26,13 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void ChangeRainDirection(FVector DirectionIn);
+
+	UFUNCTION()
+		void OnDifficultyChangedInternal(int32 NewDifficulty);
 	
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
+		void OnDifficultyChanged(int32 DifficultyOut);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<class APRainEmitter*> RainEmmitters;

@@ -14,6 +14,7 @@
 #include "PPlayerState.h"
 
 #include "KeepThePuppyDry.h"
+#include "PSwipeDelegates.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -67,10 +68,17 @@ void APPlayer::BeginPlay()
 			Umbrella->SetClampZValues(ClampZPos, ClampZNeg);
 		}
 	}
+
+	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
 }
 
 void APPlayer::PostBeginPlay()
 {
+}
+
+void APPlayer::OnDifficultyChangedInternal(int32 NewDifficulty)
+{
+	this->OnDifficultyChanged(NewDifficulty);
 }
 
 // Called every frame

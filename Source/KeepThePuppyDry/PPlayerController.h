@@ -41,6 +41,9 @@ public:
 protected:
 	UPUserWidget* PUserWidget;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player, Managers", meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<class APDifficultyManager> DifficultyManagerClass;
+
 protected:
 	virtual bool InputTouch(uint32 Handle, ETouchType::Type Type, const FVector2D& TouchLocation, float Force, FDateTime DeviceTimestamp, uint32 TouchpadIndex) override;
 
@@ -56,6 +59,8 @@ protected:
 	class APPlayer* PPlayer;
 
 	class APPlayerState* PPlayerState;
+
+	class APDifficultyManager* DifficultyManager;
 
 private:
 	FVector2D SwipeStartLoc;

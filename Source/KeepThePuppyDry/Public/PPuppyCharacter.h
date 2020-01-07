@@ -19,6 +19,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+		void OnDifficultyChangedInternal(int32 NewDifficulty);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
+		void OnDifficultyChanged(int32 DifficultyOut);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -10,6 +10,7 @@
 #include "Public/PUserWidget.h"
 #include "KeepThePuppyDry.h"
 #include "PPlayerState.h"
+#include "PDifficultyManager.h"
 
 APPlayerController::APPlayerController() {
 	bIgnoreInput = false;
@@ -46,6 +47,11 @@ void APPlayerController::BeginPlay() {
 	if (PPlayer) {
 		PPlayer->SetUserWidget(PUserWidget);
 		PPlayer->Initialize(PPlayerState);
+	}
+
+	// Spawn Managers
+	if (DifficultyManagerClass) {
+		DifficultyManager = GetWorld()->SpawnActor<APDifficultyManager>(DifficultyManagerClass);
 	}
 
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
