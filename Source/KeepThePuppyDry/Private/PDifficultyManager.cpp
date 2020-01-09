@@ -46,11 +46,13 @@ void APDifficultyManager::IncreaseDifficulty()
 
 void APDifficultyManager::Pause()
 {
+	GetWorldTimerManager().PauseTimer(DifficultyHandle);
 	bGameLoopActive = false;
 }
 
 void APDifficultyManager::UnPause()
 {
-	bGameLoopActive = false;
+	GetWorldTimerManager().UnPauseTimer(DifficultyHandle);
+	bGameLoopActive = true;
 }
 

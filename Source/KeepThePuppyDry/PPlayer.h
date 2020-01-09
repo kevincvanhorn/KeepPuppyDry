@@ -29,11 +29,11 @@ protected:
 	UFUNCTION()
 		void PostBeginPlay();
 
-	UFUNCTION()
+	/*UFUNCTION()
 		void OnDifficultyChangedInternal(int32 NewDifficulty);
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
-		void OnDifficultyChanged(int32 DifficultyOut);
+		void OnDifficultyChanged(int32 DifficultyOut);*/
 
 	UPROPERTY(EditAnywhere)
 		class USpringArmComponent* SpringArm;

@@ -40,7 +40,6 @@ public:
 
 	void SetClampZValues(float Pos, float Neg) { ClampZPos = Pos; ClampZNeg = Neg; }
 
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -106,4 +105,37 @@ protected:
 	/** called when something leaves the sphere component */
 	UFUNCTION()
 		void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	// Change Size:
+	public:
+		UFUNCTION(BlueprintCallable)
+			void ChangeUmbrellaSizeScalar(float NewSize);
+
+		/** Return true if a difficulty increase was achieved (i.e. diff cap not reached). */
+		UFUNCTION(BlueprintCallable)
+			bool IncreaseDifficulty();
+
+	protected:
+		/** Difficulty Effects per level. */
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+			TArray<float> DifficultyLevels;
+
+		/** Seconds between updates to size. */
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+			float USizeTimerRate;
+
+		/** Speed of the vInterp for the umbrella size. */
+		UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+			float USizeInterpSpeed;
+
+	private:
+		UFUNCTION()
+			void UpdateUmbrellaSize();
+		
+		FTimerHandle USizeHandle;
+		FVector UTargetSize;
+
+		float USizeDefault_MPC; // Radius of material sphere mask
+
+		int32 Difficulty;
 };

@@ -3,6 +3,7 @@
 #include "PPuppyCharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PSwipeDelegates.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APPuppyCharacter::APPuppyCharacter()
@@ -22,13 +23,9 @@ void APPuppyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPuppyCharacter::OnDifficultyChangedInternal);
+	MovementComponent = GetCharacterMovement();
 }
 
-void APPuppyCharacter::OnDifficultyChangedInternal(int32 NewDifficulty)
-{
-	this->OnDifficultyChanged(NewDifficulty);
-}
 
 void APPuppyCharacter::Tick(float DeltaTime)
 {
@@ -69,8 +66,18 @@ float APPuppyCharacter::WrapToNavRange(const float Loc)
 	else { ReturnValue = Loc; }
 
 	if (FMath::Abs(ReturnValue - GetActorLocation().Y) < NavMinMoveDist) {
-		int i = 0;
+		UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f, %f, %f, %f"), NavRangeMin, NavRangeMax, NavMinMoveDist, Loc, GetActorLocation().Y, ReturnValue);
 	}
 
 	return ReturnValue;
+}
+
+void APPuppyCharacter::OnIncreaseDifficulty(float NavMinMoveDistIn, float SpeedIn, float AccelIn)
+{
+	NavMinMoveDist = NavMinMoveDistIn;
+	
+	if (MovementComponent) {
+		if(AccelIn != 0.0f) MovementComponent->MaxAcceleration = AccelIn;
+		if(SpeedIn != 0.0f) MovementComponent->MaxWalkSpeed = SpeedIn;
+	}
 }

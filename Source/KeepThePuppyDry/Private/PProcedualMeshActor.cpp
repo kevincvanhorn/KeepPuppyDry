@@ -22,6 +22,9 @@ APProcedualMeshActor::APProcedualMeshActor()
 void APProcedualMeshActor::SetUParent(APUmbrella* UmbrellaIn)
 {
 	Umbrella = UmbrellaIn;
+	if (Umbrella) {
+		ParentSize3DDiff = this->GetActorScale3D().X - Umbrella->GetActorScale3D().X;
+	}
 }
 
 void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc)
@@ -64,6 +67,12 @@ void APProcedualMeshActor::Tick(float DeltaTime)
 		RefreshMesh();
 		PrevTopPosition = TopCapPosition;
 	}
+}
+
+float APProcedualMeshActor::GetScaledRadius()
+{
+	// Used for MPC radius
+	return (Radius+23) * GetActorScale3D().X; // TEMP: 23 should be the diff between MPC radius
 }
 
 //@source https://wiki.unrealengine.com/Procedural_Mesh_Component_in_C%2B%2B:Getting_Started
@@ -295,4 +304,8 @@ void APProcedualMeshActor::RefreshMesh()
 	Mesh->ClearAllMeshSections();
 	Mesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, VertexColors, Tangents, false);
 	Mesh->ContainsPhysicsTriMeshData(false); // Collision data
+}
+
+void APProcedualMeshActor::SetOffsetScale3D(const FVector& ParentSize) {
+	SetActorScale3D(FVector(ParentSize.X + ParentSize3DDiff, ParentSize.Y + ParentSize3DDiff, GetActorScale3D().Z));
 }

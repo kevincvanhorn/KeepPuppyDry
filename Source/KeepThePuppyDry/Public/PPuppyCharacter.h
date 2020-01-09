@@ -19,11 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-		void OnDifficultyChangedInternal(int32 NewDifficulty);
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
-		void OnDifficultyChanged(int32 DifficultyOut);
+	UCharacterMovementComponent* MovementComponent;
 
 public:	
 	// Called every frame
@@ -58,4 +54,8 @@ private:
 	float NavRangeMin;
 	float NavRangeMax;
 
+
+// Difficulty
+public:
+	void OnIncreaseDifficulty(float NavMinMoveDistIn, float SpeedIn, float AccelIn);
 };

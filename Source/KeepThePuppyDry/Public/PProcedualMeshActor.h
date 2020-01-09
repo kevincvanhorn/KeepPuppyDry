@@ -37,6 +37,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/** Get the current world radius. */
+	float GetScaledRadius();
+
 private:
 	UPROPERTY(VisibleAnywhere)
 		UProceduralMeshComponent* Mesh;
@@ -88,4 +91,11 @@ private:
 private:
 	class APUmbrella* Umbrella;
 	FVector UOffset;
+
+// Set Size:
+public:
+	void SetOffsetScale3D(const FVector& ParentSize);
+
+private:
+	float ParentSize3DDiff;
 };

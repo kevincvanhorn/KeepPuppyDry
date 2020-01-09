@@ -6,6 +6,14 @@
 #include "Engine/LevelScriptActor.h"
 #include "PLevelScriptActor.generated.h"
 
+UENUM(BlueprintType)
+enum class EDifficultyType : uint8
+{
+	ERain 	UMETA(DisplayName = "Rain"),
+	EDog 		UMETA(DisplayName = "Dog"),
+	EUmbrella	UMETA(DisplayName = "Umbrella")
+};
+
 /**
  * 
  */
@@ -18,6 +26,10 @@ public:
 	APLevelScriptActor();
 
 	void SetUmbrellaCylinder(class APProcedualMeshActor* CylinderIn);
+
+	void SetUmbrella(class APUmbrella* UmbrellaIn);
+
+	void SetAIController(class APAIController* AIControllerIn);
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,11 +45,18 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnDifficultyChanged"))
 		void OnDifficultyChanged(int32 DifficultyOut);
 
+	UFUNCTION(BlueprintCallable)
+		void IncreaseDifficulty(EDifficultyType DiffType);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<class APRainEmitter*> RainEmmitters;
 
 	class APProcedualMeshActor* UmbrellaCylinder;
+
+	class APUmbrella* Umbrella;
+
+	class APAIController* AIController;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float RainLerpSpeed;

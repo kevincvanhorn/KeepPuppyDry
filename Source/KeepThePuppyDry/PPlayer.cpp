@@ -69,17 +69,17 @@ void APPlayer::BeginPlay()
 		}
 	}
 
-	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
+	//UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
 }
 
 void APPlayer::PostBeginPlay()
 {
 }
 
-void APPlayer::OnDifficultyChangedInternal(int32 NewDifficulty)
+/*void APPlayer::OnDifficultyChangedInternal(int32 NewDifficulty)
 {
 	this->OnDifficultyChanged(NewDifficulty);
-}
+}*/
 
 // Called every frame
 void APPlayer::Tick(float DeltaTime)

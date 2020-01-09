@@ -4,6 +4,8 @@
 #include "PRainEmitter.h"
 #include "PProcedualMeshActor.h"
 #include "PSwipeDelegates.h"
+#include "PAIController.h"
+#include "PUmbrella.h"
 
 APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
@@ -25,6 +27,19 @@ void APLevelScriptActor::OnDifficultyChangedInternal(int32 NewDifficulty)
 	this->OnDifficultyChanged(NewDifficulty);
 }
 
+void APLevelScriptActor::IncreaseDifficulty(EDifficultyType DiffType)
+{
+	if (DiffType == EDifficultyType::EDog && AIController) {
+		AIController->IncreaseDifficulty();
+	}
+	else if (DiffType == EDifficultyType::ERain) {
+		
+	}
+	else if (DiffType == EDifficultyType::EUmbrella && Umbrella) {
+		Umbrella->IncreaseDifficulty();
+	}
+}
+
 void APLevelScriptActor::SetUmbrellaCylinder(APProcedualMeshActor* CylinderIn)
 {
 	UmbrellaCylinder = CylinderIn;
@@ -32,6 +47,16 @@ void APLevelScriptActor::SetUmbrellaCylinder(APProcedualMeshActor* CylinderIn)
 		FVector CapLoc = UmbrellaCylinder->GetCapLocation();
 		CurRainDirection2D = FVector2D(CapLoc.X, CapLoc.Y);
 	}
+}
+
+void APLevelScriptActor::SetUmbrella(APUmbrella* UmbrellaIn)
+{
+	Umbrella = UmbrellaIn;
+}
+
+void APLevelScriptActor::SetAIController(APAIController* AIControllerIn)
+{
+	AIController = AIControllerIn;
 }
 
 void APLevelScriptActor::Tick(float DeltaTime)

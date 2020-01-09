@@ -13,6 +13,7 @@
 #include "Components/SphereComponent.h"
 #include "PPuppyCharacter.h"
 #include "PPlayer.h"
+#include "TimerManager.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -24,6 +25,8 @@ APUmbrella::APUmbrella() {
 		SphereComponent->OnComponentEndOverlap.AddDynamic(this, &APUmbrella::OnOverlapEnd);
 	}
 	FloorLocationZ = 140.0f;
+	USizeTimerRate = 0.1f;
+	Difficulty = 0;
 }
 
 void APUmbrella::BeginPlay()
@@ -41,6 +44,7 @@ void APUmbrella::BeginPlay()
 			CylinderMesh->SetUOffset(CylinderSpawnLocation);
 			if (Level) {
 				Level->SetUmbrellaCylinder(CylinderMesh);
+				Level->SetUmbrella(this);
 			}
 		}
 	}
@@ -102,6 +106,7 @@ void APUmbrella::Initialize(APPlayer* PlayerIn,  FVector UTouchPositionIn, FVect
 	if (MPC) {
 		FVector Cur = GetActorLocation();
 		UKismetMaterialLibrary::SetVectorParameterValue(GetWorld(), MPC, FName("ULocation"), FLinearColor(Cur.X, Cur.Y, FloorLocationZ, 0));
+		USizeDefault_MPC = UKismetMaterialLibrary::GetScalarParameterValue(GetWorld(), MPC, FName("USize"));
 	}
 
 	SetActorLocation(UReleasePosition);
@@ -173,4 +178,36 @@ void APUmbrella::OnTouchEnd()
 {
 	MoveSpeed = ReleaseSpeed;
 	LerpToPosition(FVector(UReleasePosition.X, UReleasePosition.Y, UReleasePosition.Z));
+}
+
+void APUmbrella::ChangeUmbrellaSizeScalar(float NewSize) {
+	UTargetSize = FVector(NewSize, NewSize, NewSize);
+	GetWorldTimerManager().SetTimer(USizeHandle, this, &APUmbrella::UpdateUmbrellaSize, USizeTimerRate, true, 0.0f);
+}
+
+bool APUmbrella::IncreaseDifficulty()
+{
+	if (Difficulty < DifficultyLevels.Num()) {
+		ChangeUmbrellaSizeScalar(DifficultyLevels[Difficulty]);
+		Difficulty++;
+		return true;
+	}
+	return false;
+}
+
+void APUmbrella::UpdateUmbrellaSize() {
+	FVector CurSize = FMath::VInterpTo(GetActorScale3D(), UTargetSize, USizeTimerRate, USizeInterpSpeed);
+	
+	if (FVector::Dist(CurSize, GetActorScale3D()) > 0.001f) {
+		SetActorScale3D(CurSize);
+		if (MPC && CylinderMesh) {
+			CylinderMesh->SetOffsetScale3D(CurSize);
+			float NewRadius = CylinderMesh->GetScaledRadius();
+			UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC, FName("USize"), NewRadius);
+		}
+	}
+	else {
+		GetWorldTimerManager().ClearTimer(USizeHandle);
+	}
+
 }

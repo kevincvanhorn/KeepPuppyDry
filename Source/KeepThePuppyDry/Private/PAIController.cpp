@@ -8,20 +8,28 @@
 #include "NavigationSystem.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PSwipeDelegates.h"
+#include "PLevelScriptActor.h"
 
 APAIController::APAIController() {
 	ActionDelay = 5.0f;
 	TimeSinceLastAction = 0;
 	SitProbability = 0.3f;
 	WaitProbability = 0.2f;
+	Difficulty = 0;
 }
 
 void APAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Level = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
+
 	Puppy = (APPuppyCharacter*)GetPawn();
 	Navigation = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+
+	if (Level) {
+		Level->SetAIController(this);
+	}
 
 	// Start recursive action timer:
 	DoNextAction();
@@ -82,4 +90,20 @@ void APAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowin
 	else {
 		GetWorldTimerManager().SetTimer(AITimerHandle, this, &APAIController::DoNextAction, RemainingDelay, false);
 	}
+}
+
+bool APAIController::IncreaseDifficulty()
+{
+	if (Puppy && Difficulty < DifficultyLevels.Num()) {
+		FAIDIfficultyStruct State = DifficultyLevels[Difficulty];
+		ActionDelay = State.ActionDelay;
+		WaitProbability = State.WaitProbability;
+		SitProbability = State.SitProbability;
+
+		Puppy->OnIncreaseDifficulty(State.NavMinMoveDist, State.PSpeed, State.PAccel);
+
+		Difficulty++;
+		return true;
+	}
+	return false;
 }

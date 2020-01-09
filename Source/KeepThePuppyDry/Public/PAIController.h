@@ -6,6 +6,30 @@
 #include "AIController.h"
 #include "PAIController.generated.h"
 
+USTRUCT(BlueprintType)
+struct FAIDIfficultyStruct
+{
+	GENERATED_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float ActionDelay;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float WaitProbability;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float SitProbability;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float NavMinMoveDist;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float PSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float PAccel;
+};
+
 /**
  * 
  */
@@ -40,10 +64,26 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float SitProbability;
 
+	class APLevelScriptActor* Level;
+
 private:
 	class UNavigationSystemV1* Navigation;
 
 	class APPuppyCharacter* Puppy;
 
 	float TimeSinceLastAction;
+
+	// Difficulty:
+public:
+	/** Return true if a difficulty increase was achieved (i.e. diff cap not reached). */
+	UFUNCTION(BlueprintCallable)
+		bool IncreaseDifficulty();
+
+protected:
+	/** Difficulty Effects per level. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TArray<FAIDIfficultyStruct> DifficultyLevels;
+
+private:
+	int32 Difficulty;
 };
