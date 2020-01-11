@@ -20,9 +20,9 @@ public:
 
 	void SetUOffset(FVector OffsetIn) { UOffset = OffsetIn; }
 
-	void SetCapLocationXY(const FVector2D& Loc);
+	void SetCapLocationYZ(const FVector2D& Loc);
 
-	void SetCapLocationXY(const FVector2D& Loc, float CylinderOffset);
+	void SetCapLocationFromDir(const FVector& Dir);
 
 	FVector GetCapLocation() const { return TopCapPosition; }
 
@@ -98,4 +98,6 @@ public:
 
 private:
 	float ParentSize3DDiff;
+
+	FVector SizeOffset;
 };

@@ -18,7 +18,7 @@ public:
 	APRainEmitter();
 
 	UFUNCTION(BlueprintCallable)
-		void SetAcceleration(FVector DirectionIn, float RainSpeed);
+		void SetAcceleration(FVector DirectionIn, float RainIntensity);
 
 protected:
 	virtual void BeginPlay() override;

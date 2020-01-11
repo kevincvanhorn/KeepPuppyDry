@@ -65,15 +65,21 @@ protected:
 		float CylinderLerpSpeed;
 
 	/** Modifier for magnitude of Cylinder Direction.*/ // TODO: Rename.
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		float RainSpeed;
+	//UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	//	float RainCylinderModifier;
 
-	/** Modifier for magnitude of Rain velocity.*/ 
+	/** Modifier for rain velocity direction.*/
+	//UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	//	float RainVelIntensity;
+
+	/** Modifier for magnitude of Rain speed & acceleration.*/ 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float RainIntensity;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		int EmitterUpdatePerNumFrames;
+
+	void OnIncreaseDifficulty_Rain();
 
 	/** [0-1] Modifier for aligning cylinder at lower speeds.*/ // TODO
 	/*UPROPERTY(BlueprintReadWrite, EditAnywhere)

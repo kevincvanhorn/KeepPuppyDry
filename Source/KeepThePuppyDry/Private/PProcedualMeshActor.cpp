@@ -16,7 +16,7 @@ APProcedualMeshActor::APProcedualMeshActor()
 
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	SizeOffset = FVector(1,1,1);
 }
 
 void APProcedualMeshActor::SetUParent(APUmbrella* UmbrellaIn)
@@ -27,18 +27,17 @@ void APProcedualMeshActor::SetUParent(APUmbrella* UmbrellaIn)
 	}
 }
 
-void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc)
+void APProcedualMeshActor::SetCapLocationYZ(const FVector2D& Loc)
 {
-	TopCapPosition.X = Loc.X;
-	TopCapPosition.Y = Loc.Y;
+	TopCapPosition.Y = Loc.X;
 }
 
-void APProcedualMeshActor::SetCapLocationXY(const FVector2D& Loc, float CylinderOffset)
+void APProcedualMeshActor::SetCapLocationFromDir(const FVector& Dir)
 {
-	TopCapPosition.X = Loc.X;
-	TopCapPosition.Y = Loc.Y;
-	//FVector A = GetActorLocation();
-	//FVector B = A + TopCapPosition.GetSafeNormal() * FVector(1, -1, 1)*1000;
+	FVector Norm = Dir.GetSafeNormal();
+	Norm.Y *= -1;
+	TopCapPosition.X = Norm.X;
+	TopCapPosition.Y = Norm.Y;
 }
 
 void APProcedualMeshActor::ProjectCapLocation(FVector& ProjectedLoc, float FloorHeight)
@@ -294,12 +293,8 @@ void APProcedualMeshActor::RefreshMesh()
 {
 	FVector Offset = TopCapPosition;
 	for (int i = 0; i < TopCapIndices.Num() && i < BotCapIndices.Num(); ++i) {
-		Vertices[TopCapIndices[i]] = Vertices[BotCapIndices[i]] + Offset;
+		Vertices[TopCapIndices[i]] = Vertices[BotCapIndices[i]] + Offset/SizeOffset;
 	}
-	/*
-	FVector p2 = p1 + Offset;
-	FVector p3 = p0 + Offset;
-	*/
 
 	Mesh->ClearAllMeshSections();
 	Mesh->CreateMeshSection(0, Vertices, Triangles, Normals, UVs, VertexColors, Tangents, false);
@@ -307,5 +302,9 @@ void APProcedualMeshActor::RefreshMesh()
 }
 
 void APProcedualMeshActor::SetOffsetScale3D(const FVector& ParentSize) {
-	SetActorScale3D(FVector(ParentSize.X + ParentSize3DDiff, ParentSize.Y + ParentSize3DDiff, GetActorScale3D().Z));
+	FVector NewScale(ParentSize.X + ParentSize3DDiff, ParentSize.Y + ParentSize3DDiff, GetActorScale3D().Z);
+
+	SizeOffset = NewScale;//TopCapPosition - NewScale * TopCapPosition; // Translation to original point
+	SetActorScale3D(NewScale);
+	RefreshMesh();
 }

@@ -11,7 +11,6 @@ APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
 	RainLerpSpeed = 1.0f;
 	CylinderLerpSpeed = 1.0f;
-	RainSpeed = 1;
 	EmitterUpdatePerNumFrames = 3;
 }
 
@@ -38,6 +37,11 @@ void APLevelScriptActor::IncreaseDifficulty(EDifficultyType DiffType)
 	else if (DiffType == EDifficultyType::EUmbrella && Umbrella) {
 		Umbrella->IncreaseDifficulty();
 	}
+}
+
+void APLevelScriptActor::OnIncreaseDifficulty_Rain()
+{
+
 }
 
 void APLevelScriptActor::SetUmbrellaCylinder(APProcedualMeshActor* CylinderIn)
@@ -67,22 +71,23 @@ void APLevelScriptActor::Tick(float DeltaTime)
 		CurRainDirection2D = FMath::Vector2DInterpTo(CurRainDirection2D, TargetRainDirection2D, DeltaTime, CylinderLerpSpeed);
 		//CurRainDirection = FMath::VInterpTo(CurRainDirection, TargetRainDirection, DeltaTime, RainLerpSpeed);
 
-		UmbrellaCylinder->SetCapLocationXY(CurRainDirection2D*RainSpeed);
+		//UmbrellaCylinder->SetCapLocationFromDir(CurRainDirection);
+		UmbrellaCylinder->SetCapLocationYZ(CurRainDirection2D* RainIntensity);
 		if (FVector2D::Distance(TargetRainDirection2D, CurRainDirection2D) < 0.01f) {
 			bMovingCylinder = false;
 		}
-
+		
 		/*
 		FramesSinceEmitterUpdate++;
 		if (FramesSinceEmitterUpdate > EmitterUpdatePerNumFrames) {
 			FramesSinceEmitterUpdate = 0;
 			for (APRainEmitter* Emitter : RainEmmitters) {
 				if (Emitter) {
-					Emitter->SetAcceleration(CurRainDirection, RainIntensity);
+					Emitter->SetAcceleration(CurRainDirection, RainAccelIntensity, RainVelIntensity);
 				}
 			}
-		}
-		*/
+		}*/
+		
 	}
 }
 
@@ -93,7 +98,7 @@ void APLevelScriptActor::ChangeRainDirection(FVector DirectionIn)
 			Emitter->SetAcceleration(DirectionIn, RainIntensity);
 		}
 	}
-	//TargetRainDirection = DirectionIn;
-	TargetRainDirection2D = FVector2D(DirectionIn.X, DirectionIn.Y);
+	TargetRainDirection = DirectionIn;
+	TargetRainDirection2D = FVector2D(DirectionIn.Y, DirectionIn.Z);
 	bMovingCylinder = true;
 }
