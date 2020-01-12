@@ -31,6 +31,8 @@ public:
 
 	void SetAIController(class APAIController* AIControllerIn);
 
+	void SetUserWidget(class UPUserWidget* PUserWidgetIn);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -47,6 +49,12 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void IncreaseDifficulty(EDifficultyType DiffType);
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateUIDifficulty(EDifficultyType DiffType);
+
+protected:
+	class UPUserWidget* PUserWidget;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

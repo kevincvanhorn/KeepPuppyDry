@@ -47,6 +47,9 @@ float APPlayerState::SubtractHealth(float DeltaTime)
 	UnclampedHealth = FMath::Clamp(UnclampedHealth, 0.0f, 1.0f); // Reset to 1 if above when subtracting
 	UnclampedHealth = (UnclampedHealth + DeltaTime * HNegativeRate * -1);
 	Health = FMath::Clamp(UnclampedHealth, 0.0f, 1.0f);
+	if (PUserWidget) {
+		PUserWidget->SetHealthOver(0.0f);
+	}
 	return Health;
 }
 

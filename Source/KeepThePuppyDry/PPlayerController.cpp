@@ -11,6 +11,7 @@
 #include "KeepThePuppyDry.h"
 #include "PPlayerState.h"
 #include "PDifficultyManager.h"
+#include "PLevelScriptActor.h"
 
 APPlayerController::APPlayerController() {
 	bIgnoreInput = false;
@@ -34,12 +35,17 @@ void APPlayerController::BeginPlay() {
 		return;
 	}
 
+	PLevel = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
+
 	if (PUserWidgetClass) {
 		PUserWidget = CreateWidget<UPUserWidget>(GetWorld(), PUserWidgetClass);
 		if (PUserWidget) {
 			PUserWidget->AddToViewport();
 			if (PPlayerState) {
 				PPlayerState->SetPUserWidget(PUserWidget);
+			}
+			if (PLevel) {
+				PLevel->SetUserWidget(PUserWidget);
 			}
 		}
 	}

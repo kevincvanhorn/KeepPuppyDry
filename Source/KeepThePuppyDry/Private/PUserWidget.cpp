@@ -47,3 +47,8 @@ void UPUserWidget::SetHealthOver(float HealthOver)
 		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC_Score, FName("HealthOver"), HealthOver);
 	}
 }
+
+void UPUserWidget::UpdateUIDifficulty(EDifficultyType DiffType)
+{
+	this->OnUpdateUIDifficulty(DiffType);
+}

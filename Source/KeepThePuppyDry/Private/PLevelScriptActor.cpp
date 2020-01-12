@@ -6,6 +6,7 @@
 #include "PSwipeDelegates.h"
 #include "PAIController.h"
 #include "PUmbrella.h"
+#include "PUserWidget.h"
 
 APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
@@ -39,6 +40,13 @@ void APLevelScriptActor::IncreaseDifficulty(EDifficultyType DiffType)
 	}
 }
 
+void APLevelScriptActor::UpdateUIDifficulty(EDifficultyType DiffType)
+{
+	if (PUserWidget) {
+		PUserWidget->UpdateUIDifficulty(DiffType);
+	}
+}
+
 void APLevelScriptActor::OnIncreaseDifficulty_Rain()
 {
 
@@ -61,6 +69,11 @@ void APLevelScriptActor::SetUmbrella(APUmbrella* UmbrellaIn)
 void APLevelScriptActor::SetAIController(APAIController* AIControllerIn)
 {
 	AIController = AIControllerIn;
+}
+
+void APLevelScriptActor::SetUserWidget(UPUserWidget* PUserWidgetIn)
+{
+	PUserWidget = PUserWidgetIn;
 }
 
 void APLevelScriptActor::Tick(float DeltaTime)

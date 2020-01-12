@@ -38,7 +38,11 @@ public:
 
 	FVector2D GetLastTouchLocation() const { return LastTouchLoc; }
 
+
+
 protected:
+	class APLevelScriptActor* PLevel;
+
 	UPUserWidget* PUserWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player, Managers", meta = (AllowPrivateAccess = "true"))

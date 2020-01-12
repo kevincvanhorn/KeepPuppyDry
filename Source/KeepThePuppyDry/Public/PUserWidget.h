@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "PLevelScriptActor.h"
 #include "PUserWidget.generated.h"
 
 /**
@@ -22,11 +23,16 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta=(DisplayName = "DebugTouchPosition"))
 		void DebugTouchPosition(FVector2D TouchPos);
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateUIDifficulty"))
+		void OnUpdateUIDifficulty(EDifficultyType Difficulty);
+
 	void UpdateScore(int32 ScoreIn);
 
 	void UpdateHealth(float HealthIn);
 
 	void SetHealthOver(float HealthOver);
+
+	void UpdateUIDifficulty(EDifficultyType DiffType);
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
