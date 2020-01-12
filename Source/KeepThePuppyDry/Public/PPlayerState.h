@@ -34,6 +34,9 @@ public:
 		float GetHealth() const; // [0-1]
 
 	UFUNCTION(BlueprintCallable)
+		float ChangeHealth(float Delta);
+
+	UFUNCTION(BlueprintCallable)
 		float AddHealth(float DeltaTime);
 
 	UFUNCTION(BlueprintCallable)

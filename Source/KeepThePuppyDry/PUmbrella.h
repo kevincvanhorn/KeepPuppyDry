@@ -137,5 +137,26 @@ protected:
 
 		float USizeDefault_MPC; // Radius of material sphere mask
 
-		int32 Difficulty;
+		float DefaultSphereRadius;
+
+
+
+// Gameplay Stats
+private:
+
+	int32 Difficulty;
+
+// Overlap Percentage:
+public:
+	float GetOverlapPercentage() const { return OverlapPercentage; }
+
+private:
+
+	bool bOverlappingPuppy;
+
+	float OverlapPercentage;
+	
+	float PuppyRadius; // Radius of capsule.
+
+	class APPuppyCharacter* Puppy;
 };

@@ -14,6 +14,7 @@
 #include "PPuppyCharacter.h"
 #include "PPlayer.h"
 #include "TimerManager.h"
+#include "Components/CapsuleComponent.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -27,12 +28,16 @@ APUmbrella::APUmbrella() {
 	FloorLocationZ = 140.0f;
 	USizeTimerRate = 0.1f;
 	Difficulty = 0;
+	bOverlappingPuppy = false;
+	DefaultSphereRadius = 280.0f;
+	PuppyRadius = 1.0f;
 }
 
 void APUmbrella::BeginPlay()
 {
 	Super::BeginPlay();
 
+	DefaultSphereRadius = SphereComponent->GetUnscaledSphereRadius();
 	Level = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
 
 	if (CylinderMeshClass) {
@@ -81,8 +86,16 @@ void APUmbrella::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 {
 	APPuppyCharacter* PuppyOverlap =  dynamic_cast<APPuppyCharacter*>(OtherActor);
 	if (PuppyOverlap && PPlayer) {
+		if (!Puppy) {
+			Puppy = PuppyOverlap;
+			UCapsuleComponent* Capsule =  Puppy->GetCapsuleComponent();
+			if (Capsule) {
+				PuppyRadius = Capsule->GetScaledCapsuleRadius();
+			}
+		}
 		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin %s"), *OtherActor->GetName());
 		PPlayer->OnUmbrellaOverlapBegin();
+		bOverlappingPuppy = true;
 	}
 }
 
@@ -92,6 +105,8 @@ void APUmbrella::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Other
 	if (PuppyOverlap && PPlayer) {
 		UE_LOG(LogTemp, Warning, TEXT("OverlapEnd %s"), *OtherActor->GetName());
 		PPlayer->OnUmbrellaOverlapEnd();
+		bOverlappingPuppy = false;
+		OverlapPercentage = 0.0f;
 	}
 }
 
@@ -142,6 +157,13 @@ void APUmbrella::Tick(float DeltaTime)
 	// Set location to block particles bottom of cylinder.
 	if (SphereComponent) {
 		SphereComponent->SetWorldLocation(GroundLoc);
+		
+		// Check Overlap Percentage:
+		if (bOverlappingPuppy && Puppy) {
+			// Ru-Rp / d  :assuming Rp is less than Ru (p = puppy, u = umbrella, d = dist from centers)
+			OverlapPercentage = FMath::Clamp(FMath::Abs(SphereComponent->GetScaledSphereRadius() - PuppyRadius)/ FMath::Abs(GroundLoc.Y - Puppy->GetActorLocation().Y), 0.0f, 1.0f);
+			UE_LOG(LogTemp, Warning, TEXT("OverlapEnd %f"), OverlapPercentage);
+		}
 	}
 	// MPC for grass material
 	if (MPC) {
@@ -161,6 +183,8 @@ void APUmbrella::Tick(float DeltaTime)
 			}
 		}
 	}
+
+	
 }
 
 void APUmbrella::SetMPC(UMaterialParameterCollection* MPC_In)
@@ -204,6 +228,9 @@ void APUmbrella::UpdateUmbrellaSize() {
 			CylinderMesh->SetOffsetScale3D(CurSize);
 			float NewRadius = CylinderMesh->GetScaledRadius();
 			UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC, FName("USize"), NewRadius);
+		}
+		if (SphereComponent) {
+			SphereComponent->SetSphereRadius(DefaultSphereRadius * GetActorScale().Y);
 		}
 	}
 	else {

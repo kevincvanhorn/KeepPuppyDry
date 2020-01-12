@@ -88,9 +88,10 @@ void APPlayer::Tick(float DeltaTime)
 
 	if (bUOverlapping) {
 		UOverlapTime += DeltaTime;
-		if (PPlayerState && PUserWidget) {
+		if (PPlayerState && PUserWidget && Umbrella) {
 			//PUserWidget->UpdateScore(PPlayerState->ScoreFromTime(UOverlapTime));
-			PUserWidget->UpdateHealth(PPlayerState->AddHealth(DeltaTime));
+			float fOverlap = 2.0f * (Umbrella->GetOverlapPercentage() - 0.5f);
+			PUserWidget->UpdateHealth(PPlayerState->ChangeHealth(DeltaTime * fOverlap));
 		}
 	}
 	else {

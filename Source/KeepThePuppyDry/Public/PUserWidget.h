@@ -26,6 +26,8 @@ public:
 
 	void UpdateHealth(float HealthIn);
 
+	void SetHealthOver(float HealthOver);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UScaleBox* HandWidget;

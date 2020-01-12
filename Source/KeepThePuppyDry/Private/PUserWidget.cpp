@@ -40,3 +40,10 @@ void UPUserWidget::UpdateHealth(float HealthIn)
 		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC_Score, FName("Health"), HealthIn);
 	}
 }
+
+void UPUserWidget::SetHealthOver(float HealthOver)
+{
+	if (MPC_Score) {
+		UKismetMaterialLibrary::SetScalarParameterValue(GetWorld(), MPC_Score, FName("HealthOver"), HealthOver);
+	}
+}
