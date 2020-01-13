@@ -1,4 +1,4 @@
-// Copyright 2019, Kevin VanHorn. All rights reserved.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #pragma once
 
@@ -16,6 +16,20 @@ class KEEPTHEPUPPYDRY_API APPlayerState : public APlayerState
 
 public:
 	APPlayerState();
+
+	bool LoadGame();
+
+	bool SaveGame();
+
+// PERSISTENT DATA: Saved locally
+protected:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+		int32 PScore; // Bones = Currency // TODO: rename
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+		bool bShowTutorial;
+	
+public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Score")
 		float ScoreMultiplier;
@@ -54,8 +68,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 		float Health;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		int32 PScore;
+
 
 private:
 	class UPUserWidget* PUserWidget;

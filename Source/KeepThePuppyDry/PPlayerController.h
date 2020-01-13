@@ -31,6 +31,9 @@ public:
 		TSubclassOf<class UPUserWidget> PUserWidgetClass;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		TSubclassOf<class UPMainMenuWidget> PMainMenuWidgetClass;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		float MinSwipeDistance;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
@@ -38,12 +41,15 @@ public:
 
 	FVector2D GetLastTouchLocation() const { return LastTouchLoc; }
 
-
+	/** Called from MainMenuWidget to Unpause & postinitialize game. */
+	void StartGame();
 
 protected:
 	class APLevelScriptActor* PLevel;
 
 	UPUserWidget* PUserWidget;
+
+	class UPMainMenuWidget* PMainMenuWidget;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Player, Managers", meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<class APDifficultyManager> DifficultyManagerClass;

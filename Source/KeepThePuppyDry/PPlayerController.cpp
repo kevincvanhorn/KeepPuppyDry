@@ -1,4 +1,4 @@
-// Copyright 2019, Kevin VanHorn. All rights reserved.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 
 #include "PPlayerController.h"
@@ -12,6 +12,9 @@
 #include "PPlayerState.h"
 #include "PDifficultyManager.h"
 #include "PLevelScriptActor.h"
+#include "PMainMenuWidget.h"
+
+#include "Kismet/GameplayStatics.h"
 
 APPlayerController::APPlayerController() {
 	bIgnoreInput = false;
@@ -30,17 +33,21 @@ void APPlayerController::PostInitializeComponents()
 void APPlayerController::BeginPlay() {
 	PPlayer = Cast<APPlayer>(GetPawn());
 	PPlayerState = Cast<APPlayerState>(PlayerState);
-
-	if (B_LEVEL_SIMPLE) {
-		return;
-	}
-
 	PLevel = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
 
+	// Start Screen (load this first).
+	if (PMainMenuWidgetClass) {
+		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
+		if (PMainMenuWidget) {
+			PMainMenuWidget->Initialize(this);
+			PMainMenuWidget->AddToViewport();
+		}
+	}
+
+	// Spawn Managers & Pre-StartGame initialization:
 	if (PUserWidgetClass) {
 		PUserWidget = CreateWidget<UPUserWidget>(GetWorld(), PUserWidgetClass);
 		if (PUserWidget) {
-			PUserWidget->AddToViewport();
 			if (PPlayerState) {
 				PPlayerState->SetPUserWidget(PUserWidget);
 			}
@@ -49,21 +56,35 @@ void APPlayerController::BeginPlay() {
 			}
 		}
 	}
-
+	
 	if (PPlayer) {
-		PPlayer->SetUserWidget(PUserWidget);
 		PPlayer->Initialize(PPlayerState);
+		PPlayer->SetUserWidget(PUserWidget); // Sets to nullptr if UserWidget does not exist.
 	}
-
-	// Spawn Managers
 	if (DifficultyManagerClass) {
 		DifficultyManager = GetWorld()->SpawnActor<APDifficultyManager>(DifficultyManagerClass);
-		if (DifficultyManager) {
-			DifficultyManager->SetPUserWidget(PUserWidget);
-		}
+		DifficultyManager->SetPUserWidget(PUserWidget);
+	}
+
+	// Main Menu:
+	UGameplayStatics::SetGamePaused(GetWorld(), true); // Pause game.
+	if (PPlayerState) {
+		PPlayerState->LoadGame();
 	}
 
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
+}
+
+void APPlayerController::StartGame()
+{
+	if (PUserWidget) {
+		PUserWidget->AddToViewport();
+	}
+
+	if (PMainMenuWidget) {
+		PMainMenuWidget->RemoveFromViewport();
+	}
+	UGameplayStatics::SetGamePaused(GetWorld(), false); // UnPause game.
 }
 
 void APPlayerController::ResetTapHandler()

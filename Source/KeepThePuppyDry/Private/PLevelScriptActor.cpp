@@ -1,4 +1,4 @@
-// Copyright 2019, Kevin VanHorn. All rights reserved.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 #include "PLevelScriptActor.h"
 #include "PRainEmitter.h"

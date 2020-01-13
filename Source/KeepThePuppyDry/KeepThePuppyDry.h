@@ -3,5 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PSaveGame.h"
+#include "Kismet/GameplayStatics.h"
 
-static bool B_LEVEL_SIMPLE = false;
+static bool B_LEVEL_SIMPLE = false; //TODO: Deprecated.

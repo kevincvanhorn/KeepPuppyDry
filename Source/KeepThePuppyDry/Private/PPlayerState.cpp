@@ -1,14 +1,37 @@
-// Copyright 2019, Kevin VanHorn. All rights reserved.
+// Copyright 2020, Kevin VanHorn. All rights reserved.
 
 
 #include "PPlayerState.h"
 #include "PUserWidget.h"
+#include "PSaveGame.h"
+#include "KeepThePuppyDry.h"
 
 APPlayerState::APPlayerState() {
 	ScoreMultiplier = 1.0f;
 	Health = 1.0f;
 	HPositiveRate = HNegativeRate = 1.0f;
 	UnclampedHealth = 1.0f;
+	bShowTutorial = true;
+}
+
+bool APPlayerState::LoadGame()
+{
+	// Retrieve and cast the USaveGame object to UMySaveGame.
+	if (UPSaveGame* LoadedGame = Cast<UPSaveGame>(UGameplayStatics::LoadGameFromSlot(UPSaveGame::SaveSlotName, UPSaveGame::UserIndex)))
+	{
+		// The operation was successful, so LoadedGame now contains the data we saved earlier.
+		PScore = LoadedGame->Currency;
+		bShowTutorial =  LoadedGame->bShowTutorial;
+
+		UE_LOG(LogTemp, Warning, TEXT("LOADED: %d"), LoadedGame->Currency);
+		return true;
+	}
+	return false;
+}
+
+bool APPlayerState::SaveGame()
+{
+	return UPSaveGame::SynchronousSave(PScore, bShowTutorial);
 }
 
 int32 APPlayerState::ScoreFromTime(float TotalTime)
