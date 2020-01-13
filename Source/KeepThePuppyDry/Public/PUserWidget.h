@@ -34,6 +34,8 @@ public:
 
 	void UpdateUIDifficulty(EDifficultyType DiffType);
 
+	void SetDTimeRemaining(float TimeRemaining);
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UScaleBox* HandWidget;
@@ -41,6 +43,12 @@ protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UTextBlock* ScoreTextWidget;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* DTimerWidget;
+
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		class UMaterialParameterCollection* MPC_Score;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+		float TimeToNextDifficulty;
 };

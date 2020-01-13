@@ -4,6 +4,7 @@
 #include "PDifficultyManager.h"
 #include "PSwipeDelegates.h"
 #include "TimerManager.h"
+#include "PUserWidget.h"
 
 APDifficultyManager::APDifficultyManager()
 {
@@ -13,6 +14,13 @@ APDifficultyManager::APDifficultyManager()
 	bGameLoopActive = false;
 	Difficulty = 0;	
 	MaxDifficulty = 0;
+	CurUIFrame = 0;
+	UIFramesToSkip = 4;
+}
+
+void APDifficultyManager::SetPUserWidget(class UPUserWidget* PUserWidgetIn)
+{
+	PUserWidget = PUserWidgetIn;
 }
 
 void APDifficultyManager::BeginPlay()
@@ -23,6 +31,10 @@ void APDifficultyManager::BeginPlay()
 void APDifficultyManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (++CurUIFrame > UIFramesToSkip && PUserWidget) {
+		PUserWidget->SetDTimeRemaining(GetWorldTimerManager().GetTimerRemaining(DifficultyHandle));
+		CurUIFrame = 0;
+	}
 }
 
 void APDifficultyManager::Start()

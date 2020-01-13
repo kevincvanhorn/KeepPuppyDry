@@ -52,3 +52,17 @@ void UPUserWidget::UpdateUIDifficulty(EDifficultyType DiffType)
 {
 	this->OnUpdateUIDifficulty(DiffType);
 }
+
+void UPUserWidget::SetDTimeRemaining(float TimeRemaining)
+{
+	TimeToNextDifficulty = TimeRemaining;
+	if (DTimerWidget) {
+		int32 iTime = FMath::CeilToInt(TimeRemaining);
+		if (iTime >= 0) {
+			DTimerWidget->SetText(FText::AsNumber(iTime));
+		}
+		else {
+			DTimerWidget->SetVisibility(ESlateVisibility::Hidden);
+		}
+	}
+}

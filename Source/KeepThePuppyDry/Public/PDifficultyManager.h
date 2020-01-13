@@ -14,6 +14,8 @@ class KEEPTHEPUPPYDRY_API APDifficultyManager : public AActor
 public:	
 	APDifficultyManager();
 
+	void SetPUserWidget(class UPUserWidget* PUserWidgetIn);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -53,7 +55,11 @@ protected:
 
 	FTimerHandle DifficultyHandle;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int32 UIFramesToSkip;
+
 private:
 	bool bGameLoopActive;
 
+	int32 CurUIFrame;
 };

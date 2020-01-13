@@ -58,6 +58,9 @@ void APPlayerController::BeginPlay() {
 	// Spawn Managers
 	if (DifficultyManagerClass) {
 		DifficultyManager = GetWorld()->SpawnActor<APDifficultyManager>(DifficultyManagerClass);
+		if (DifficultyManager) {
+			DifficultyManager->SetPUserWidget(PUserWidget);
+		}
 	}
 
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
