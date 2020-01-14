@@ -21,6 +21,8 @@ public:
 
 	void Initialize(class APPlayerState* PlayerStateIn);
 
+	void OnGameOver() const;
+
 
 protected:
 	// Called when the game starts or when spawned

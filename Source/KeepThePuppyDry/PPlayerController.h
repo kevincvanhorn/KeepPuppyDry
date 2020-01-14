@@ -44,6 +44,9 @@ public:
 	/** Called from MainMenuWidget to Unpause & postinitialize game. */
 	void StartGame();
 
+	UFUNCTION()
+		void OnGameOver();
+
 protected:
 	class APLevelScriptActor* PLevel;
 

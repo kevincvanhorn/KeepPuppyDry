@@ -21,6 +21,8 @@ public:
 
 	bool SaveGame();
 
+	void SetPPlayer(class APPlayer* PPlayerIn);
+
 // PERSISTENT DATA: Saved locally
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -68,7 +70,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 		float Health;
 
-
+	void GameOver();
 
 private:
 	class UPUserWidget* PUserWidget;

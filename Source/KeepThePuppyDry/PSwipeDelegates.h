@@ -35,6 +35,8 @@ public:
 	static FLevelEventDelegate PuppySitDelegate;
 	static FLevelEventDelegate PuppyStandDelegate;
 
+	static FLevelEventDelegate GameOverDelegate;
+
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDifficultyChangedDelegate, int32, Difficulty);
 

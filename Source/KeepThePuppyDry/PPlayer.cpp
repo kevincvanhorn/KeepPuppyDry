@@ -43,6 +43,10 @@ void APPlayer::Initialize(APPlayerState* PlayerStateIn)
 	PPlayerState = PlayerStateIn;
 }
 
+void APPlayer::OnGameOver() const
+{
+}
+
 // Called when the game starts or when spawned
 void APPlayer::BeginPlay()
 {

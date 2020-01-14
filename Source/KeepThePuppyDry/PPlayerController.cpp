@@ -35,6 +35,8 @@ void APPlayerController::BeginPlay() {
 	PPlayerState = Cast<APPlayerState>(PlayerState);
 	PLevel = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
 
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APPlayerController::OnGameOver);
+
 	// Start Screen (load this first).
 	if (PMainMenuWidgetClass) {
 		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
@@ -81,10 +83,17 @@ void APPlayerController::StartGame()
 		PUserWidget->AddToViewport();
 	}
 
-	if (PMainMenuWidget) {
+	/*if (PMainMenuWidget) {
 		PMainMenuWidget->RemoveFromViewport();
-	}
+	}*/
 	UGameplayStatics::SetGamePaused(GetWorld(), false); // UnPause game.
+}
+
+void APPlayerController::OnGameOver()
+{
+	/*if (UserWidget) {
+		UserWidget->RemoveFromViewport();
+	}*/
 }
 
 void APPlayerController::ResetTapHandler()

@@ -5,6 +5,7 @@
 #include "PUserWidget.h"
 #include "PSaveGame.h"
 #include "KeepThePuppyDry.h"
+#include "PSwipeDelegates.h"
 
 APPlayerState::APPlayerState() {
 	ScoreMultiplier = 1.0f;
@@ -72,6 +73,11 @@ float APPlayerState::SubtractHealth(float DeltaTime)
 	Health = FMath::Clamp(UnclampedHealth, 0.0f, 1.0f);
 	if (PUserWidget) {
 		PUserWidget->SetHealthOver(0.0f);
+		
+		if (UnclampedHealth < 0.0f) {
+			UPSwipeDelegates::GameOverDelegate.Broadcast();
+			GameOver();
+		}
 	}
 	return Health;
 }
@@ -92,4 +98,11 @@ void APPlayerState::SetPUserWidget(UPUserWidget* PUserWidgetIn)
 void APPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void APPlayerState::GameOver()
+{
+	if (SaveGame()) {
+		UE_LOG(LogTemp, Warning, TEXT("Saved!"));
+	}
 }
