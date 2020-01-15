@@ -35,16 +35,38 @@ APPlayer::APPlayer()
 	bScreenTouched = false;
 	ClampZNeg = ClampZNeg = UReleasePosition.Z;
 	UOverlapTime = 0;
-	bUOverlapping = false;
+	bTutorialEnabled = true;
+	//bUOverlapping = false;
 }
 
 void APPlayer::Initialize(APPlayerState* PlayerStateIn)
 {
 	PPlayerState = PlayerStateIn;
+	
 }
 
-void APPlayer::OnGameOver() const
+void APPlayer::OnGameTutorial() {
+	bTutorialEnabled = true;
+	if (PUserWidget && PPlayerState) {
+		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
+		PUserWidget->UpdateScore(PPlayerState->GetScore());
+	}
+	this->SetActorTickEnabled(false);
+}
+
+void APPlayer::OnGameStart()
 {
+	bTutorialEnabled = false;
+	if (PUserWidget && PPlayerState) {
+		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
+		PUserWidget->UpdateScore(PPlayerState->GetScore());
+	}
+	this->SetActorTickEnabled(true);
+}
+
+void APPlayer::OnGameOver()
+{
+	this->SetActorTickEnabled(false);
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +83,9 @@ void APPlayer::BeginPlay()
 
 	UPSwipeDelegates::TouchBeganDelegate.AddUObject(this, &APPlayer::OnTouchBegin);
 	UPSwipeDelegates::TouchEndedDelegate.AddUObject(this, &APPlayer::OnTouchEnd);
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APPlayer::OnGameOver);
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APPlayer::OnGameStart);
+	UPSwipeDelegates::GameTutorialDelegate.AddUObject(this, &APPlayer::OnGameTutorial);
 
 	if (UmbrellaClass) {
 		FActorSpawnParameters SpawnParams;
@@ -122,7 +147,7 @@ void APPlayer::UpdateTouchLoc(FVector2D TouchLocIn)
 {
 	TouchLoc = TouchLocIn;
 
-	if (B_LEVEL_SIMPLE) return;
+	if (bTutorialEnabled) return;
 
 	/*if (PUserWidget) {
 		PUserWidget->SetTouchDragPosition(TouchLocIn);
@@ -148,6 +173,7 @@ void APPlayer::OnDoubleTap()
 void APPlayer::OnTouchBegin()
 {
 	bScreenTouched = true;
+	if (bTutorialEnabled) return;
 
 	if (Umbrella) {
 		if (B_LEVEL_SIMPLE) {
@@ -163,6 +189,9 @@ void APPlayer::OnTouchBegin()
 void APPlayer::OnTouchEnd()
 {
 	bScreenTouched = false;
+
+	if (bTutorialEnabled) return;
+
 	if (Umbrella) {
 		Umbrella->OnTouchEnd();
 	}

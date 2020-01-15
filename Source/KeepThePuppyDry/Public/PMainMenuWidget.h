@@ -17,11 +17,14 @@ class KEEPTHEPUPPYDRY_API UPMainMenuWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	/** Unpause game & remove this widget.*/
+	/** Unpause game & set the appropriate canvas panel visible.*/
 	UFUNCTION(BlueprintCallable)
 		void StartGame();
 
-	void Initialize(class APPlayerController* ControllerIn);
+	UFUNCTION(BlueprintCallable)
+		void EndTutorial();
+
+	void PInitialize(class APPlayerController* ControllerIn);
 
 protected:
 	UFUNCTION()
@@ -38,6 +41,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UCanvasPanel* TitleScreen;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UCanvasPanel* TutorialScreen;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UButton* StartGameButton;

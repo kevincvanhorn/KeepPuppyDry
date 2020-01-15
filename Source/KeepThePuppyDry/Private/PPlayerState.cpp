@@ -13,6 +13,7 @@ APPlayerState::APPlayerState() {
 	HPositiveRate = HNegativeRate = 1.0f;
 	UnclampedHealth = 1.0f;
 	bShowTutorial = true;
+	bIsGameOver = false;
 }
 
 bool APPlayerState::LoadGame()
@@ -45,6 +46,11 @@ float APPlayerState::GetHealth() const
 	return Health;
 }
 
+int32 APPlayerState::GetScore() const
+{
+	return Score;
+}
+
 float APPlayerState::ChangeHealth(float Delta)
 {
 	return Delta >= 0 ? AddHealth(Delta) : SubtractHealth(-1*Delta);
@@ -74,7 +80,7 @@ float APPlayerState::SubtractHealth(float DeltaTime)
 	if (PUserWidget) {
 		PUserWidget->SetHealthOver(0.0f);
 		
-		if (UnclampedHealth < 0.0f) {
+		if (UnclampedHealth < 0.0f && !bIsGameOver) {
 			UPSwipeDelegates::GameOverDelegate.Broadcast();
 			GameOver();
 		}
@@ -103,6 +109,7 @@ void APPlayerState::BeginPlay()
 void APPlayerState::GameOver()
 {
 	if (SaveGame()) {
+		bIsGameOver = true;
 		UE_LOG(LogTemp, Warning, TEXT("Saved!"));
 	}
 }

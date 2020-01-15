@@ -14,6 +14,7 @@
 #include "PPuppyCharacter.h"
 #include "PPlayer.h"
 #include "TimerManager.h"
+#include "PSwipeDelegates.h"
 #include "Components/CapsuleComponent.h"
 
 APUmbrella::APUmbrella() {
@@ -36,6 +37,10 @@ APUmbrella::APUmbrella() {
 void APUmbrella::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APUmbrella::OnGameOver);
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APUmbrella::OnGameStart);
+	UPSwipeDelegates::GameTutorialDelegate.AddUObject(this, &APUmbrella::OnGameTutorial);
 
 	DefaultSphereRadius = SphereComponent->GetUnscaledSphereRadius();
 	Level = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
@@ -184,7 +189,6 @@ void APUmbrella::Tick(float DeltaTime)
 		}
 	}
 
-	
 }
 
 void APUmbrella::SetMPC(UMaterialParameterCollection* MPC_In)
@@ -202,6 +206,21 @@ void APUmbrella::OnTouchEnd()
 {
 	MoveSpeed = ReleaseSpeed;
 	LerpToPosition(FVector(UReleasePosition.X, UReleasePosition.Y, UReleasePosition.Z));
+}
+
+void APUmbrella::OnGameTutorial()
+{
+	SetActorLocation(FVector(0.0f,0.0f, UReleasePosition.Z));
+	TargetPosition = FVector(0.0f, 0.0f, UReleasePosition.Z);
+	bMoving = false;
+}
+
+void APUmbrella::OnGameStart()
+{
+}
+
+void APUmbrella::OnGameOver()
+{
 }
 
 void APUmbrella::ChangeUmbrellaSizeScalar(float NewSize) {

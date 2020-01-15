@@ -41,7 +41,7 @@ void APPlayerController::BeginPlay() {
 	if (PMainMenuWidgetClass) {
 		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
 		if (PMainMenuWidget) {
-			PMainMenuWidget->Initialize(this);
+			PMainMenuWidget->PInitialize(this);
 			PMainMenuWidget->AddToViewport();
 		}
 	}
@@ -60,8 +60,8 @@ void APPlayerController::BeginPlay() {
 	}
 	
 	if (PPlayer) {
-		PPlayer->Initialize(PPlayerState);
 		PPlayer->SetUserWidget(PUserWidget); // Sets to nullptr if UserWidget does not exist.
+		PPlayer->Initialize(PPlayerState);
 	}
 	if (DifficultyManagerClass) {
 		DifficultyManager = GetWorld()->SpawnActor<APDifficultyManager>(DifficultyManagerClass);
@@ -77,8 +77,14 @@ void APPlayerController::BeginPlay() {
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
 }
 
-void APPlayerController::StartGame()
+// Directly called from button Start in Menu screen
+bool APPlayerController::StartGame()
 {
+	bool bShowTutorial = false;
+	if (PPlayerState) {
+		bShowTutorial = PPlayerState->GetTutorialEnabled();
+	}
+
 	if (PUserWidget) {
 		PUserWidget->AddToViewport();
 	}
@@ -87,6 +93,18 @@ void APPlayerController::StartGame()
 		PMainMenuWidget->RemoveFromViewport();
 	}*/
 	UGameplayStatics::SetGamePaused(GetWorld(), false); // UnPause game.
+	if (bShowTutorial) {
+		UPSwipeDelegates::GameTutorialDelegate.Broadcast();
+	}
+	else {
+		UPSwipeDelegates::GameStartDelegate.Broadcast();
+	}
+	return bShowTutorial;
+}
+
+void APPlayerController::EndTutorial()
+{
+	UPSwipeDelegates::GameStartDelegate.Broadcast();
 }
 
 void APPlayerController::OnGameOver()

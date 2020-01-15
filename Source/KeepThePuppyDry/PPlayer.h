@@ -21,10 +21,16 @@ public:
 
 	void Initialize(class APPlayerState* PlayerStateIn);
 
-	void OnGameOver() const;
-
-
 protected:
+	UFUNCTION()
+		void OnGameTutorial();
+
+	UFUNCTION()
+		void OnGameStart();
+
+	UFUNCTION()
+		void OnGameOver();
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -128,4 +134,8 @@ private:
 	bool bUOverlapping; // Overlapping umbrella?
 
 	class UMaterialParameterCollection* MPC;
+
+	//
+private:
+	bool bTutorialEnabled;
 };

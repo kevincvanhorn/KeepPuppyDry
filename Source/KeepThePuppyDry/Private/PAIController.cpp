@@ -18,9 +18,30 @@ APAIController::APAIController() {
 	Difficulty = 0;
 }
 
+void APAIController::OnGameTutorial()
+{
+	UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+}
+
+void APAIController::OnGameStart()
+{
+	// Start recursive action timer:
+	DoNextAction();
+}
+
+void APAIController::OnGameOver()
+{
+	GetWorldTimerManager().PauseTimer(AITimerHandle);
+	UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+}
+
 void APAIController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APAIController::OnGameOver);
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APAIController::OnGameStart);
+	UPSwipeDelegates::GameTutorialDelegate.AddUObject(this, &APAIController::OnGameTutorial);
 
 	Level = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
 
@@ -32,7 +53,7 @@ void APAIController::BeginPlay()
 	}
 
 	// Start recursive action timer:
-	DoNextAction();
+	//DoNextAction();
 }
 void APAIController::Tick(float DeltaTime)
 {

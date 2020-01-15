@@ -10,5 +10,12 @@ public class KeepThePuppyDryEditorTarget : TargetRules
 		Type = TargetType.Editor;
 
 		ExtraModuleNames.AddRange( new string[] { "KeepThePuppyDry" } );
+
+		if (Target.Platform == UnrealTargetPlatform.Android)
+		{
+			ExtraModuleNames.Add("OnlineSubsystemGooglePlay");
+			ExtraModuleNames.Add("OnlineSubsystem");
+			ExtraModuleNames.Add("AndroidAdvertising");
+		}
 	}
 }

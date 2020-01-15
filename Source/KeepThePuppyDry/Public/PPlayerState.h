@@ -23,6 +23,9 @@ public:
 
 	void SetPPlayer(class APPlayer* PPlayerIn);
 
+public:
+	bool GetTutorialEnabled() const { return bShowTutorial; }
+
 // PERSISTENT DATA: Saved locally
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -48,6 +51,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		float GetHealth() const; // [0-1]
+
+	/** Returns the "score" TODO: should be renamed currency. */
+	UFUNCTION(BlueprintCallable)
+		int32 GetScore() const;
 
 	UFUNCTION(BlueprintCallable)
 		float ChangeHealth(float Delta);
@@ -76,4 +83,6 @@ private:
 	class UPUserWidget* PUserWidget;
 
 	float UnclampedHealth;
+	
+	bool bIsGameOver;
 };

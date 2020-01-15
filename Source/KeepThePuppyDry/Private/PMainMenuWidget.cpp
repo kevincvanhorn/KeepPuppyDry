@@ -10,20 +10,33 @@
 void UPMainMenuWidget::NativeConstruct() {
 	Super::NativeConstruct();
 
-	Menus = { TitleScreen, GameOverScreen};
+	Menus = { TitleScreen, GameOverScreen, TutorialScreen};
 	SetScreenVisible(TitleScreen); // Hide all screens
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &UPMainMenuWidget::OnGameOver);
 }
 
 void UPMainMenuWidget::StartGame()
 {
-	SetScreenVisible(nullptr); // Hide all screens
+	bool bShowTutorial = false;
 	if (PPlayerController) {
-		PPlayerController->StartGame();
+		bShowTutorial = PPlayerController->StartGame();
+	}
+	if (bShowTutorial) {
+		SetScreenVisible(TutorialScreen);
+	}
+	else {
+		SetScreenVisible(nullptr); // Hide all screens
 	}
 }
 
-void UPMainMenuWidget::Initialize(APPlayerController* ControllerIn)
+void UPMainMenuWidget::EndTutorial()
+{
+	if (PPlayerController) {
+		PPlayerController->EndTutorial();
+	}
+}
+
+void UPMainMenuWidget::PInitialize(APPlayerController* ControllerIn)
 {
 	PPlayerController = ControllerIn;
 }

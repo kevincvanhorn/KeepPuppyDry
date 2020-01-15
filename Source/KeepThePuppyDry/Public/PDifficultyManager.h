@@ -17,6 +17,15 @@ public:
 	void SetPUserWidget(class UPUserWidget* PUserWidgetIn);
 
 protected:
+	UFUNCTION()
+		void OnGameTutorial();
+
+	UFUNCTION()
+		void OnGameStart();
+
+	UFUNCTION()
+		void OnGameOver();
+
 	virtual void BeginPlay() override;
 
 	class UPUserWidget* PUserWidget;
@@ -41,6 +50,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnSwitchDifficulty"))
 		void OnSwitchDifficulty(int32 DifficultyOut);
+
 
 protected:
 	UFUNCTION()

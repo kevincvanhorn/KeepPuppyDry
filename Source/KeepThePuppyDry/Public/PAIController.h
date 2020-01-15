@@ -42,6 +42,15 @@ public:
 	APAIController();
 
 protected:
+	UFUNCTION()
+		void OnGameTutorial();
+
+	UFUNCTION()
+		void OnGameStart();
+
+	UFUNCTION()
+		void OnGameOver();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;

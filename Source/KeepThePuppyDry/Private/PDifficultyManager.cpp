@@ -23,9 +23,27 @@ void APDifficultyManager::SetPUserWidget(class UPUserWidget* PUserWidgetIn)
 	PUserWidget = PUserWidgetIn;
 }
 
+void APDifficultyManager::OnGameTutorial()
+{
+}
+
+void APDifficultyManager::OnGameStart()
+{
+	Start();
+}
+
+void APDifficultyManager::OnGameOver()
+{
+	Pause();
+}
+
 void APDifficultyManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APDifficultyManager::OnGameOver);
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APDifficultyManager::OnGameStart);
+	UPSwipeDelegates::GameTutorialDelegate.AddUObject(this, &APDifficultyManager::OnGameTutorial);
 }
 
 void APDifficultyManager::Tick(float DeltaTime)

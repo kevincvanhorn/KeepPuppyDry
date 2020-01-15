@@ -41,6 +41,15 @@ public:
 	void SetClampZValues(float Pos, float Neg) { ClampZPos = Pos; ClampZNeg = Neg; }
 
 protected:
+	UFUNCTION()
+		void OnGameTutorial();
+
+	UFUNCTION()
+		void OnGameStart();
+
+	UFUNCTION()
+		void OnGameOver();
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchLoc"))

@@ -41,8 +41,11 @@ public:
 
 	FVector2D GetLastTouchLocation() const { return LastTouchLoc; }
 
-	/** Called from MainMenuWidget to Unpause & postinitialize game. */
-	void StartGame();
+	/** Called from MainMenuWidget to Unpause & postinitialize game. 
+		@return tutorial enabled? */
+	bool StartGame();
+
+	void EndTutorial();
 
 	UFUNCTION()
 		void OnGameOver();
