@@ -23,11 +23,14 @@ public:
 		float MinimumLoadingScreenDisplayTime;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
-		class UUserWidget* WidgetLoadingScreen;
+		TSubclassOf<class UUserWidget> WidgetLoadingScreenClass;
 
 	UFUNCTION()
 		virtual void BeginLoadingScreen(const FString& MapName);
 	UFUNCTION()
 		virtual void EndLoadingScreen(UWorld* InLoadedWorld);
+
+private:
+	class UUserWidget* LoadingScreenWidget;
 	
 };

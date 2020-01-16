@@ -26,6 +26,8 @@ UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::GameOverDelegate;
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::GameStartDelegate;
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::GameTutorialDelegate;
 
+UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::EndLoadingScreenDelegate;
+
 UPSwipeDelegates::FDifficultyChangedDelegate UPSwipeDelegates::DifficultySwitchDelegate;
 
 

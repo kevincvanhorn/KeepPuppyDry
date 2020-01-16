@@ -31,6 +31,7 @@ void APPlayerController::PostInitializeComponents()
 }
 
 void APPlayerController::BeginPlay() {
+	Super::BeginPlay();
 	PPlayer = Cast<APPlayer>(GetPawn());
 	PPlayerState = Cast<APPlayerState>(PlayerState);
 	PLevel = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
@@ -42,7 +43,7 @@ void APPlayerController::BeginPlay() {
 		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
 		if (PMainMenuWidget) {
 			PMainMenuWidget->PInitialize(this);
-			PMainMenuWidget->AddToViewport();
+			//PMainMenuWidget->AddToViewport();
 		}
 	}
 
@@ -74,6 +75,10 @@ void APPlayerController::BeginPlay() {
 		PPlayerState->LoadGame();
 	}
 
+	if (PMainMenuWidget) {
+		PMainMenuWidget->AddToViewport();
+	}
+
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
 }
 
@@ -92,7 +97,12 @@ bool APPlayerController::StartGame()
 	/*if (PMainMenuWidget) {
 		PMainMenuWidget->RemoveFromViewport();
 	}*/
-	UGameplayStatics::SetGamePaused(GetWorld(), false); // UnPause game.
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		UGameplayStatics::SetGamePaused(World, false); // UnPause game.
+	}
+
 	if (bShowTutorial) {
 		UPSwipeDelegates::GameTutorialDelegate.Broadcast();
 	}

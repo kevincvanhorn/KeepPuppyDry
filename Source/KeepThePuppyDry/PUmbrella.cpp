@@ -213,10 +213,17 @@ void APUmbrella::OnGameTutorial()
 	SetActorLocation(FVector(0.0f,0.0f, UReleasePosition.Z));
 	TargetPosition = FVector(0.0f, 0.0f, UReleasePosition.Z);
 	bMoving = false;
+
+	if (SphereComponent){
+		SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
 }
 
 void APUmbrella::OnGameStart()
 {
+	if (SphereComponent) {
+		SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
 }
 
 void APUmbrella::OnGameOver()

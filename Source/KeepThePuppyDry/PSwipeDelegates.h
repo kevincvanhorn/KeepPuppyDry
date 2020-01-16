@@ -39,6 +39,8 @@ public:
 	static FLevelEventDelegate GameStartDelegate;
 	static FLevelEventDelegate GameTutorialDelegate;
 
+	static FLevelEventDelegate EndLoadingScreenDelegate;
+
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDifficultyChangedDelegate, int32, Difficulty);
 

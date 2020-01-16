@@ -13,6 +13,10 @@ void UPMainMenuWidget::NativeConstruct() {
 	Menus = { TitleScreen, GameOverScreen, TutorialScreen};
 	SetScreenVisible(TitleScreen); // Hide all screens
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &UPMainMenuWidget::OnGameOver);
+	UPSwipeDelegates::TouchBeganDelegate.AddUObject(this, &UPMainMenuWidget::OnTouchBegin);
+	UPSwipeDelegates::TouchEndedDelegate.AddUObject(this, &UPMainMenuWidget::OnTouchEnd);
+
+	bTutorialInProgress = false;
 }
 
 void UPMainMenuWidget::StartGame()
@@ -23,6 +27,7 @@ void UPMainMenuWidget::StartGame()
 	}
 	if (bShowTutorial) {
 		SetScreenVisible(TutorialScreen);
+		bTutorialInProgress = true;
 	}
 	else {
 		SetScreenVisible(nullptr); // Hide all screens
@@ -31,6 +36,8 @@ void UPMainMenuWidget::StartGame()
 
 void UPMainMenuWidget::EndTutorial()
 {
+	bTutorialInProgress = false;
+	SetScreenVisible(nullptr);
 	if (PPlayerController) {
 		PPlayerController->EndTutorial();
 	}
@@ -48,6 +55,11 @@ void UPMainMenuWidget::OnGameOver()
 	}
 }
 
+void UPMainMenuWidget::EndLoadingScreen()
+{
+	UPSwipeDelegates::EndLoadingScreenDelegate.Broadcast();
+}
+
 void UPMainMenuWidget::SetScreenVisible(UCanvasPanel* ScreenIn)
 {
 	for (UCanvasPanel* Screen : Menus) {
@@ -58,4 +70,18 @@ void UPMainMenuWidget::SetScreenVisible(UCanvasPanel* ScreenIn)
 			}
 		}
 	}
+}
+
+void UPMainMenuWidget::OnTouchBegin()
+{
+	this->OnBPTouchBegin();
+
+	if (bTutorialInProgress) {
+		EndTutorial();
+	}
+}
+
+void UPMainMenuWidget::OnTouchEnd()
+{
+	this->OnBPTouchEnd();
 }

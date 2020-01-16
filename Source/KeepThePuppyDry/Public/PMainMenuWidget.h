@@ -30,10 +30,27 @@ protected:
 	UFUNCTION()
 		void OnGameOver();
 
+	UFUNCTION(BlueprintCallable)
+		void EndLoadingScreen();
+
+
 	TArray<class UCanvasPanel*> Menus;
 
 	/** Redundant: Hide all screens and show the @param screen. */
 	void SetScreenVisible(class UCanvasPanel* ScreenIn);
+
+protected:
+	UFUNCTION()
+		void OnTouchBegin();
+
+	UFUNCTION()
+		void OnTouchEnd();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchBegin"))
+		void OnBPTouchBegin();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchEnd"))
+		void OnBPTouchEnd();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -53,4 +70,7 @@ protected:
 		class UCanvasPanel* GameOverScreen;
 
 	class APPlayerController* PPlayerController;
+
+private:
+	bool bTutorialInProgress;
 };

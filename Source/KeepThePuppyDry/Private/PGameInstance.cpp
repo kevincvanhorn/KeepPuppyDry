@@ -22,11 +22,14 @@ void UPGameInstance::BeginLoadingScreen(const FString& InMapName)
 	{
 		FLoadingScreenAttributes LoadingScreen;
 		LoadingScreen.MinimumLoadingScreenDisplayTime = MinimumLoadingScreenDisplayTime;
-		if (WidgetLoadingScreen) {
-			LoadingScreen.WidgetLoadingScreen = WidgetLoadingScreen->TakeWidget();
+		if (WidgetLoadingScreenClass) {
+			LoadingScreenWidget = CreateWidget<UUserWidget>(GetWorld(), WidgetLoadingScreenClass);
+			if (LoadingScreenWidget) {
+				LoadingScreen.WidgetLoadingScreen = LoadingScreenWidget->TakeWidget();
+			}
 		}
-		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-
+		LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+		LoadingScreen.bMoviesAreSkippable = false;
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 	}
 }

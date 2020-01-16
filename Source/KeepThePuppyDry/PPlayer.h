@@ -137,5 +137,5 @@ private:
 
 	//
 private:
-	bool bTutorialEnabled;
+	bool bTryUpdateTouchEvents;
 };

@@ -35,18 +35,17 @@ APPlayer::APPlayer()
 	bScreenTouched = false;
 	ClampZNeg = ClampZNeg = UReleasePosition.Z;
 	UOverlapTime = 0;
-	bTutorialEnabled = true;
+	bTryUpdateTouchEvents = true;
 	//bUOverlapping = false;
 }
 
 void APPlayer::Initialize(APPlayerState* PlayerStateIn)
 {
 	PPlayerState = PlayerStateIn;
-	
 }
 
 void APPlayer::OnGameTutorial() {
-	bTutorialEnabled = true;
+	bTryUpdateTouchEvents = false;
 	if (PUserWidget && PPlayerState) {
 		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
 		PUserWidget->UpdateScore(PPlayerState->GetScore());
@@ -56,7 +55,11 @@ void APPlayer::OnGameTutorial() {
 
 void APPlayer::OnGameStart()
 {
-	bTutorialEnabled = false;
+	if (!bTryUpdateTouchEvents) {
+		// Tutorial just finished
+		OnTouchBegin();
+	}
+	bTryUpdateTouchEvents = true;
 	if (PUserWidget && PPlayerState) {
 		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
 		PUserWidget->UpdateScore(PPlayerState->GetScore());
@@ -67,6 +70,7 @@ void APPlayer::OnGameStart()
 void APPlayer::OnGameOver()
 {
 	this->SetActorTickEnabled(false);
+	bTryUpdateTouchEvents = false;
 }
 
 // Called when the game starts or when spawned
@@ -76,9 +80,9 @@ void APPlayer::BeginPlay()
 	PPlayerController = Cast<APPlayerController>(Controller);
 
 	// Subscribe all delegates:
-	UPSwipeDelegates::DoubleTapDelegate.AddUObject(this, &APPlayer::OnDoubleTap);
-	UPSwipeDelegates::SwipeUpDelegate.AddUObject(this, &APPlayer::OnSwipeUp);
-	UPSwipeDelegates::SwipeDownDelegate.AddUObject(this, &APPlayer::OnSwipeDown);
+	//UPSwipeDelegates::DoubleTapDelegate.AddUObject(this, &APPlayer::OnDoubleTap);
+	//UPSwipeDelegates::SwipeUpDelegate.AddUObject(this, &APPlayer::OnSwipeUp);
+	//UPSwipeDelegates::SwipeDownDelegate.AddUObject(this, &APPlayer::OnSwipeDown);
 	UPSwipeDelegates::PostBeginPlayDelegate.AddUObject(this, &APPlayer::PostBeginPlay);
 
 	UPSwipeDelegates::TouchBeganDelegate.AddUObject(this, &APPlayer::OnTouchBegin);
@@ -147,7 +151,7 @@ void APPlayer::UpdateTouchLoc(FVector2D TouchLocIn)
 {
 	TouchLoc = TouchLocIn;
 
-	if (bTutorialEnabled) return;
+	if (!bTryUpdateTouchEvents) return;
 
 	/*if (PUserWidget) {
 		PUserWidget->SetTouchDragPosition(TouchLocIn);
@@ -173,7 +177,7 @@ void APPlayer::OnDoubleTap()
 void APPlayer::OnTouchBegin()
 {
 	bScreenTouched = true;
-	if (bTutorialEnabled) return;
+	if (!bTryUpdateTouchEvents) return;
 
 	if (Umbrella) {
 		if (B_LEVEL_SIMPLE) {
@@ -190,7 +194,7 @@ void APPlayer::OnTouchEnd()
 {
 	bScreenTouched = false;
 
-	if (bTutorialEnabled) return;
+	if (!bTryUpdateTouchEvents) return;
 
 	if (Umbrella) {
 		Umbrella->OnTouchEnd();

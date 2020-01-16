@@ -48,7 +48,7 @@ float APPlayerState::GetHealth() const
 
 int32 APPlayerState::GetScore() const
 {
-	return Score;
+	return PScore;
 }
 
 float APPlayerState::ChangeHealth(float Delta)
