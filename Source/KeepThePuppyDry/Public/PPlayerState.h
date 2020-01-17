@@ -31,10 +31,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 		int32 PScore; // Bones = Currency // TODO: rename
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		bool bShowTutorial;
 	
 public:
+	void SetShowTutorial(bool bVisible) { bShowTutorial = bVisible; }
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Score")
 		float ScoreMultiplier;
@@ -44,6 +45,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Health")
 		float HNegativeRate;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		int32 TriesBetweenInterstitialAds;
+
+	UFUNCTION(BlueprintCallable)
+		bool bCanDisplayInterstitialAd();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -55,6 +62,9 @@ public:
 	/** Returns the "score" TODO: should be renamed currency. */
 	UFUNCTION(BlueprintCallable)
 		int32 GetScore() const;
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetNumSessionLosses() const;
 
 	UFUNCTION(BlueprintCallable)
 		float ChangeHealth(float Delta);
@@ -82,7 +92,13 @@ protected:
 private:
 	class UPUserWidget* PUserWidget;
 
+	class UPGameInstance* PGameInstance;
+
 	float UnclampedHealth;
 	
 	bool bIsGameOver;
+
+	//int32 NumSessionLosses;
+
+	bool bShowAdOnNextRequest;
 };

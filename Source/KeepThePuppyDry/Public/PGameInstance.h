@@ -7,7 +7,7 @@
 #include "PGameInstance.generated.h"
 
 /**
- * 
+ * Persistent through play session.
  */
 UCLASS()
 class KEEPTHEPUPPYDRY_API UPGameInstance : public UGameInstance
@@ -30,7 +30,20 @@ public:
 	UFUNCTION()
 		virtual void EndLoadingScreen(UWorld* InLoadedWorld);
 
+	bool ShouldSkipToGameplay() const { return bSkipToGameplay; }
+
+	void SetSkipToGameplay(bool bSkip) { bSkipToGameplay = bSkip; }
+
 private:
 	class UUserWidget* LoadingScreenWidget;
 	
+	bool bSkipToGameplay;
+
+public:
+	int32 IncrementNumSessionLosses() { return ++NumSessionLosses; }
+
+	int32 GetNumSessionLosses() const { return NumSessionLosses; }
+
+private:
+	int32 NumSessionLosses;
 };

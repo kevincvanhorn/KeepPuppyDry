@@ -32,7 +32,7 @@ void APAIController::OnGameStart()
 void APAIController::OnGameOver()
 {
 	GetWorldTimerManager().PauseTimer(AITimerHandle);
-	UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+	//UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
 }
 
 void APAIController::BeginPlay()

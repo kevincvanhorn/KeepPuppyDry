@@ -43,7 +43,7 @@ public:
 
 	/** Called from MainMenuWidget to Unpause & postinitialize game. 
 		@return tutorial enabled? */
-	bool StartGame();
+	bool StartGame(bool bSkipStartOverride = false);
 
 	void EndTutorial();
 
@@ -76,6 +76,8 @@ protected:
 
 	class APPlayerState* PPlayerState;
 
+	class UPGameInstance* PGameInstance;
+
 	class APDifficultyManager* DifficultyManager;
 
 private:
@@ -89,6 +91,10 @@ private:
 
 	int32 TapCount;
 
+	bool bShowTutorial;
+
 	UFUNCTION()
 		void ResetTapHandler();
+
+	//UWorld* World;
 };

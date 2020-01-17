@@ -56,6 +56,7 @@ void APPlayer::OnGameTutorial() {
 void APPlayer::OnGameStart()
 {
 	if (!bTryUpdateTouchEvents) {
+		bTryUpdateTouchEvents = true;
 		// Tutorial just finished
 		OnTouchBegin();
 	}

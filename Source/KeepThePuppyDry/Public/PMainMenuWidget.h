@@ -24,7 +24,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void EndTutorial();
 
-	void PInitialize(class APPlayerController* ControllerIn);
+	void PInitialize(class APPlayerController* ControllerIn, class APPlayerState* PPlayerStateIn, bool bSkipMenuIn);
 
 protected:
 	UFUNCTION()
@@ -33,6 +33,8 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void EndLoadingScreen();
 
+	UFUNCTION(BlueprintCallable)
+		bool bCanDisplayInterstitialAd();
 
 	TArray<class UCanvasPanel*> Menus;
 
@@ -46,11 +48,23 @@ protected:
 	UFUNCTION()
 		void OnTouchEnd();
 
+	UFUNCTION()
+		void PostBeginPlay();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnSkipMenu"))
+		void OnSkipMenu();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnPostBeginPlay"))
+		void OnPostBeginPlay();
+
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchBegin"))
 		void OnBPTouchBegin();
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchEnd"))
 		void OnBPTouchEnd();
+
+	UFUNCTION(BlueprintCallable)
+		void PRestartLevel(bool bShowTitleScreen);
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
@@ -63,14 +77,28 @@ protected:
 		class UCanvasPanel* TutorialScreen;
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UCanvasPanel* CountdownScreen;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UButton* StartGameButton;
+
+	class APPlayerController* PPlayerController;
+
+	class APPlayerState* PPlayerState;
+
+private:
+	bool bTutorialInProgress;
+	
+	bool bSkipMenus;
+
+	class UPGameInstance* PGameInstance;
+
+// GAME OVER
+public:
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnGameOver"))
+		void OnGameOverEventBP();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UCanvasPanel* GameOverScreen;
-
-	class APPlayerController* PPlayerController;
-
-private:
-	bool bTutorialInProgress;
 };

@@ -6,6 +6,8 @@
 #include "PSaveGame.h"
 #include "KeepThePuppyDry.h"
 #include "PSwipeDelegates.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "PGameInstance.h"
 
 APPlayerState::APPlayerState() {
 	ScoreMultiplier = 1.0f;
@@ -14,16 +16,25 @@ APPlayerState::APPlayerState() {
 	UnclampedHealth = 1.0f;
 	bShowTutorial = true;
 	bIsGameOver = false;
+	//NumSessionLosses = 0;
+	bShowAdOnNextRequest = false;
+	TriesBetweenInterstitialAds = 1;
 }
 
 bool APPlayerState::LoadGame()
 {
+	if (!PGameInstance) {
+		PGameInstance = Cast<UPGameInstance>(GetGameInstance());
+	}
+
 	// Retrieve and cast the USaveGame object to UMySaveGame.
 	if (UPSaveGame* LoadedGame = Cast<UPSaveGame>(UGameplayStatics::LoadGameFromSlot(UPSaveGame::SaveSlotName, UPSaveGame::UserIndex)))
 	{
 		// The operation was successful, so LoadedGame now contains the data we saved earlier.
 		PScore = LoadedGame->Currency;
-		bShowTutorial =  LoadedGame->bShowTutorial;
+		//bShowTutorial =  LoadedGame->bShowTutorial;
+		
+		if (GetNumSessionLosses() > 0) bShowTutorial = false;
 
 		UE_LOG(LogTemp, Warning, TEXT("LOADED: %d"), LoadedGame->Currency);
 		return true;
@@ -34,6 +45,30 @@ bool APPlayerState::LoadGame()
 bool APPlayerState::SaveGame()
 {
 	return UPSaveGame::SynchronousSave(PScore, bShowTutorial);
+}
+
+bool APPlayerState::bCanDisplayInterstitialAd()
+{
+	int32 NumSessionLosses = GetNumSessionLosses();
+	if (NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) {
+		if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
+			bShowAdOnNextRequest = false;
+			return true;
+		}
+		else {
+			bShowAdOnNextRequest = true;
+			return false;
+		}
+	}
+	else {
+		if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
+			// Continue
+		}
+		else {
+			UKismetSystemLibrary::LoadInterstitialAd(1);
+		}
+	}
+	return false;
 }
 
 int32 APPlayerState::ScoreFromTime(float TotalTime)
@@ -49,6 +84,14 @@ float APPlayerState::GetHealth() const
 int32 APPlayerState::GetScore() const
 {
 	return PScore;
+}
+
+int32 APPlayerState::GetNumSessionLosses() const
+{
+	if (PGameInstance) {
+		return PGameInstance->GetNumSessionLosses();
+	}
+	return 0;
 }
 
 float APPlayerState::ChangeHealth(float Delta)
@@ -81,8 +124,8 @@ float APPlayerState::SubtractHealth(float DeltaTime)
 		PUserWidget->SetHealthOver(0.0f);
 		
 		if (UnclampedHealth < 0.0f && !bIsGameOver) {
-			UPSwipeDelegates::GameOverDelegate.Broadcast();
 			GameOver();
+			UPSwipeDelegates::GameOverDelegate.Broadcast();
 		}
 	}
 	return Health;
@@ -104,10 +147,17 @@ void APPlayerState::SetPUserWidget(UPUserWidget* PUserWidgetIn)
 void APPlayerState::BeginPlay()
 {
 	Super::BeginPlay();
+	if (!PGameInstance) {
+		PGameInstance = Cast<UPGameInstance>(GetGameInstance());
+	}
 }
 
 void APPlayerState::GameOver()
 {
+	//NumSessionLosses++;
+	if (PGameInstance) {
+		PGameInstance->IncrementNumSessionLosses();
+	}
 	if (SaveGame()) {
 		bIsGameOver = true;
 		UE_LOG(LogTemp, Warning, TEXT("Saved!"));

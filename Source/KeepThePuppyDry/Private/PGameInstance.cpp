@@ -6,6 +6,8 @@
 #include "UserWidget.h"
 
 UPGameInstance::UPGameInstance() {
+	bSkipToGameplay = false;
+	NumSessionLosses = 0;
 }
 
 void UPGameInstance::Init()
@@ -18,6 +20,7 @@ void UPGameInstance::Init()
 
 void UPGameInstance::BeginLoadingScreen(const FString& InMapName)
 {
+	return; // removed because animation was not valid pre-loading.
 	if (!IsRunningDedicatedServer())
 	{
 		FLoadingScreenAttributes LoadingScreen;

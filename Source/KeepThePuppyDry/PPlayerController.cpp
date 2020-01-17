@@ -13,6 +13,7 @@
 #include "PDifficultyManager.h"
 #include "PLevelScriptActor.h"
 #include "PMainMenuWidget.h"
+#include "PGameInstance.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -22,8 +23,8 @@ APPlayerController::APPlayerController() {
 	MinSwipeDistance = 1.0f;
 	TapCount = 0;
 	MaxDoubleTapDelay = 0.5f;
+	bShowTutorial = true;
 }
-
 
 void APPlayerController::PostInitializeComponents()
 {
@@ -37,15 +38,6 @@ void APPlayerController::BeginPlay() {
 	PLevel = (APLevelScriptActor*)GetWorld()->GetLevelScriptActor();
 
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APPlayerController::OnGameOver);
-
-	// Start Screen (load this first).
-	if (PMainMenuWidgetClass) {
-		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
-		if (PMainMenuWidget) {
-			PMainMenuWidget->PInitialize(this);
-			//PMainMenuWidget->AddToViewport();
-		}
-	}
 
 	// Spawn Managers & Pre-StartGame initialization:
 	if (PUserWidgetClass) {
@@ -69,27 +61,42 @@ void APPlayerController::BeginPlay() {
 		DifficultyManager->SetPUserWidget(PUserWidget);
 	}
 
+	bool bSkipMenu = false;
+	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
+	if (PPlayerState) {
+		bShowTutorial = PPlayerState->GetTutorialEnabled();
+		if (PGameInstance) {
+			bSkipMenu = PGameInstance->ShouldSkipToGameplay();
+			bShowTutorial &= !bSkipMenu;
+		}
+	}
+
 	// Main Menu:
-	UGameplayStatics::SetGamePaused(GetWorld(), true); // Pause game.
+	if (!bSkipMenu) {
+		UGameplayStatics::SetGamePaused(GetWorld(), true); // Pause game.
+	}
 	if (PPlayerState) {
 		PPlayerState->LoadGame();
 	}
 
-	if (PMainMenuWidget) {
-		PMainMenuWidget->AddToViewport();
+	// Start Screen
+	if (PMainMenuWidgetClass) {
+		PMainMenuWidget = CreateWidget<UPMainMenuWidget>(GetWorld(), PMainMenuWidgetClass);
+		if (PMainMenuWidget) {
+			PMainMenuWidget->PInitialize(this, PPlayerState, bSkipMenu);
+			PMainMenuWidget->AddToViewport();
+			/*if (bSkipMenu) {
+				PMainMenuWidget->StartGame();
+			}*/
+		}
 	}
-
+	
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();
 }
 
 // Directly called from button Start in Menu screen
-bool APPlayerController::StartGame()
+bool APPlayerController::StartGame(bool bSkipStartOverride)
 {
-	bool bShowTutorial = false;
-	if (PPlayerState) {
-		bShowTutorial = PPlayerState->GetTutorialEnabled();
-	}
-
 	if (PUserWidget) {
 		PUserWidget->AddToViewport();
 	}
@@ -97,18 +104,18 @@ bool APPlayerController::StartGame()
 	/*if (PMainMenuWidget) {
 		PMainMenuWidget->RemoveFromViewport();
 	}*/
-	UWorld* World = GetWorld();
-	if (World)
-	{
-		UGameplayStatics::SetGamePaused(World, false); // UnPause game.
+	try {
+		if (bShowTutorial || bSkipStartOverride) {
+			UPSwipeDelegates::GameTutorialDelegate.Broadcast();
+		}
+		else {
+			UPSwipeDelegates::GameStartDelegate.Broadcast();
+		}
 	}
-
-	if (bShowTutorial) {
-		UPSwipeDelegates::GameTutorialDelegate.Broadcast();
+	catch (...) {
+		return bShowTutorial;
 	}
-	else {
-		UPSwipeDelegates::GameStartDelegate.Broadcast();
-	}
+	
 	return bShowTutorial;
 }
 

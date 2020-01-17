@@ -51,4 +51,13 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 		float TimeToNextDifficulty;
+
+// Game Over
+public:
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnGameOver"))
+		void OnGameOver();
+
+private:
+	UFUNCTION()
+		void OnGameOverInternal();
 };

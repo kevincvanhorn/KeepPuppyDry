@@ -7,9 +7,12 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/TextBlock.h"
 #include "Kismet/KismetMaterialLibrary.h"
+#include "PSwipeDelegates.h"
 
 void UPUserWidget::NativeConstruct() {
 	Super::NativeConstruct();
+
+	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &UPUserWidget::OnGameOverInternal);
 }
 
 void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
@@ -65,4 +68,9 @@ void UPUserWidget::SetDTimeRemaining(float TimeRemaining)
 			DTimerWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
+}
+
+void UPUserWidget::OnGameOverInternal()
+{
+	this->OnGameOver();
 }

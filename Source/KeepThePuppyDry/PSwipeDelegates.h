@@ -38,6 +38,7 @@ public:
 	static FLevelEventDelegate GameOverDelegate;
 	static FLevelEventDelegate GameStartDelegate;
 	static FLevelEventDelegate GameTutorialDelegate;
+	static FLevelEventDelegate GameRestartDelegate;
 
 	static FLevelEventDelegate EndLoadingScreenDelegate;
 
