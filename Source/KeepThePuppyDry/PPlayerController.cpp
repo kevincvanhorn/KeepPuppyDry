@@ -49,6 +49,9 @@ void APPlayerController::BeginPlay() {
 			if (PLevel) {
 				PLevel->SetUserWidget(PUserWidget);
 			}
+
+			PUserWidget->AddToViewport();
+			PUserWidget->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 	
@@ -97,14 +100,14 @@ void APPlayerController::BeginPlay() {
 // Directly called from button Start in Menu screen
 bool APPlayerController::StartGame(bool bSkipStartOverride)
 {
-	if (PUserWidget) {
-		PUserWidget->AddToViewport();
-	}
-
 	/*if (PMainMenuWidget) {
 		PMainMenuWidget->RemoveFromViewport();
 	}*/
 	try {
+		if (PUserWidget) {
+			PUserWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+
 		if (bShowTutorial || bSkipStartOverride) {
 			UPSwipeDelegates::GameTutorialDelegate.Broadcast();
 		}

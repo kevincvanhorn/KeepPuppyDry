@@ -168,3 +168,10 @@ void UPMainMenuWidget::StopPersistentSound(ESoundLabels SoundLabel, float FadeOu
 		PGameInstance->StopPersistentSound(SoundLabel, FadeOutDuration);
 	}
 }
+
+void UPMainMenuWidget::SetVolume(float MusicVolume, float SFXVolume)
+{
+	if (PGameInstance) {
+		PGameInstance->SetVolume(MusicVolume, SFXVolume);
+	}
+}

@@ -87,11 +87,12 @@ protected:
 
 	class APPlayerState* PPlayerState;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+		bool bSkipMenus;
+
 private:
 	bool bTutorialInProgress;
 	
-	bool bSkipMenus;
-
 	class UPGameInstance* PGameInstance;
 
 // GAME OVER
@@ -113,4 +114,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void StopPersistentSound(ESoundLabels SoundLabel, float FadeOutDuration);
+
+	UFUNCTION(BlueprintCallable)
+		void SetVolume(float MusicVolume, float SFXVolume);
 };
