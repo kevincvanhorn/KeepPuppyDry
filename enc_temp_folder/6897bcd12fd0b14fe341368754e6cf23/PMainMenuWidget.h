@@ -106,7 +106,7 @@ protected:
 // SOUNDS
 protected:
 	UFUNCTION(BlueprintCallable)
-		void PlaySound2D(class USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
+		void PlaySound2D(class USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 1.0f);
 
 	UFUNCTION(BlueprintCallable)
 		void PlayPersisentSound(ESoundLabels SoundLabel, float FadeInDuration);

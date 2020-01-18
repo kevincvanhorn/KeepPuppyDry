@@ -73,7 +73,7 @@ FVector APUmbrella::ScreenToWorldLoc(FVector2D ScreenLoc)
 
 		float Dist = (FVector::DotProduct(PNormal, GetActorLocation() - WorldLoc) / FVector::DotProduct(PNormal, WorldDir));
 		Intersect = WorldLoc + WorldDir * Dist;
-		DrawDebugSphere(GetWorld(), Intersect, 2.0f, 4, FColor::Red, false, 0.1f);
+		//DrawDebugSphere(GetWorld(), Intersect, 2.0f, 4, FColor::Red, false, 0.1f);
 		//TargetZ = FMath::Clamp(Intersect.Z, ClampZPos, ClampZNeg);
 	}
 	return Intersect;

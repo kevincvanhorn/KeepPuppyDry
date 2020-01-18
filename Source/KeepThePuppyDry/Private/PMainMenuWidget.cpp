@@ -147,3 +147,24 @@ void UPMainMenuWidget::PRestartLevel(bool bShowTitleScreen)
 		PPlayerController->RestartLevel();
 	}
 }
+
+void UPMainMenuWidget::PlaySound2D(USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier, float PitchMultiplier, float StartTime)
+{
+	if (PGameInstance) {
+		PGameInstance->PlaySound2D(Sound, SoundType, VolumeMultiplier, PitchMultiplier, StartTime);
+	}
+}
+
+void UPMainMenuWidget::PlayPersisentSound(ESoundLabels SoundLabel, float FadeInDuration)
+{
+	if (PGameInstance) {
+		PGameInstance->PlayPersisentSound(SoundLabel, FadeInDuration);
+	}
+}
+
+void UPMainMenuWidget::StopPersistentSound(ESoundLabels SoundLabel, float FadeOutDuration)
+{
+	if (PGameInstance) {
+		PGameInstance->StopPersistentSound(SoundLabel, FadeOutDuration);
+	}
+}

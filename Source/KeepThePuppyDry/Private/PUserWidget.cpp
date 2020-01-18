@@ -8,11 +8,14 @@
 #include "Components/TextBlock.h"
 #include "Kismet/KismetMaterialLibrary.h"
 #include "PSwipeDelegates.h"
+#include "Kismet/GameplayStatics.h"
 
 void UPUserWidget::NativeConstruct() {
 	Super::NativeConstruct();
 
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &UPUserWidget::OnGameOverInternal);
+
+	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
 }
 
 void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
@@ -73,4 +76,25 @@ void UPUserWidget::SetDTimeRemaining(float TimeRemaining)
 void UPUserWidget::OnGameOverInternal()
 {
 	this->OnGameOver();
+}
+
+void UPUserWidget::PlaySound2D(USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier, float PitchMultiplier, float StartTime)
+{
+	if (PGameInstance) {
+		PGameInstance->PlaySound2D(Sound, SoundType, VolumeMultiplier, PitchMultiplier, StartTime);
+	}
+}
+
+void UPUserWidget::PlayPersisentSound(ESoundLabels SoundLabel, float FadeInDuration)
+{
+	if (PGameInstance) {
+		PGameInstance->PlayPersisentSound(SoundLabel, FadeInDuration);
+	}
+}
+
+void UPUserWidget::StopPersistentSound(ESoundLabels SoundLabel, float FadeOutDuration)
+{
+	if (PGameInstance) {
+		PGameInstance->StopPersistentSound(SoundLabel, FadeOutDuration);
+	}
 }
