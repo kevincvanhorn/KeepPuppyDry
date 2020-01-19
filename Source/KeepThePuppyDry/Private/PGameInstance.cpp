@@ -54,7 +54,9 @@ void UPGameInstance::SetVolume(float MusicVolume, float SFXVolume)
 	for(FPersistentSound FSound : PersistentSounds){
 		if (FSound.Sound) {
 			if (FSound.SoundType == ESoundType::E_Music && MusicVolume <= .01f) {
-				StopPersistentSound(FSound.SoundLabel, 0.2f);
+				if (MusicVolume <= .01f) {
+					StopPersistentSound(FSound.SoundLabel, 0.2f);
+				}
 			}
 			else if (FSound.SoundType ==  ESoundType::E_SFX && SFXVolume <= .01f) {
 				StopPersistentSound(FSound.SoundLabel, 0.2f);

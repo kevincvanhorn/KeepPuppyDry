@@ -210,8 +210,8 @@ void APUmbrella::OnTouchEnd()
 
 void APUmbrella::OnGameTutorial()
 {
-	SetActorLocation(FVector(0.0f,0.0f, UReleasePosition.Z));
-	TargetPosition = FVector(0.0f, 0.0f, UReleasePosition.Z);
+	SetActorLocation(FVector(UReleasePosition.X,0.0f, UReleasePosition.Z));
+	TargetPosition = FVector(UReleasePosition.X, 0.0f, UReleasePosition.Z);
 	bMoving = false;
 
 	if (SphereComponent){
