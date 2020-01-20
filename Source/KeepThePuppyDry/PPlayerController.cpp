@@ -103,7 +103,7 @@ bool APPlayerController::StartGame(bool bSkipStartOverride)
 	/*if (PMainMenuWidget) {
 		PMainMenuWidget->RemoveFromViewport();
 	}*/
-	try {
+	//try {
 		if (PUserWidget) {
 			PUserWidget->SetVisibility(ESlateVisibility::Visible);
 		}
@@ -114,10 +114,10 @@ bool APPlayerController::StartGame(bool bSkipStartOverride)
 		else {
 			UPSwipeDelegates::GameStartDelegate.Broadcast();
 		}
-	}
-	catch (...) {
-		return bShowTutorial;
-	}
+	//}
+	//catch (...) {
+	//	return bShowTutorial;
+	//}
 	
 	return bShowTutorial;
 }
