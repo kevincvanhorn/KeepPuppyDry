@@ -106,6 +106,9 @@ protected:
 
 // SOUNDS
 protected:
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UButton* MuteButton;
+
 	UFUNCTION(BlueprintCallable)
 		void PlaySound2D(class USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier = 1.0f, float PitchMultiplier = 1.0f, float StartTime = 0.0f);
 
@@ -117,4 +120,19 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void SetVolume(float MusicVolume, float SFXVolume);
+
+	/** Return true if the volume is turned on. */
+	UFUNCTION(BlueprintCallable, meta = (DisplayName = "OnMuteButtonPressed"))
+		bool OnMuteButtonPressedBP();
+
+	/** Material for Volume On. */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		UObject* SoundOnImageObj;
+
+	/** Material for Volume Off. */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		UObject* SoundOffImageObj;
+
+	private:
+		bool bVolumeOn;
 };

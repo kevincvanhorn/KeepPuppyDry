@@ -16,7 +16,6 @@ void UPUserWidget::NativeConstruct() {
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &UPUserWidget::OnGameOverInternal);
 
 	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
-	bShowUpdateScore = false;
 }
 
 void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
@@ -38,10 +37,7 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 {
 	if (ScoreTextWidget) {
 		ScoreTextWidget->SetText(FText::AsNumber(ScoreIn));
-		if (bShowUpdateScore) { // Hide the first update
-			this->OnUpdateScore();
-		}
-		bShowUpdateScore = true;
+		this->OnUpdateScore();
 	}
 }
 

@@ -20,6 +20,7 @@ void UPMainMenuWidget::NativeConstruct() {
 	UPSwipeDelegates::PostBeginPlayDelegate.AddUObject(this, &UPMainMenuWidget::PostBeginPlay);
 
 	bTutorialInProgress = false;
+	bVolumeOn = true;
 
 	bSkipMenus = false;
 	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
@@ -174,4 +175,27 @@ void UPMainMenuWidget::SetVolume(float MusicVolume, float SFXVolume)
 	if (PGameInstance) {
 		PGameInstance->SetVolume(MusicVolume, SFXVolume);
 	}
+}
+
+bool UPMainMenuWidget::OnMuteButtonPressedBP()
+{
+	bVolumeOn = !bVolumeOn;
+
+	if (bVolumeOn) {
+		SetVolume(1.0f, 1.0f);
+		if (MuteButton) {
+			MuteButton->WidgetStyle.Normal.SetResourceObject(SoundOnImageObj);
+			MuteButton->WidgetStyle.Pressed.SetResourceObject(SoundOnImageObj);
+			MuteButton->WidgetStyle.Hovered.SetResourceObject(SoundOnImageObj);
+		}
+	}
+	else {
+		SetVolume(0.0f, 0.0f);
+		if (MuteButton) {
+			MuteButton->WidgetStyle.Normal.SetResourceObject(SoundOffImageObj);
+			MuteButton->WidgetStyle.Pressed.SetResourceObject(SoundOffImageObj);
+			MuteButton->WidgetStyle.Hovered.SetResourceObject(SoundOffImageObj);
+		}
+	}
+	return bVolumeOn;
 }

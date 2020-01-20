@@ -78,7 +78,4 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 		void StopPersistentSound(ESoundLabels SoundLabel, float FadeOutDuration);
-
-private:
-	bool bShowUpdateScore;
 };

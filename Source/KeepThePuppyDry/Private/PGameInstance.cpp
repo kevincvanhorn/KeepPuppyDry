@@ -51,18 +51,20 @@ void UPGameInstance::SetVolume(float MusicVolume, float SFXVolume)
 	GlobalSFXVolume = SFXVolume;
 	GlobalMusicVolume = MusicVolume;
 
-	for(FPersistentSound FSound : PersistentSounds){
+	/*for(FPersistentSound FSound : PersistentSounds){
 		if (FSound.Sound) {
-			if (FSound.SoundType == ESoundType::E_Music && MusicVolume <= .01f) {
+			if (FSound.SoundType == ESoundType::E_Music) {
 				if (MusicVolume <= .01f) {
 					StopPersistentSound(FSound.SoundLabel, 0.2f);
 				}
 			}
 			else if (FSound.SoundType ==  ESoundType::E_SFX && SFXVolume <= .01f) {
-				StopPersistentSound(FSound.SoundLabel, 0.2f);
+				if (MusicVolume <= .01f) {
+					StopPersistentSound(FSound.SoundLabel, 0.2f);
+				}
 			}
 		}
-	}
+	}*/
 }
 
 void UPGameInstance::PlaySound2D(USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier,
