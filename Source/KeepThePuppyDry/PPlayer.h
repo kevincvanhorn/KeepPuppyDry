@@ -17,6 +17,8 @@ public:
 
 	void SetUserWidget(class UPUserWidget* WidgetIn) { PUserWidget = WidgetIn; }
 
+	void SetMainMenuWidget(class UPMainMenuWidget* WidgetIn);
+
 	class USpringArmComponent* GetSpringArmComponent() const { return SpringArm; }
 
 	void Initialize(class APPlayerState* PlayerStateIn);
@@ -53,6 +55,8 @@ protected:
 
 	class UPUserWidget* PUserWidget;
 	
+	class UPMainMenuWidget* PMenuWidget;
+
 	class APPlayerState* PPlayerState;
 
 public:	
@@ -84,6 +88,15 @@ public:
 	UFUNCTION()
 		void Zoom(float AxisValue);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TSubclassOf<class APCustomizationManager> CustomizationManagerClass;
+
+protected:
+	class APCustomizationManager* CustomizationManager;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		class AStaticMeshActor* UmbrellaMeshUIActor;
+
 private:
 	FVector StartLoc;
 
@@ -95,6 +108,7 @@ private:
 public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
 		TSubclassOf<class APUmbrella> UmbrellaClass;
+
 	
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Umbrella")
 		FVector UmbrellaSpawnLoc;

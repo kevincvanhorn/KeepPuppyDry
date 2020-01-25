@@ -9,6 +9,7 @@
 #include "PPlayerState.h"
 #include "PGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "PCustomizationManager.h"
 
 void UPMainMenuWidget::NativeConstruct() {
 	Super::NativeConstruct();
@@ -78,6 +79,15 @@ void UPMainMenuWidget::PInitialize(APPlayerController* ControllerIn, APPlayerSta
 		SetScreenVisible(nullptr);
 		//UGameplayStatics::SetGamePaused(GetWorld(), true);
 		this->OnSkipMenu();
+	}
+}
+
+void UPMainMenuWidget::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SET UMBRELLA PATTERN 1"));
+	if (CustomizationManager) {
+		UE_LOG(LogTemp, Warning, TEXT("SET UMBRELLA PATTERN 2"));
+		CustomizationManager->SelectUmbrellaPattern(UmbrellaPattern);
 	}
 }
 

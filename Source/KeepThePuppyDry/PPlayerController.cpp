@@ -61,7 +61,9 @@ void APPlayerController::BeginPlay() {
 	}
 	if (DifficultyManagerClass) {
 		DifficultyManager = GetWorld()->SpawnActor<APDifficultyManager>(DifficultyManagerClass);
-		DifficultyManager->SetPUserWidget(PUserWidget);
+		if (DifficultyManager) {
+			DifficultyManager->SetPUserWidget(PUserWidget);
+		}
 	}
 
 	bool bSkipMenu = false;
@@ -92,6 +94,10 @@ void APPlayerController::BeginPlay() {
 				PMainMenuWidget->StartGame();
 			}*/
 		}
+	}
+
+	if (PPlayer) {
+		PPlayer->SetMainMenuWidget(PMainMenuWidget);
 	}
 	
 	UPSwipeDelegates::PostBeginPlayDelegate.Broadcast();

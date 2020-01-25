@@ -12,9 +12,12 @@
 #include "Materials/MaterialParameterCollection.h"
 #include "Public/PUserWidget.h"
 #include "PPlayerState.h"
+#include "Components/StaticMeshComponent.h"
 
 #include "KeepThePuppyDry.h"
 #include "PSwipeDelegates.h"
+#include "PCustomizationManager.h"
+#include "PMainMenuWidget.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -37,6 +40,11 @@ APPlayer::APPlayer()
 	UOverlapTime = 0;
 	bTryUpdateTouchEvents = true;
 	//bUOverlapping = false;
+}
+
+void APPlayer::SetMainMenuWidget(UPMainMenuWidget* WidgetIn)
+{
+	PMenuWidget = WidgetIn;
 }
 
 void APPlayer::Initialize(APPlayerState* PlayerStateIn)
@@ -103,11 +111,25 @@ void APPlayer::BeginPlay()
 		}
 	}
 
+	if (CustomizationManagerClass) {
+		CustomizationManager = GetWorld()->SpawnActor<APCustomizationManager>(CustomizationManagerClass);
+		if (CustomizationManager) {
+			UStaticMeshComponent* UIMesh = nullptr;
+			if (UmbrellaMeshUIActor) {
+				UIMesh = UmbrellaMeshUIActor->GetStaticMeshComponent();
+			}
+			CustomizationManager->PInit(Umbrella, UIMesh);
+		}
+	}
+
 	//UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
 }
 
 void APPlayer::PostBeginPlay()
 {
+	if (PMenuWidget) {
+		PMenuWidget->SetCustomizationManager(CustomizationManager);
+	}
 }
 
 /*void APPlayer::OnDifficultyChangedInternal(int32 NewDifficulty)

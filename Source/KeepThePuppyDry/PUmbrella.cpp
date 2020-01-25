@@ -16,6 +16,7 @@
 #include "TimerManager.h"
 #include "PSwipeDelegates.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 APUmbrella::APUmbrella() {
 	bMoving = false;
@@ -132,6 +133,14 @@ void APUmbrella::Initialize(APPlayer* PlayerIn,  FVector UTouchPositionIn, FVect
 	SetActorLocation(UReleasePosition);
 	TargetPosition = UReleasePosition;
 	//TargetZ = UReleasePosition.Z;
+}
+
+void APUmbrella::SetMaterial(int32 ElementIndex, UMaterialInterface* Material)
+{
+	UStaticMeshComponent* StaticMesh = GetStaticMeshComponent();
+	if (StaticMesh) {
+		StaticMesh->SetMaterial(ElementIndex, Material);
+	}
 }
 
 void APUmbrella::LerpToPosition(FVector Target)

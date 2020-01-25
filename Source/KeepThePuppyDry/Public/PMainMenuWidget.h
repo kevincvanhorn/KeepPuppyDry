@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "PGameInstance.h"
+#include "PCustomizationManager.h"
 #include "PMainMenuWidget.generated.h"
 
 /**
@@ -27,6 +28,11 @@ public:
 
 	void PInitialize(class APPlayerController* ControllerIn, class APPlayerState* PPlayerStateIn, bool bSkipMenuIn);
 
+	UFUNCTION(BlueprintCallable)
+		void SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
+
+	void SetCustomizationManager(class APCustomizationManager* ManagerIn) { CustomizationManager = ManagerIn; }
+
 protected:
 	UFUNCTION()
 		void OnGameOver();
@@ -38,6 +44,8 @@ protected:
 		bool bCanDisplayInterstitialAd();
 
 	TArray<class UCanvasPanel*> Menus;
+
+	class APCustomizationManager* CustomizationManager;
 
 	/** Redundant: Hide all screens and show the @param screen. */
 	void SetScreenVisible(class UCanvasPanel* ScreenIn);

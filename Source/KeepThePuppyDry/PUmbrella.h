@@ -19,6 +19,8 @@ public:
 
 	void Initialize(class APPlayer* PlayerIn, FVector UTouchPositionIn, FVector UReleasePositionIn, class APPlayerController* PControllerIn);
 
+	void SetMaterial(int32 ElementIndex, UMaterialInterface* Material);
+
 	void LerpToPosition(FVector Target);
 	
 	// Use screen location to move umbrella.

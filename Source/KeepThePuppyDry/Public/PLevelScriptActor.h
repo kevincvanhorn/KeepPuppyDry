@@ -34,6 +34,12 @@ public:
 	void SetUserWidget(class UPUserWidget* PUserWidgetIn);
 
 protected:
+	UFUNCTION()
+		void OnGameStartInternal();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnGameStart"))
+		void OnGameStart();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;

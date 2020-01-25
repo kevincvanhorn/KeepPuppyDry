@@ -80,6 +80,8 @@ protected:
 
 	class APDifficultyManager* DifficultyManager;
 
+	class APCustomizationManager* CustomizationManager;
+
 private:
 	FVector2D SwipeStartLoc;
 

@@ -7,6 +7,7 @@
 #include "PAIController.h"
 #include "PUmbrella.h"
 #include "PUserWidget.h"
+#include "PSwipeDelegates.h"
 
 APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
@@ -18,7 +19,7 @@ APLevelScriptActor::APLevelScriptActor() {
 void APLevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
-
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APLevelScriptActor::OnGameStartInternal);
 	UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APLevelScriptActor::OnDifficultyChangedInternal);
 }
 
@@ -74,6 +75,11 @@ void APLevelScriptActor::SetAIController(APAIController* AIControllerIn)
 void APLevelScriptActor::SetUserWidget(UPUserWidget* PUserWidgetIn)
 {
 	PUserWidget = PUserWidgetIn;
+}
+
+void APLevelScriptActor::OnGameStartInternal()
+{
+	this->OnGameStart();
 }
 
 void APLevelScriptActor::Tick(float DeltaTime)
