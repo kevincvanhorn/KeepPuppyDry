@@ -10,6 +10,7 @@
 #include "PGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "PCustomizationManager.h"
+#include "Components/TextBlock.h"
 
 void UPMainMenuWidget::NativeConstruct() {
 	Super::NativeConstruct();
@@ -71,14 +72,25 @@ void UPMainMenuWidget::EndTutorial()
 
 void UPMainMenuWidget::PInitialize(APPlayerController* ControllerIn, APPlayerState* PPlayerStateIn, bool bSkipMenuIn)
 {
+	// Game has already been loaded.
 	PPlayerController = ControllerIn;
 	PPlayerState = PPlayerStateIn;
 	bSkipMenus = bSkipMenuIn;
 	Menus = { TitleScreen, GameOverScreen, TutorialScreen, CountdownScreen };
 	if (bSkipMenus) {
 		SetScreenVisible(nullptr);
-		//UGameplayStatics::SetGamePaused(GetWorld(), true);
 		this->OnSkipMenu();
+	}
+	if (PPlayerState) {
+		UpdateScore(PPlayerState->GetScore());
+	}
+}
+
+void UPMainMenuWidget::UpdateScore(int32 ScoreIn)
+{
+	if (ScoreWidget_Shop) {
+		ScoreWidget_Shop->SetText(FText::AsNumber(ScoreIn));
+		this->OnUpdateScore_Shop();
 	}
 }
 

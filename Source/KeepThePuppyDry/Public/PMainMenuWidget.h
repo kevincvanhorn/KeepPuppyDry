@@ -33,6 +33,8 @@ public:
 
 	void SetCustomizationManager(class APCustomizationManager* ManagerIn) { CustomizationManager = ManagerIn; }
 
+	void UpdateScore(int32 ScoreIn);
+
 protected:
 	UFUNCTION()
 		void OnGameOver();
@@ -72,6 +74,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnTouchEnd"))
 		void OnBPTouchEnd();
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateScoreShop"))
+		void OnUpdateScore_Shop();
+
 	UFUNCTION(BlueprintCallable)
 		void PRestartLevel(bool bShowTitleScreen);
 
@@ -90,6 +95,9 @@ protected:
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UButton* StartGameButton;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* ScoreWidget_Shop;
 
 	class APPlayerController* PPlayerController;
 
