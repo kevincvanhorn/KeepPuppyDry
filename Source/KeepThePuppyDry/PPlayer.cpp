@@ -50,6 +50,9 @@ void APPlayer::SetMainMenuWidget(UPMainMenuWidget* WidgetIn)
 void APPlayer::Initialize(APPlayerState* PlayerStateIn)
 {
 	PPlayerState = PlayerStateIn;
+	if (CustomizationManager) {
+		CustomizationManager->SetPPlayerState(PPlayerState);
+	}
 }
 
 void APPlayer::OnGameTutorial() {

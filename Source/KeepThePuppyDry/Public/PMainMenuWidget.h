@@ -151,4 +151,12 @@ protected:
 
 	private:
 		bool bVolumeOn;
+
+// SHOPPING
+protected:
+	UFUNCTION(BlueprintCallable)
+		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UTextBlock* ShoppingCostText;
 };

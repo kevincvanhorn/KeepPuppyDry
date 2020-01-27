@@ -96,10 +96,9 @@ void UPMainMenuWidget::UpdateScore(int32 ScoreIn)
 
 void UPMainMenuWidget::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SET UMBRELLA PATTERN 1"));
 	if (CustomizationManager) {
-		UE_LOG(LogTemp, Warning, TEXT("SET UMBRELLA PATTERN 2"));
 		CustomizationManager->SelectUmbrellaPattern(UmbrellaPattern);
+		ShoppingCostText->SetText(FText::AsNumber(CustomizationManager->GetCost(UmbrellaPattern)));
 	}
 }
 
@@ -220,4 +219,18 @@ bool UPMainMenuWidget::OnMuteButtonPressedBP()
 		}
 	}
 	return bVolumeOn;
+}
+
+bool UPMainMenuWidget::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
+{
+	bool bBuySuccess = false;
+	UE_LOG(LogTemp, Warning, TEXT("Message"));
+	if (CustomizationManager) {
+		bBuySuccess = CustomizationManager->BuyUmbrellaPattern(UmbrellaPattern);
+		if (bBuySuccess && PPlayerState) {
+			UpdateScore(PPlayerState->GetScore());
+		}
+	}
+
+	return bBuySuccess;
 }

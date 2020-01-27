@@ -47,6 +47,27 @@ bool APPlayerState::SaveGame()
 	return UPSaveGame::SynchronousSave(PScore, bShowTutorial);
 }
 
+bool APPlayerState::PlayerOwnsAsset(EUmbrellaPattern Pattern)
+{
+	return UmbrellaPatterns.Contains(Pattern);
+}
+
+bool APPlayerState::BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost)
+{
+	if (!PlayerOwnsAsset(UmbrellaPattern) && bCanAffordAsset(Cost)) {
+		PScore = PScore - Cost;
+		UmbrellaPatterns.Add(UmbrellaPattern);
+		SaveGame();
+		return true;
+	}
+	return false;
+}
+
+bool APPlayerState::bCanAffordAsset(int32 Cost)
+{
+	return PScore - Cost >= 0;
+}
+
 bool APPlayerState::bCanDisplayInterstitialAd()
 {
 	int32 NumSessionLosses = GetNumSessionLosses();

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "PCustomizationManager.h"
 #include "PPlayerState.generated.h"
 
 /**
@@ -101,4 +102,15 @@ private:
 	//int32 NumSessionLosses;
 
 	bool bShowAdOnNextRequest;
+
+// Customization:
+public:
+	bool PlayerOwnsAsset(EUmbrellaPattern Pattern);
+
+	bool BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost);
+
+	bool bCanAffordAsset(int32 Cost);
+
+protected:
+	TArray<EUmbrellaPattern> UmbrellaPatterns;
 };

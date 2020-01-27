@@ -31,6 +31,9 @@ struct FUmbrellaMaterials
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		class UMaterialInterface* HandleMaterial;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		int32 Cost;
 };
 
 UCLASS()
@@ -44,19 +47,28 @@ public:
 
 	void PInit(class APUmbrella* UmbrellaIn, class UStaticMeshComponent* UIMesh);
 
+	void SetPPlayerState(class APPlayerState* PPlayerStateIn) { PPlayerState = PPlayerStateIn; }
+
 	UFUNCTION(BlueprintCallable)
 		void SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
+
+	UFUNCTION(BlueprintCallable)
+		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
+
+	int32 GetCost(EUmbrellaPattern UmbrellaPattern);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FUmbrellaMaterials> UmbrellaMaterials;
+		TArray<FUmbrellaMaterials> UmbrellaMaterials;
 
 	class APUmbrella* Umbrella;
 
 	class UStaticMeshComponent* UmbrellaMeshUI;
+
+	class APPlayerState* PPlayerState;
 
 public:	
 	// Called every frame

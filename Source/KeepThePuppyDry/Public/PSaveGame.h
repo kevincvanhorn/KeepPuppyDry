@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "PCustomizationManager.h"
 #include "PSaveGame.generated.h"
 
 /**

@@ -4,6 +4,7 @@
 #include "PCustomizationManager.h"
 #include "Components/StaticMeshComponent.h"
 #include "PUmbrella.h"
+#include "PPlayerState.h"
 
 // Sets default values
 APCustomizationManager::APCustomizationManager()
@@ -21,13 +22,14 @@ void APCustomizationManager::PInit(APUmbrella* UmbrellaIn, UStaticMeshComponent*
 
 void APCustomizationManager::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SET UMBRELLA PATTERN 3"));
 	if ((uint8)UmbrellaPattern < UmbrellaMaterials.Num()) {
-		if (Umbrella) {
-			Umbrella->SetMaterial(0, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
-			Umbrella->SetMaterial(1, UmbrellaMaterials[(uint8)UmbrellaPattern].TopMaterial);
-			Umbrella->SetMaterial(2, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
-			Umbrella->SetMaterial(3, UmbrellaMaterials[(uint8)UmbrellaPattern].HandleMaterial);
+		if (Umbrella && PPlayerState) {
+			if (PPlayerState->PlayerOwnsAsset(UmbrellaPattern)) {
+				Umbrella->SetMaterial(0, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
+				Umbrella->SetMaterial(1, UmbrellaMaterials[(uint8)UmbrellaPattern].TopMaterial);
+				Umbrella->SetMaterial(2, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
+				Umbrella->SetMaterial(3, UmbrellaMaterials[(uint8)UmbrellaPattern].HandleMaterial);
+			}
 		}
 		if (UmbrellaMeshUI) {
 			UmbrellaMeshUI->SetMaterial(0, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
@@ -36,6 +38,25 @@ void APCustomizationManager::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPatt
 			UmbrellaMeshUI->SetMaterial(3, UmbrellaMaterials[(uint8)UmbrellaPattern].HandleMaterial);
 		}
 	}
+}
+
+bool APCustomizationManager::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
+{
+	if (PPlayerState) {
+		if ((uint8)UmbrellaPattern < UmbrellaMaterials.Num()) {
+			int32 Cost = UmbrellaMaterials[(uint8)UmbrellaPattern].Cost;
+			return PPlayerState->BuyAsset(UmbrellaPattern, Cost);
+		}
+	}
+	return false;
+}
+
+int32 APCustomizationManager::GetCost(EUmbrellaPattern UmbrellaPattern)
+{
+	if ((uint8)UmbrellaPattern < UmbrellaMaterials.Num()) {
+		return UmbrellaMaterials[(uint8)UmbrellaPattern].Cost;
+	}
+	return 0;
 }
 
 // Called when the game starts or when spawned
