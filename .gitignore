@@ -44,6 +44,7 @@
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
+Silo_Interactive/icon
 
 # Binary Files
 Binaries/*
