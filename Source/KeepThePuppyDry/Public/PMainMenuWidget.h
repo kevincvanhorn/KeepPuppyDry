@@ -157,6 +157,10 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
+	UFUNCTION(BlueprintCallable)
+		TArray<EUmbrellaPattern> GetLoadedUmbrellaPatterns();
+
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UTextBlock* ShoppingCostText;
+
 };

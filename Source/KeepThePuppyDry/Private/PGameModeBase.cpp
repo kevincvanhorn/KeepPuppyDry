@@ -5,6 +5,9 @@
 #include "Blueprint/UserWidget.h"
 #include "PSwipeDelegates.h"
 #include "PGameInstance.h"
+#include "PPlayerState.h"
+#include "PPlayer.h"
+#include "Kismet/GameplayStatics.h"
 
 APGameModeBase::APGameModeBase() {
 	bSpawnLoadingScreen = false;
@@ -35,5 +38,27 @@ void APGameModeBase::EndLoadingScreen()
 {
 	if (PLoadingScreen) {
 		PLoadingScreen->RemoveFromViewport();
+	}
+}
+
+void APGameModeBase::execSetScore(int32 ScoreIn)
+{
+	APPlayer* PPlayer = (APPlayer*)UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (PPlayer) {
+		APPlayerState* PPlayerState = (APPlayerState*)PPlayer->GetPlayerState();
+		if (PPlayerState) {
+			PPlayerState->SetScore(ScoreIn);
+		}
+	}
+}
+
+void APGameModeBase::execResetLocalGameSave()
+{
+	APPlayer* PPlayer = (APPlayer*)UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (PPlayer) {
+		APPlayerState* PPlayerState = (APPlayerState*)PPlayer->GetPlayerState();
+		if (PPlayerState) {
+			PPlayerState->ResetLocalGameSave();
+		}
 	}
 }

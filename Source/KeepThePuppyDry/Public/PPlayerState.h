@@ -24,8 +24,12 @@ public:
 
 	void SetPPlayer(class APPlayer* PPlayerIn);
 
+	void ResetLocalGameSave();
+
 public:
 	bool GetTutorialEnabled() const { return bShowTutorial; }
+
+	const TArray<uint8>& GetUmbrellaPatterns() const { return UmbrellaPatterns; }
 
 // PERSISTENT DATA: Saved locally
 protected:
@@ -79,6 +83,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void IncrementScore();
 
+	void SetScore(int32 ScoreIn);
+
 	void SetPUserWidget(class UPUserWidget* PUserWidgetIn);
 
 protected:
@@ -111,6 +117,10 @@ public:
 
 	bool bCanAffordAsset(int32 Cost);
 
+	void SetLastSelected(EUmbrellaPattern UmbrellaPattern);
+
+	int32 LastSelected_UmbrellaPattern;
+
 protected:
-	TArray<EUmbrellaPattern> UmbrellaPatterns;
+	TArray<uint8> UmbrellaPatterns;
 };

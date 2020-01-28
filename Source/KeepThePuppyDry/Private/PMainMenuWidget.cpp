@@ -234,3 +234,14 @@ bool UPMainMenuWidget::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 
 	return bBuySuccess;
 }
+
+TArray<EUmbrellaPattern> UPMainMenuWidget::GetLoadedUmbrellaPatterns()
+{
+	TArray<EUmbrellaPattern> Patterns;
+	if (PPlayerState) {
+		for (uint8 Patt : PPlayerState->GetUmbrellaPatterns()) {
+			Patterns.Add((EUmbrellaPattern) Patt);
+		}
+	}
+	return Patterns;
+}

@@ -19,6 +19,7 @@ APPlayerState::APPlayerState() {
 	//NumSessionLosses = 0;
 	bShowAdOnNextRequest = false;
 	TriesBetweenInterstitialAds = 1;
+	LastSelected_UmbrellaPattern = -1;
 }
 
 bool APPlayerState::LoadGame()
@@ -33,6 +34,9 @@ bool APPlayerState::LoadGame()
 		// The operation was successful, so LoadedGame now contains the data we saved earlier.
 		PScore = LoadedGame->Currency;
 		//bShowTutorial =  LoadedGame->bShowTutorial;
+		UmbrellaPatterns.Empty();
+		UmbrellaPatterns = LoadedGame->UPatterns;
+		LastSelected_UmbrellaPattern = LoadedGame->LS_UmbrellaPattern;
 		
 		if (GetNumSessionLosses() > 0) bShowTutorial = false;
 
@@ -44,19 +48,19 @@ bool APPlayerState::LoadGame()
 
 bool APPlayerState::SaveGame()
 {
-	return UPSaveGame::SynchronousSave(PScore, bShowTutorial);
+	return UPSaveGame::SynchronousSave(PScore, bShowTutorial, UmbrellaPatterns, LastSelected_UmbrellaPattern);
 }
 
 bool APPlayerState::PlayerOwnsAsset(EUmbrellaPattern Pattern)
 {
-	return UmbrellaPatterns.Contains(Pattern);
+	return UmbrellaPatterns.Contains((uint8)Pattern);
 }
 
 bool APPlayerState::BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost)
 {
 	if (!PlayerOwnsAsset(UmbrellaPattern) && bCanAffordAsset(Cost)) {
 		PScore = PScore - Cost;
-		UmbrellaPatterns.Add(UmbrellaPattern);
+		UmbrellaPatterns.Add((uint8)UmbrellaPattern);
 		SaveGame();
 		return true;
 	}
@@ -66,6 +70,19 @@ bool APPlayerState::BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost)
 bool APPlayerState::bCanAffordAsset(int32 Cost)
 {
 	return PScore - Cost >= 0;
+}
+
+void APPlayerState::SetLastSelected(EUmbrellaPattern UmbrellaPattern)
+{
+	LastSelected_UmbrellaPattern = (int32)UmbrellaPattern;
+}
+
+void APPlayerState::ResetLocalGameSave()
+{
+	PScore = 0;
+	bShowTutorial =  true;
+	UmbrellaPatterns.Empty();
+	SaveGame();
 }
 
 bool APPlayerState::bCanDisplayInterstitialAd()
@@ -158,6 +175,11 @@ void APPlayerState::IncrementScore()
 	if (PUserWidget) {
 		PUserWidget->UpdateScore(PScore);
 	}
+}
+
+void APPlayerState::SetScore(int32 ScoreIn)
+{
+	PScore = ScoreIn;
 }
 
 void APPlayerState::SetPUserWidget(UPUserWidget* PUserWidgetIn)

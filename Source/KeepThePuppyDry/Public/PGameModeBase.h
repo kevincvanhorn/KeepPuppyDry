@@ -30,4 +30,12 @@ protected:
 
 	UFUNCTION()
 		void EndLoadingScreen();
+
+// CONSOLE
+public:
+	UFUNCTION(exec)
+		void execSetScore(int32 ScoreIn);
+
+	UFUNCTION(exec)
+		void execResetLocalGameSave();
 };

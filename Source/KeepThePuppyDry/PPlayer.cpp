@@ -130,6 +130,11 @@ void APPlayer::BeginPlay()
 
 void APPlayer::PostBeginPlay()
 {
+	if (CustomizationManager && PPlayerState) {
+		if (PPlayerState->LastSelected_UmbrellaPattern > 0) { // -1 is none
+			CustomizationManager->SelectUmbrellaPattern((EUmbrellaPattern)PPlayerState->LastSelected_UmbrellaPattern);
+		}
+	}
 	if (PMenuWidget) {
 		PMenuWidget->SetCustomizationManager(CustomizationManager);
 	}

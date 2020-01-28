@@ -25,6 +25,8 @@ void APCustomizationManager::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPatt
 	if ((uint8)UmbrellaPattern < UmbrellaMaterials.Num()) {
 		if (Umbrella && PPlayerState) {
 			if (PPlayerState->PlayerOwnsAsset(UmbrellaPattern)) {
+				PPlayerState->SetLastSelected(UmbrellaPattern);
+				PPlayerState->SaveGame();
 				Umbrella->SetMaterial(0, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);
 				Umbrella->SetMaterial(1, UmbrellaMaterials[(uint8)UmbrellaPattern].TopMaterial);
 				Umbrella->SetMaterial(2, UmbrellaMaterials[(uint8)UmbrellaPattern].UnderMaterial);

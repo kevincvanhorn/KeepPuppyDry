@@ -16,7 +16,8 @@ class KEEPTHEPUPPYDRY_API UPSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
-	static bool SynchronousSave(int32 CurrencyIn, bool bShowTutorialIn);
+	/** uint64s are masks to store up to 64 one hot encodings. */
+	static bool SynchronousSave(int32 CurrencyIn, bool bShowTutorialIn, const TArray<uint8>& UPatternsIn, int32 LS_UmbrellaPatternIn);
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = Basic)
@@ -25,6 +26,11 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 		bool bShowTutorial;
 
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+		TArray<uint8> UPatterns;
+
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+		int32 LS_UmbrellaPattern;
 public:
 	static FString SaveSlotName;
 
