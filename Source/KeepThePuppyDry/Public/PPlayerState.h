@@ -22,7 +22,7 @@ public:
 
 	bool SaveGame();
 
-	void SetPPlayer(class APPlayer* PPlayerIn);
+	//void SetPPlayer(class APPlayer* PPlayerIn);
 
 	void ResetLocalGameSave();
 
@@ -55,7 +55,11 @@ public:
 		int32 TriesBetweenInterstitialAds;
 
 	UFUNCTION(BlueprintCallable)
-		bool bCanDisplayInterstitialAd();
+		bool TryDisplayInterstitialAd();
+
+	void ShowAdBanner();
+
+	void HideAdBanner();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -123,4 +127,6 @@ public:
 
 protected:
 	TArray<uint8> UmbrellaPatterns;
+
+	FString PLATFORM;
 };

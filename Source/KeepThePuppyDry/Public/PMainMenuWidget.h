@@ -43,7 +43,9 @@ protected:
 		void EndLoadingScreen();
 
 	UFUNCTION(BlueprintCallable)
-		bool bCanDisplayInterstitialAd();
+		bool TryDisplayInterstitialAd();
+
+	void ShowAdBanner();
 
 	TArray<class UCanvasPanel*> Menus;
 

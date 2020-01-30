@@ -59,6 +59,8 @@ void UPMainMenuWidget::StartGame()
 	else {
 		SetScreenVisible(nullptr); // Hide all screens
 	}
+
+	ShowAdBanner();
 }
 
 void UPMainMenuWidget::EndTutorial()
@@ -120,13 +122,19 @@ void UPMainMenuWidget::EndLoadingScreen()
 	UPSwipeDelegates::EndLoadingScreenDelegate.Broadcast();
 }
 
-bool UPMainMenuWidget::bCanDisplayInterstitialAd()
+bool UPMainMenuWidget::TryDisplayInterstitialAd()
 {
 	if (PPlayerState) {
-		return PPlayerState->bCanDisplayInterstitialAd();
+		return PPlayerState->TryDisplayInterstitialAd();
 	}
+	return false;
+}
 
-	return true;
+void UPMainMenuWidget::ShowAdBanner()
+{
+	if (PPlayerState) {
+		PPlayerState->ShowAdBanner();
+	}
 }
 
 void UPMainMenuWidget::SetScreenVisible(UCanvasPanel* ScreenIn)

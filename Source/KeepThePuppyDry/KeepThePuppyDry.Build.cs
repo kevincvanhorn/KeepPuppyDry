@@ -8,7 +8,7 @@ public class KeepThePuppyDry : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Slate", "SlateCore", "ProceduralMeshComponent", "NavigationSystem", "MoviePlayer" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "Slate", "SlateCore", "ProceduralMeshComponent", "NavigationSystem", "MoviePlayer"}); // , "EASYADS" 
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

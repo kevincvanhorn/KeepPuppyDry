@@ -9,6 +9,12 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "PGameInstance.h"
 
+#ifdef IOS
+#include "EasyAdsLibrary.h"
+#include "ShowInterstitialProxy.h"
+#endif
+
+
 APPlayerState::APPlayerState() {
 	ScoreMultiplier = 1.0f;
 	Health = 1.0f;
@@ -85,28 +91,89 @@ void APPlayerState::ResetLocalGameSave()
 	SaveGame();
 }
 
-bool APPlayerState::bCanDisplayInterstitialAd()
+bool APPlayerState::TryDisplayInterstitialAd()
 {
 	int32 NumSessionLosses = GetNumSessionLosses();
 	if (NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) {
-		if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
-			bShowAdOnNextRequest = false;
-			return true;
+		if (PLATFORM == "Android") {
+			if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
+				bShowAdOnNextRequest = false;
+				UKismetSystemLibrary::ShowInterstitialAd(); // Show Ad
+				return true;
+			}
+			else {
+				bShowAdOnNextRequest = true;
+				return false;
+			}
 		}
+#ifdef IOS
+		else if (PLATFORM == "IOS") {
+			if (UEasyAdsLibrary::IsInterstitialReady()) {
+				UShowInterstitialProxy::ShowInterstitial(); // Show Ad
+				bShowAdOnNextRequest = false;
+				return true;
+			}
+			else {
+				bShowAdOnNextRequest = true;
+				return false;
+			}
+		}
+#endif
 		else {
-			bShowAdOnNextRequest = true;
-			return false;
+			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 		}
 	}
 	else {
-		if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
-			// Continue
+		if (PLATFORM == "Android") {
+			if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
+				// Continue
+			}
+			else {
+				UKismetSystemLibrary::LoadInterstitialAd(1);
+			}
 		}
+#ifdef IOS
+		else if (PLATFORM == "IOS") {
+			if (UEasyAdsLibrary::IsInterstitialReady()) {
+				// Continue
+			}
+		}
+#endif
 		else {
-			UKismetSystemLibrary::LoadInterstitialAd(1);
+			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 		}
 	}
 	return false;
+}
+
+void APPlayerState::ShowAdBanner()
+{
+	if (PLATFORM == "Android") {
+		UKismetSystemLibrary::ShowAdBanner(0, true); // Show ad
+	}
+#ifdef IOS
+	else if (PLATFORM == "IOS") {
+
+	}
+#endif
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
+	}
+}
+
+void APPlayerState::HideAdBanner()
+{
+	if (PLATFORM == "Android") {
+		UKismetSystemLibrary::HideAdBanner(); // Show ad
+	}
+#ifdef IOS
+	else if (PLATFORM == "IOS") {
+		UEasyAdsLibrary::HideBanner();
+	}
+#endif
+	else {
+		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
+	}
 }
 
 int32 APPlayerState::ScoreFromTime(float TotalTime)
@@ -193,6 +260,7 @@ void APPlayerState::BeginPlay()
 	if (!PGameInstance) {
 		PGameInstance = Cast<UPGameInstance>(GetGameInstance());
 	}
+	PLATFORM = UGameplayStatics::GetPlatformName();
 }
 
 void APPlayerState::GameOver()
@@ -205,4 +273,6 @@ void APPlayerState::GameOver()
 		bIsGameOver = true;
 		UE_LOG(LogTemp, Warning, TEXT("Saved!"));
 	}
+
+	HideAdBanner();
 }
