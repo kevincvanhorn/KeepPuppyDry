@@ -46,7 +46,8 @@ void UPAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 				Speed = 0;
 			}
 			else {
-				Speed = MaxMoveSpeed / fVelocity;
+				Speed = fVelocity / MaxMoveSpeed;
+				int test = 0;
 			}
 		}
 	}

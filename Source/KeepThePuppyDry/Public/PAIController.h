@@ -95,4 +95,6 @@ protected:
 
 private:
 	int32 Difficulty;
+
+	bool bMovedLastAction;
 };

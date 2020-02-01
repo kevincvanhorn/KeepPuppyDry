@@ -13,7 +13,7 @@ APPuppyCharacter::APPuppyCharacter()
 
 	// Navigation
 	NavMinMoveDist = 100;
-	NavRadius = 500;
+	NavRadius = 400;
 	NavRangeMin = NavOrigin.Y - NavRadius;
 	NavRangeMax = NavOrigin.Y + NavRadius;
 }
@@ -41,15 +41,15 @@ void APPuppyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 FVector APPuppyCharacter::GetNextRandomLocation()
 {
-	float PosY = UKismetMathLibrary::RandomFloatInRange(NavRangeMin, NavRangeMax);
+	float PosY = UKismetMathLibrary::RandomFloatInRange(0, NavMinMoveDist*.05f); // Assumes global origin alignment.
 	FVector CurLoc = GetActorLocation();
 
 	/*if (FMath::Abs(CurLoc.Y - PosY) < NavMinMoveDist) {
 		return FVector(CurLoc.X, PosY, CurLoc.Z);
 	}
 	else {*/
-		int Dir = (int)UKismetMathLibrary::RandomBool();
-		return FVector(CurLoc.X, WrapToNavRange(Dir * NavMinMoveDist + PosY), CurLoc.Z);
+		int Dir = UKismetMathLibrary::RandomBool()? 1 : -1;
+		return FVector(CurLoc.X, WrapToNavRange(CurLoc.Y + Dir * (NavMinMoveDist + PosY)), CurLoc.Z);
 	//}
 }
 
@@ -61,11 +61,11 @@ float APPuppyCharacter::WrapToNavRange(const float Loc)
 		ReturnValue =  NavRangeMax - (NavRangeMin - Loc);
 	}
 	else if (Loc > NavRangeMax) {
-		ReturnValue =  NavRangeMin - (NavRangeMax - Loc);
+		ReturnValue =  NavRangeMin + (NavRangeMax - Loc);
 	}
 	else { ReturnValue = Loc; }
 
-	if (FMath::Abs(ReturnValue - GetActorLocation().Y) < NavMinMoveDist) {
+	if (FMath::Abs(ReturnValue - GetActorLocation().Y) < 100) {
 		UE_LOG(LogTemp, Warning, TEXT("%f, %f, %f, %f, %f, %f"), NavRangeMin, NavRangeMax, NavMinMoveDist, Loc, GetActorLocation().Y, ReturnValue);
 	}
 

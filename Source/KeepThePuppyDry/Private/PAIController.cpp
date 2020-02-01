@@ -16,6 +16,7 @@ APAIController::APAIController() {
 	SitProbability = 0.3f;
 	WaitProbability = 0.2f;
 	Difficulty = 0;
+	bMovedLastAction = true; // enable sitting at beginning
 }
 
 void APAIController::OnGameTutorial()
@@ -72,12 +73,14 @@ void APAIController::DoNextAction()
 	bool bSit = UKismetMathLibrary::RandomBoolWithWeight(SitProbability); // Note: this is chained probability.
 
 	// Wait Action:
-	if (bWait) {
+	if (bWait && bMovedLastAction) {
 		// Do nothing.
+		bMovedLastAction = false;
 	}
 	// Sit Action:
-	else if (bSit) {
+	else if (bSit && bMovedLastAction) {
 		UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+		bMovedLastAction = false;
 	}
 	// Move Action:
 	else if (Puppy && Navigation) {
@@ -85,8 +88,9 @@ void APAIController::DoNextAction()
 		FNavLocation  ProjectedPoint;
 		bCanRequestMove = Navigation->ProjectPointToNavigation(Puppy->GetNextRandomLocation(), ProjectedPoint);
 		if (bCanRequestMove) {
-			bMovedThisAction = true;
 			MoveToLocation(ProjectedPoint.Location);
+			bMovedThisAction = true;
+			bMovedLastAction = true;
 		}
 	}
 
