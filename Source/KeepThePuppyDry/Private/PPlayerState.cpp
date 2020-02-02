@@ -95,7 +95,7 @@ bool APPlayerState::TryDisplayInterstitialAd()
 {
 	int32 NumSessionLosses = GetNumSessionLosses();
 	if (NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) {
-		if (PLATFORM == "Android") {
+		//if (PLATFORM == "Android") {
 			if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
 				bShowAdOnNextRequest = false;
 				UKismetSystemLibrary::ShowInterstitialAd(); // Show Ad
@@ -105,7 +105,7 @@ bool APPlayerState::TryDisplayInterstitialAd()
 				bShowAdOnNextRequest = true;
 				return false;
 			}
-		}
+		//}
 #ifdef IOS
 		else if (PLATFORM == "IOS") {
 			if (UEasyAdsLibrary::IsInterstitialReady()) {
@@ -118,62 +118,63 @@ bool APPlayerState::TryDisplayInterstitialAd()
 				return false;
 			}
 		}
-#endif
 		else {
 			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 		}
+#endif
 	}
 	else {
-		if (PLATFORM == "Android") {
+		//if (PLATFORM == "Android") {
 			if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
 				// Continue
 			}
 			else {
 				UKismetSystemLibrary::LoadInterstitialAd(1);
 			}
-		}
+		//}
 #ifdef IOS
 		else if (PLATFORM == "IOS") {
 			if (UEasyAdsLibrary::IsInterstitialReady()) {
 				// Continue
 			}
 		}
-#endif
 		else {
 			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 		}
+#endif
 	}
 	return false;
 }
 
 void APPlayerState::ShowAdBanner()
 {
-	if (PLATFORM == "Android") {
+	//if (PLATFORM == "Android") {
 		UKismetSystemLibrary::ShowAdBanner(0, true); // Show ad
-	}
+	//}
 #ifdef IOS
 	else if (PLATFORM == "IOS") {
 
 	}
-#endif
+
 	else {
 		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 	}
+#endif
 }
 
 void APPlayerState::HideAdBanner()
 {
-	if (PLATFORM == "Android") {
+	//if (PLATFORM == "Android") {
 		UKismetSystemLibrary::HideAdBanner(); // Show ad
-	}
+	//}
 #ifdef IOS
 	else if (PLATFORM == "IOS") {
 		UEasyAdsLibrary::HideBanner();
 	}
-#endif
 	else {
 		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
 	}
+#endif
 }
 
 int32 APPlayerState::ScoreFromTime(float TotalTime)
