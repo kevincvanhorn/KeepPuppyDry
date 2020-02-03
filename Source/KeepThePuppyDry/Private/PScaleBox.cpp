@@ -11,9 +11,9 @@ UPScaleBox::UPScaleBox() {
 
 void UPScaleBox::MoveTo(FVector2D StartLoc, FVector2D TargetLocIn, float InterpSpeed) {
 	MoveSpeed = InterpSpeed;
-	FVector2D TargetLoc;
-	
-	this->RenderTransform.Translation = StartLoc;
+	TargetLoc = TargetLocIn;
+
+	this->SetRenderTranslation(StartLoc);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -26,7 +26,8 @@ void UPScaleBox::UpdateLocation() {
 	FVector2D CurLoc = this->RenderTransform.Translation;
 
 	if (FVector2D::Distance(CurLoc, TargetLoc) > 0.001f) {
-		this->RenderTransform.Translation = UKismetMathLibrary::Vector2DInterpTo(CurLoc, TargetLoc, 0.01f, MoveSpeed);
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *TargetLoc.ToString());	
+		this->SetRenderTranslation(UKismetMathLibrary::Vector2DInterpTo(CurLoc, TargetLoc, 0.01f, MoveSpeed));
 	}
 	else{
 		UWorld* World = GetWorld();

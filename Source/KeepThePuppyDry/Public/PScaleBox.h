@@ -29,5 +29,7 @@ private:
 
 	float MoveSpeed;
 
+	float DistToTravelInv;
+
 	FVector2D TargetLoc;
 };

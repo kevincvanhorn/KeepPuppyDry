@@ -176,7 +176,6 @@ void APUmbrella::Tick(float DeltaTime)
 		if (bOverlappingPuppy && Puppy) {
 			// Ru-Rp / d  :assuming Rp is less than Ru (p = puppy, u = umbrella, d = dist from centers)
 			OverlapPercentage = FMath::Clamp(FMath::Abs(SphereComponent->GetScaledSphereRadius() - PuppyRadius)/ FMath::Abs(GroundLoc.Y - Puppy->GetActorLocation().Y), 0.0f, 1.0f);
-			UE_LOG(LogTemp, Warning, TEXT("OverlapEnd %f"), OverlapPercentage);
 		}
 	}
 	// MPC for grass material

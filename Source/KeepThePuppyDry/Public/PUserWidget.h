@@ -95,9 +95,22 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float TreatMoveSpeed;
 
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UPScaleBox* BoneMovingSB;
+
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+		class UImage* BoneTarget;
+
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 		TArray<class UPScaleBox*> TreatQueue;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		FVector UmbrellaOffset;
+
 private:
 	uint8 CurMovingTreatIdx;
+	
+	void PopulateTreatQueue();
+
+	float ViewportScaleInv;
 };

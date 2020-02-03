@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "PScaleBox.h"
 #include "PPlayer.h"
+#include "Blueprint/SlateBlueprintLibrary.h"
+#include "Components/Image.h"
 
 void UPUserWidget::NativeConstruct() {
 	Super::NativeConstruct();
@@ -20,6 +22,8 @@ void UPUserWidget::NativeConstruct() {
 	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
 	bShowUpdateScore = false;
 	CurMovingTreatIdx = 0;
+	PopulateTreatQueue();	
+	ViewportScaleInv = 1.0f/UWidgetLayoutLibrary::GetViewportScale(GetWorld());
 }
 
 void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
@@ -52,11 +56,15 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 			CurMovingTreatIdx = 0;
 		}
 		if (CurMovingTreatIdx < TreatQueue.Num()) {
-			if (ScoreTextWidget) {
-				FVector2D TargetLoc = ScoreTextWidget->RenderTransform.Translation;
+			if (BoneTarget) {
+				FVector2D PixelPos, TargetLoc;
+				USlateBlueprintLibrary::LocalToViewport(GetWorld(), BoneTarget->GetCachedGeometry(), FVector2D(0.5f, 0.5f), PixelPos, TargetLoc);
 				FVector2D StartLoc;
-				UGameplayStatics::ProjectWorldToScreen((APlayerController*)PPlayerController, PPlayer->GetUmbrellaLocation(), StartLoc);
-				TreatQueue[CurMovingTreatIdx]->MoveTo(StartLoc, TargetLoc, TreatMoveSpeed);
+				UGameplayStatics::ProjectWorldToScreen((APlayerController*)PPlayerController, PPlayer->GetUmbrellaLocation()+UmbrellaOffset, StartLoc);
+				if (TreatQueue[CurMovingTreatIdx]) {
+					//TreatQueue[CurMovingTreatIdx]->SetRenderTranslation(StartLoc * ViewportScaleInv);
+					TreatQueue[CurMovingTreatIdx]->MoveTo(StartLoc* ViewportScaleInv, TargetLoc, TreatMoveSpeed);
+				}
 			}
 		}
 		
@@ -120,5 +128,12 @@ void UPUserWidget::StopPersistentSound(ESoundLabels SoundLabel, float FadeOutDur
 {
 	if (PGameInstance) {
 		PGameInstance->StopPersistentSound(SoundLabel, FadeOutDuration);
+	}
+}
+
+void UPUserWidget::PopulateTreatQueue()
+{
+	if(BoneMovingSB){
+		TreatQueue.Push(BoneMovingSB);
 	}
 }
