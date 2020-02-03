@@ -9,6 +9,8 @@
 #include "Kismet/KismetMaterialLibrary.h"
 #include "PSwipeDelegates.h"
 #include "Kismet/GameplayStatics.h"
+#include "PScaleBox.h"
+#include "PPlayer.h"
 
 void UPUserWidget::NativeConstruct() {
 	Super::NativeConstruct();
@@ -17,6 +19,7 @@ void UPUserWidget::NativeConstruct() {
 
 	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
 	bShowUpdateScore = false;
+	CurMovingTreatIdx = 0;
 }
 
 void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
@@ -40,8 +43,24 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 		ScoreTextWidget->SetText(FText::AsNumber(ScoreIn));
 		if (bShowUpdateScore) { // Hide the first update
 			this->OnUpdateScore();
-		}
+		} 
 		bShowUpdateScore = true;
+	}
+
+	if (TreatQueue.Num() > 0) {
+		if (CurMovingTreatIdx > TreatQueue.Num()) {
+			CurMovingTreatIdx = 0;
+		}
+		if (CurMovingTreatIdx < TreatQueue.Num()) {
+			if (ScoreTextWidget) {
+				FVector2D TargetLoc = ScoreTextWidget->RenderTransform.Translation;
+				FVector2D StartLoc;
+				UGameplayStatics::ProjectWorldToScreen((APlayerController*)PPlayerController, PPlayer->GetUmbrellaLocation(), StartLoc);
+				TreatQueue[CurMovingTreatIdx]->MoveTo(StartLoc, TargetLoc, TreatMoveSpeed);
+			}
+		}
+		
+		CurMovingTreatIdx++;
 	}
 }
 
@@ -77,7 +96,6 @@ void UPUserWidget::SetDTimeRemaining(float TimeRemaining)
 		}
 	}
 }
-
 
 void UPUserWidget::OnGameOverInternal()
 {

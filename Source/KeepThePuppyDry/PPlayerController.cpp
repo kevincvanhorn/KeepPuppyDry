@@ -49,7 +49,8 @@ void APPlayerController::BeginPlay() {
 			if (PLevel) {
 				PLevel->SetUserWidget(PUserWidget);
 			}
-
+			PUserWidget->SetPlayer(PPlayer);
+			PUserWidget->SetPlayerController(this);
 			PUserWidget->AddToViewport();
 			PUserWidget->SetVisibility(ESlateVisibility::Hidden);
 		}

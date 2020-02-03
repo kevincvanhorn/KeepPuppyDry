@@ -55,6 +55,14 @@ void APPlayer::Initialize(APPlayerState* PlayerStateIn)
 	}
 }
 
+FVector APPlayer::GetUmbrellaLocation() const
+{
+	if (Umbrella) {
+		return Umbrella->GetActorLocation();
+	}
+	return FVector::ZeroVector;
+}
+
 void APPlayer::OnGameTutorial() {
 	bTryUpdateTouchEvents = false;
 	if (PUserWidget && PPlayerState) {

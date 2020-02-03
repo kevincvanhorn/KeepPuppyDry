@@ -23,6 +23,8 @@ public:
 
 	void Initialize(class APPlayerState* PlayerStateIn);
 
+	FVector GetUmbrellaLocation() const;
+
 protected:
 	UFUNCTION()
 		void OnGameTutorial();

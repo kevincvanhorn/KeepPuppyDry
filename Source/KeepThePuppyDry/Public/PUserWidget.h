@@ -37,6 +37,9 @@ public:
 
 	void SetDTimeRemaining(float TimeRemaining);
 
+	void SetPlayer(class APPlayer* PlayerIn) { PPlayer = PlayerIn; }
+	void SetPlayerController(class APPlayerController* ControllerIn) { PPlayerController = ControllerIn; }
+
 protected:
 	class UPGameInstance* PGameInstance;
 
@@ -55,6 +58,11 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
 		float TimeToNextDifficulty;
 
+	UPROPERTY(BlueprintReadOnly)
+		class APPlayer* PPlayer;
+
+	UPROPERTY(BlueprintReadOnly)
+		class APPlayerController* PPlayerController;
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateScore"))
 		void OnUpdateScore();
@@ -81,4 +89,15 @@ protected:
 
 private:
 	bool bShowUpdateScore;
+
+// Moving Treats:
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float TreatMoveSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+		TArray<class UPScaleBox*> TreatQueue;
+
+private:
+	uint8 CurMovingTreatIdx;
 };
