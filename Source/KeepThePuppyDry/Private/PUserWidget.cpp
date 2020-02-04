@@ -51,6 +51,7 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 		bShowUpdateScore = true;
 	}
 
+	/*
 	if (TreatQueue.Num() > 0) {
 		if (CurMovingTreatIdx > TreatQueue.Num()) {
 			CurMovingTreatIdx = 0;
@@ -69,7 +70,8 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 		}
 		
 		CurMovingTreatIdx++;
-	}
+	}*/
+	
 }
 
 void UPUserWidget::UpdateHealth(float HealthIn)
