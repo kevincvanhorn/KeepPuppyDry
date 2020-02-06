@@ -18,7 +18,7 @@ public:
 	UPScaleBox();
 
 	/** Lerps this widget to the target position, starting from the beginning if already moving. */
-	void MoveTo(FVector2D StartLoc, FVector2D TargetLocIn, float InterpSpeed);
+	void MoveTo(FVector2D StartLocIn, FVector2D TargetLocIn, float InterpSpeed);
 
 protected:
 	UFUNCTION()
@@ -29,7 +29,8 @@ private:
 
 	float MoveSpeed;
 
-	float DistToTravelInv;
+	float TotalDistInv;
 
+	FVector2D StartLoc;
 	FVector2D TargetLoc;
 };

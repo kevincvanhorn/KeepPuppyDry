@@ -9,11 +9,14 @@
 UPScaleBox::UPScaleBox() {
 }
 
-void UPScaleBox::MoveTo(FVector2D StartLoc, FVector2D TargetLocIn, float InterpSpeed) {
+void UPScaleBox::MoveTo(FVector2D StartLocIn, FVector2D TargetLocIn, float InterpSpeed) {
 	MoveSpeed = InterpSpeed;
+	StartLoc = StartLocIn;
 	TargetLoc = TargetLocIn;
 
 	this->SetRenderTranslation(StartLoc);
+
+	TotalDistInv = 1.0f / FVector2D::Distance(StartLoc, TargetLoc);
 
 	UWorld* World = GetWorld();
 	if (World) {
@@ -24,10 +27,12 @@ void UPScaleBox::MoveTo(FVector2D StartLoc, FVector2D TargetLocIn, float InterpS
 
 void UPScaleBox::UpdateLocation() {
 	FVector2D CurLoc = this->RenderTransform.Translation;
-
-	if (FVector2D::Distance(CurLoc, TargetLoc) > 0.001f) {
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *TargetLoc.ToString());	
+	float Dist = FVector2D::Distance(CurLoc, TargetLoc);
+	
+	if (Dist > 0.001f) {
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *TargetLoc.ToString());
 		this->SetRenderTranslation(UKismetMathLibrary::Vector2DInterpTo(CurLoc, TargetLoc, 0.01f, MoveSpeed));
+		this->SetRenderOpacity(Dist*TotalDistInv);
 	}
 	else{
 		UWorld* World = GetWorld();
@@ -36,5 +41,4 @@ void UPScaleBox::UpdateLocation() {
 			WorldTimeManager.ClearTimer(MoveHandle);
 		}
 	}
-
 }
