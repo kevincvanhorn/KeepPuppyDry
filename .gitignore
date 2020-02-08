@@ -45,6 +45,7 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 Silo_Interactive/icon
+Staging/
 
 # Binary Files
 Binaries/*

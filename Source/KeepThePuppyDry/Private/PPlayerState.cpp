@@ -9,11 +9,12 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "PGameInstance.h"
 
+#define IOS
+
 #ifdef IOS
 #include "EasyAdsLibrary.h"
 #include "ShowInterstitialProxy.h"
 #endif
-
 
 APPlayerState::APPlayerState() {
 	ScoreMultiplier = 1.0f;
@@ -95,19 +96,19 @@ bool APPlayerState::TryDisplayInterstitialAd()
 {
 	int32 NumSessionLosses = GetNumSessionLosses();
 	if (NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) {
-		//if (PLATFORM == "Android") {
-			if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
-				bShowAdOnNextRequest = false;
-				UKismetSystemLibrary::ShowInterstitialAd(); // Show Ad
-				return true;
-			}
-			else {
-				bShowAdOnNextRequest = true;
-				return false;
-			}
-		//}
+#ifndef IOS
+		if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
+			bShowAdOnNextRequest = false;
+			UKismetSystemLibrary::ShowInterstitialAd(); // Show Ad
+			return true;
+		}
+		else {
+			bShowAdOnNextRequest = true;
+			return false;
+		}
+#endif
 #ifdef IOS
-		else if (PLATFORM == "IOS") {
+		if (PLATFORM == "IOS") {
 			if (UEasyAdsLibrary::IsInterstitialReady()) {
 				UShowInterstitialProxy::ShowInterstitial(); // Show Ad
 				bShowAdOnNextRequest = false;
@@ -118,28 +119,20 @@ bool APPlayerState::TryDisplayInterstitialAd()
 				return false;
 			}
 		}
-		else {
-			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
-		}
 #endif
 	}
 	else {
-		//if (PLATFORM == "Android") {
-			if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
-				// Continue
-			}
-			else {
-				UKismetSystemLibrary::LoadInterstitialAd(1);
-			}
-		//}
-#ifdef IOS
-		else if (PLATFORM == "IOS") {
-			if (UEasyAdsLibrary::IsInterstitialReady()) {
-				// Continue
-			}
+#ifndef IOS
+		if (UKismetSystemLibrary::IsInterstitialAdRequested()) {
+			// Continue
 		}
 		else {
-			UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
+			UKismetSystemLibrary::LoadInterstitialAd(1);
+		}
+#endif
+#ifdef IOS
+		if (UEasyAdsLibrary::IsInterstitialReady()) {
+			// Continue
 		}
 #endif
 	}
@@ -148,32 +141,25 @@ bool APPlayerState::TryDisplayInterstitialAd()
 
 void APPlayerState::ShowAdBanner()
 {
+#ifndef IOS
 	//if (PLATFORM == "Android") {
 		UKismetSystemLibrary::ShowAdBanner(0, true); // Show ad
 	//}
+#endif
 #ifdef IOS
-	else if (PLATFORM == "IOS") {
-
-	}
-
-	else {
-		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
-	}
+		UEasyAdsLibrary::ShowBanner(true);
 #endif
 }
 
 void APPlayerState::HideAdBanner()
 {
+#ifndef IOS
 	//if (PLATFORM == "Android") {
 		UKismetSystemLibrary::HideAdBanner(); // Show ad
 	//}
+#endif
 #ifdef IOS
-	else if (PLATFORM == "IOS") {
 		UEasyAdsLibrary::HideBanner();
-	}
-	else {
-		UE_LOG(LogTemp, Error, TEXT("Invalid Platform."));
-	}
 #endif
 }
 
