@@ -31,6 +31,8 @@ public:
 
 	const TArray<uint8>& GetUmbrellaPatterns() const { return UmbrellaPatterns; }
 
+	void IncreaseScoreRate(float PosRate, float NegRate); // TODO: rename
+
 // PERSISTENT DATA: Saved locally
 protected:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
@@ -60,6 +62,8 @@ public:
 	void ShowAdBanner();
 
 	void HideAdBanner();
+
+	int32 GetSessionScore();
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -129,4 +133,9 @@ protected:
 	TArray<uint8> UmbrellaPatterns;
 
 	FString PLATFORM;
+
+	UFUNCTION()
+		void OnGameStart();
+
+	int32 SessionStartScore;
 };

@@ -27,7 +27,8 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateUIDifficulty"))
 		void OnUpdateUIDifficulty(EDifficultyType Difficulty);
 
-	void UpdateScore(int32 ScoreIn);
+	UFUNCTION()
+		void UpdateScore(int32 ScoreIn);
 
 	void UpdateHealth(float HealthIn);
 
@@ -39,6 +40,9 @@ public:
 
 	void SetPlayer(class APPlayer* PlayerIn) { PPlayer = PlayerIn; }
 	void SetPlayerController(class APPlayerController* ControllerIn) { PPlayerController = ControllerIn; }
+
+	//UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateScore"))
+	//	void OnUpdateScore();
 
 protected:
 	class UPGameInstance* PGameInstance;
@@ -63,9 +67,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 		class APPlayerController* PPlayerController;
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnUpdateScore"))
-		void OnUpdateScore();
 
 // Game Over
 public:

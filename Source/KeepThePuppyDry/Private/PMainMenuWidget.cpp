@@ -178,6 +178,14 @@ void UPMainMenuWidget::PRestartLevel(bool bShowTitleScreen)
 	}
 }
 
+int32 UPMainMenuWidget::GetGOScore()
+{
+	if (PPlayerState) {
+		return PPlayerState->GetSessionScore();
+	}
+	return 0.0f;
+}
+
 void UPMainMenuWidget::PlaySound2D(USoundBase* Sound, ESoundType SoundType, float VolumeMultiplier, float PitchMultiplier, float StartTime)
 {
 	if (PGameInstance) {

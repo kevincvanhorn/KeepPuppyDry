@@ -27,11 +27,15 @@ public:
 
 	void SetUmbrellaCylinder(class APProcedualMeshActor* CylinderIn);
 
-	void SetUmbrella(class APUmbrella* UmbrellaIn);
+	void SetUmbrella(class APUmbrella* UmbrellaIn);//, class APDifficultyManager* DifficultyManagerIn);
 
 	void SetAIController(class APAIController* AIControllerIn);
 
 	void SetUserWidget(class UPUserWidget* PUserWidgetIn);
+
+	void SetDifficultyManager(class APDifficultyManager* DifficultyManagerIn);
+
+	void SetPPlayerState(class APPlayerState* PPlayerStateIn);
 
 protected:
 	UFUNCTION()
@@ -59,6 +63,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 		void UpdateUIDifficulty(EDifficultyType DiffType);
 
+	UFUNCTION(BlueprintCallable)
+		void IncreaseScoreRate(float PosRate, float NegRate);
+
 protected:
 	class UPUserWidget* PUserWidget;
 
@@ -71,6 +78,8 @@ protected:
 	class APUmbrella* Umbrella;
 
 	class APAIController* AIController;
+
+	class APPlayerState* PPlayerState;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		float RainLerpSpeed;

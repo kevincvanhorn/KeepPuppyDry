@@ -43,8 +43,8 @@ void UPUserWidget::SetTouchDragPosition(FVector2D TouchPos)
 
 void UPUserWidget::UpdateScore(int32 ScoreIn)
 {
-	/*if (TreatQueue.Num() > 0) {
-		if (CurMovingTreatIdx > TreatQueue.Num()) {
+	if (TreatQueue.Num() > 0 && bShowUpdateScore) {
+		if (CurMovingTreatIdx > TreatQueue.Num()-1) {
 			CurMovingTreatIdx = 0;
 		}
 		if (CurMovingTreatIdx < TreatQueue.Num()) {
@@ -61,7 +61,7 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 		}
 		
 		CurMovingTreatIdx++;
-	}*/
+	}
 	
 	if (ScoreTextWidget) {
 		ScoreTextWidget->SetText(FText::AsNumber(ScoreIn));

@@ -8,6 +8,7 @@
 #include "PUmbrella.h"
 #include "PUserWidget.h"
 #include "PSwipeDelegates.h"
+#include "PPlayerState.h"
 
 APLevelScriptActor::APLevelScriptActor() {
 	bMovingCylinder = false;
@@ -48,6 +49,13 @@ void APLevelScriptActor::UpdateUIDifficulty(EDifficultyType DiffType)
 	}
 }
 
+void APLevelScriptActor::IncreaseScoreRate(float PosRate, float NegRate)
+{
+	if (PPlayerState) {
+		PPlayerState->IncreaseScoreRate(PosRate, NegRate);
+	}
+}
+
 void APLevelScriptActor::OnIncreaseDifficulty_Rain()
 {
 
@@ -62,9 +70,10 @@ void APLevelScriptActor::SetUmbrellaCylinder(APProcedualMeshActor* CylinderIn)
 	}
 }
 
-void APLevelScriptActor::SetUmbrella(APUmbrella* UmbrellaIn)
+void APLevelScriptActor::SetUmbrella(APUmbrella* UmbrellaIn)//, APDifficultyManager* DifficultyManagerIn)
 {
 	Umbrella = UmbrellaIn;
+	//DifficultyManager = DifficultyManagerIn;
 }
 
 void APLevelScriptActor::SetAIController(APAIController* AIControllerIn)
@@ -75,6 +84,11 @@ void APLevelScriptActor::SetAIController(APAIController* AIControllerIn)
 void APLevelScriptActor::SetUserWidget(UPUserWidget* PUserWidgetIn)
 {
 	PUserWidget = PUserWidgetIn;
+}
+
+void APLevelScriptActor::SetPPlayerState(APPlayerState* PPlayerStateIn)
+{
+	PPlayerState = PPlayerStateIn;
 }
 
 void APLevelScriptActor::OnGameStartInternal()

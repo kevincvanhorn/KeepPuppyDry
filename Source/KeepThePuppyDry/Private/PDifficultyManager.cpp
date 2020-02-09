@@ -5,6 +5,7 @@
 #include "PSwipeDelegates.h"
 #include "TimerManager.h"
 #include "PUserWidget.h"
+#include "PLevelScriptActor.h"
 
 APDifficultyManager::APDifficultyManager()
 {
@@ -44,7 +45,6 @@ void APDifficultyManager::BeginPlay()
 	UPSwipeDelegates::GameOverDelegate.AddUObject(this, &APDifficultyManager::OnGameOver);
 	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APDifficultyManager::OnGameStart);
 	UPSwipeDelegates::GameTutorialDelegate.AddUObject(this, &APDifficultyManager::OnGameTutorial);
-
 }
 
 void APDifficultyManager::Tick(float DeltaTime)

@@ -18,6 +18,7 @@
 #include "PSwipeDelegates.h"
 #include "PCustomizationManager.h"
 #include "PMainMenuWidget.h"
+#include "TimerManager.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -63,6 +64,18 @@ FVector APPlayer::GetUmbrellaLocation() const
 	return FVector::ZeroVector;
 }
 
+void APPlayer::ZoomIn()
+{
+	TargetZoomFactor = InZoomFactor;
+	GetWorldTimerManager().SetTimer(ZoomHandle, this, &APPlayer::UpdateCameraZoom, 0.01f, true, 0.0f);
+}
+
+void APPlayer::ZoomOut()
+{
+	TargetZoomFactor = OutZoomFactor;
+	GetWorldTimerManager().SetTimer(ZoomHandle, this, &APPlayer::UpdateCameraZoom, 0.01f, true, 0.0f);
+}
+
 void APPlayer::OnGameTutorial() {
 	bTryUpdateTouchEvents = false;
 	if (PUserWidget && PPlayerState) {
@@ -82,7 +95,7 @@ void APPlayer::OnGameStart()
 	bTryUpdateTouchEvents = true;
 	if (PUserWidget && PPlayerState) {
 		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
-		PUserWidget->UpdateScore(PPlayerState->GetScore());
+		//PUserWidget->UpdateScore(PPlayerState->GetScore());
 	}
 	this->SetActorTickEnabled(true);
 }
@@ -131,6 +144,10 @@ void APPlayer::BeginPlay()
 			}
 			CustomizationManager->PInit(Umbrella, UIMesh);
 		}
+	}
+
+	if (SpringArm) {
+		InZoomFactor = SpringArm->TargetArmLength;
 	}
 
 	//UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
@@ -253,4 +270,14 @@ void APPlayer::OnUmbrellaOverlapBegin()
 void APPlayer::OnUmbrellaOverlapEnd()
 {
 	bUOverlapping = false;
+}
+
+void APPlayer::UpdateCameraZoom()
+{
+	if (SpringArm) {
+		SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, TargetZoomFactor, 0.01f, ZoomSpeed);
+		if (FMath::Abs(SpringArm->TargetArmLength - TargetZoomFactor) < 0.1f) {
+			GetWorldTimerManager().ClearTimer(ZoomHandle);
+		}
+	}
 }

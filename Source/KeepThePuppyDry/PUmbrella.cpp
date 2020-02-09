@@ -99,7 +99,8 @@ void APUmbrella::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 				PuppyRadius = Capsule->GetScaledCapsuleRadius();
 			}
 		}
-		UE_LOG(LogTemp, Warning, TEXT("OverlapBegin %s"), *OtherActor->GetName());
+		bUpdateWetFrame = true;
+		//UE_LOG(LogTemp, Warning, TEXT("OverlapBegin %s"), *OtherActor->GetName());
 		PPlayer->OnUmbrellaOverlapBegin();
 		bOverlappingPuppy = true;
 	}
@@ -113,6 +114,11 @@ void APUmbrella::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* Other
 		PPlayer->OnUmbrellaOverlapEnd();
 		bOverlappingPuppy = false;
 		OverlapPercentage = 0.0f;
+
+		if (Puppy && bUpdateWetFrame) {
+			Puppy->OnGetWet();
+		}
+		bUpdateWetFrame = false;
 	}
 }
 

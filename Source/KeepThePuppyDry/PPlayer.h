@@ -25,6 +25,10 @@ public:
 
 	FVector GetUmbrellaLocation() const;
 
+	void ZoomIn();
+
+	void ZoomOut();
+
 protected:
 	UFUNCTION()
 		void OnGameTutorial();
@@ -151,7 +155,25 @@ private:
 
 	class UMaterialParameterCollection* MPC;
 
-	//
 private:
 	bool bTryUpdateTouchEvents;
+
+
+// ZOOMING -------------------------
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float ZoomSpeed;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		float OutZoomFactor;
+
+private:
+	float InZoomFactor;
+
+	float TargetZoomFactor;
+
+	FTimerHandle ZoomHandle;
+
+	UFUNCTION()
+		void UpdateCameraZoom();
 };

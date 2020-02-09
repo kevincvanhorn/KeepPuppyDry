@@ -8,8 +8,9 @@
 #include "PSwipeDelegates.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "PGameInstance.h"
+#include "PSwipeDelegates.h"
 
-#define IOS
+//#define IOS
 
 #ifdef IOS
 #include "EasyAdsLibrary.h"
@@ -27,6 +28,7 @@ APPlayerState::APPlayerState() {
 	bShowAdOnNextRequest = false;
 	TriesBetweenInterstitialAds = 1;
 	LastSelected_UmbrellaPattern = -1;
+	SessionStartScore = 0;
 }
 
 bool APPlayerState::LoadGame()
@@ -84,12 +86,23 @@ void APPlayerState::SetLastSelected(EUmbrellaPattern UmbrellaPattern)
 	LastSelected_UmbrellaPattern = (int32)UmbrellaPattern;
 }
 
+void APPlayerState::OnGameStart()
+{
+	SessionStartScore = PScore;
+}
+
 void APPlayerState::ResetLocalGameSave()
 {
 	PScore = 0;
 	bShowTutorial =  true;
 	UmbrellaPatterns.Empty();
 	SaveGame();
+}
+
+void APPlayerState::IncreaseScoreRate(float PosRate, float NegRate)
+{
+	HPositiveRate = PosRate;
+	HNegativeRate = NegRate;
 }
 
 bool APPlayerState::TryDisplayInterstitialAd()
@@ -109,8 +122,8 @@ bool APPlayerState::TryDisplayInterstitialAd()
 #endif
 #ifdef IOS
 		if (PLATFORM == "IOS") {
+			UShowInterstitialProxy::ShowInterstitial(); // Show Ad
 			if (UEasyAdsLibrary::IsInterstitialReady()) {
-				UShowInterstitialProxy::ShowInterstitial(); // Show Ad
 				bShowAdOnNextRequest = false;
 				return true;
 			}
@@ -161,6 +174,11 @@ void APPlayerState::HideAdBanner()
 #ifdef IOS
 		UEasyAdsLibrary::HideBanner();
 #endif
+}
+
+int32 APPlayerState::GetSessionScore()
+{
+	return PScore - SessionStartScore;
 }
 
 int32 APPlayerState::ScoreFromTime(float TotalTime)
@@ -248,6 +266,8 @@ void APPlayerState::BeginPlay()
 		PGameInstance = Cast<UPGameInstance>(GetGameInstance());
 	}
 	PLATFORM = UGameplayStatics::GetPlatformName();
+
+	UPSwipeDelegates::GameStartDelegate.AddUObject(this, &APPlayerState::OnGameStart);
 }
 
 void APPlayerState::GameOver()

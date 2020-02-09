@@ -39,6 +39,7 @@ void APPuppyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+
 FVector APPuppyCharacter::GetNextRandomLocation()
 {
 	float PosY = UKismetMathLibrary::RandomFloatInRange(0, NavMinMoveDist*.05f); // Assumes global origin alignment.

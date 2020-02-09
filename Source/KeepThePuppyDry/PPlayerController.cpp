@@ -48,6 +48,7 @@ void APPlayerController::BeginPlay() {
 			}
 			if (PLevel) {
 				PLevel->SetUserWidget(PUserWidget);
+				PLevel->SetPPlayerState(PPlayerState);
 			}
 			PUserWidget->SetPlayer(PPlayer);
 			PUserWidget->SetPlayerController(this);

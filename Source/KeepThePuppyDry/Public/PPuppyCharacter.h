@@ -28,6 +28,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnGetWet"))
+		void OnGetWet();
+
 // Navigation: ------------------------
 public:
 	/** Get a y-world aligned random navigatable location a min distance away from the pawn location.*/

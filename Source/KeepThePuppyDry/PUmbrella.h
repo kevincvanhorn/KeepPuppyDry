@@ -170,4 +170,6 @@ private:
 	float PuppyRadius; // Radius of capsule.
 
 	class APPuppyCharacter* Puppy;
+
+	bool bUpdateWetFrame;
 };

@@ -118,6 +118,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnGameOver"))
 		void OnGameOverEventBP();
 
+	/** Score difference for game over. */
+	UFUNCTION(BlueprintCallable)
+		int32 GetGOScore();
+
 protected:
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UCanvasPanel* GameOverScreen;
