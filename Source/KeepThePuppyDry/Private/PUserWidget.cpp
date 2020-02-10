@@ -55,7 +55,7 @@ void UPUserWidget::UpdateScore(int32 ScoreIn)
 				UGameplayStatics::ProjectWorldToScreen((APlayerController*)PPlayerController, PPlayer->GetUmbrellaLocation()+UmbrellaOffset, StartLoc);
 				if (TreatQueue[CurMovingTreatIdx]) {
 					//TreatQueue[CurMovingTreatIdx]->SetRenderTranslation(StartLoc * ViewportScaleInv);
-					TreatQueue[CurMovingTreatIdx]->MoveTo(StartLoc* ViewportScaleInv, TargetLoc, TreatMoveSpeed);
+					TreatQueue[CurMovingTreatIdx]->MoveTo(StartLoc / UWidgetLayoutLibrary::GetViewportScale(GetWorld()), TargetLoc, TreatMoveSpeed);
 				}
 			}
 		}

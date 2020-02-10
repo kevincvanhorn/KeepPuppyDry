@@ -10,7 +10,7 @@
 #include "PGameInstance.h"
 #include "PSwipeDelegates.h"
 
-//#define IOS
+#define IOS
 
 #ifdef IOS
 #include "EasyAdsLibrary.h"
@@ -108,7 +108,7 @@ void APPlayerState::IncreaseScoreRate(float PosRate, float NegRate)
 bool APPlayerState::TryDisplayInterstitialAd()
 {
 	int32 NumSessionLosses = GetNumSessionLosses();
-	if (NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) {
+	if ((NumSessionLosses % TriesBetweenInterstitialAds == 0 || bShowAdOnNextRequest) && GetSessionScore() > 2) {
 #ifndef IOS
 		if (UKismetSystemLibrary::IsInterstitialAdAvailable()) {
 			bShowAdOnNextRequest = false;
@@ -121,17 +121,17 @@ bool APPlayerState::TryDisplayInterstitialAd()
 		}
 #endif
 #ifdef IOS
-		if (PLATFORM == "IOS") {
-			UShowInterstitialProxy::ShowInterstitial(); // Show Ad
-			if (UEasyAdsLibrary::IsInterstitialReady()) {
-				bShowAdOnNextRequest = false;
-				return true;
-			}
-			else {
-				bShowAdOnNextRequest = true;
-				return false;
-			}
+		//if (PLATFORM == "IOS") {
+		if (UEasyAdsLibrary::IsInterstitialReady()) {
+			//UShowInterstitialProxy::ShowInterstitial(); // Show Ad // MOVED TO BLUEPRINT
+			bShowAdOnNextRequest = false;
+			return true;
 		}
+		else {
+			bShowAdOnNextRequest = true;
+			return false;
+		}
+		//}
 #endif
 	}
 	else {
