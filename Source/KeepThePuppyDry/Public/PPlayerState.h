@@ -22,14 +22,14 @@ public:
 
 	bool SaveGame();
 
-	//void SetPPlayer(class APPlayer* PPlayerIn);
-
 	void ResetLocalGameSave();
 
 public:
 	bool GetTutorialEnabled() const { return bShowTutorial; }
 
 	const TArray<uint8>& GetUmbrellaPatterns() const { return UmbrellaPatterns; }
+
+	const TArray<uint8>& GetDogChoices() const { return DogChoices; }
 
 	void IncreaseScoreRate(float PosRate, float NegRate); // TODO: rename
 
@@ -113,24 +113,27 @@ private:
 	
 	bool bIsGameOver;
 
-	//int32 NumSessionLosses;
-
 	bool bShowAdOnNextRequest;
 
 // Customization:
 public:
 	bool PlayerOwnsAsset(EUmbrellaPattern Pattern);
+	bool PlayerOwnsAsset(EDogChoice DogChoice);
 
 	bool BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost);
+	bool BuyAsset(EDogChoice DogChoice, int32 Cost);
 
 	bool bCanAffordAsset(int32 Cost);
 
 	void SetLastSelected(EUmbrellaPattern UmbrellaPattern);
+	void SetLastSelected(EDogChoice DogChoice);
 
 	int32 LastSelected_UmbrellaPattern;
+	int32 LastSelected_Dog;
 
 protected:
 	TArray<uint8> UmbrellaPatterns;
+	TArray<uint8> DogChoices;
 
 	FString PLATFORM;
 

@@ -19,6 +19,7 @@
 #include "PCustomizationManager.h"
 #include "PMainMenuWidget.h"
 #include "TimerManager.h"
+#include "PPuppyCharacter.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -82,6 +83,8 @@ void APPlayer::OnGameTutorial() {
 		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
 		PUserWidget->UpdateScore(PPlayerState->GetScore());
 	}
+	SpawnPuppy();
+
 	this->SetActorTickEnabled(false);
 }
 
@@ -149,14 +152,12 @@ void APPlayer::BeginPlay()
 	if (SpringArm) {
 		InZoomFactor = SpringArm->TargetArmLength;
 	}
-
-	//UPSwipeDelegates::DifficultySwitchDelegate.AddUniqueDynamic(this, &APPlayer::OnDifficultyChangedInternal);
 }
 
 void APPlayer::PostBeginPlay()
 {
 	if (CustomizationManager && PPlayerState) {
-		if (PPlayerState->LastSelected_UmbrellaPattern > 0) { // -1 is none
+		if (PPlayerState->LastSelected_UmbrellaPattern >= 0) { // -1 is none
 			CustomizationManager->SelectUmbrellaPattern((EUmbrellaPattern)PPlayerState->LastSelected_UmbrellaPattern);
 		}
 	}
@@ -278,6 +279,18 @@ void APPlayer::UpdateCameraZoom()
 		SpringArm->TargetArmLength = FMath::FInterpTo(SpringArm->TargetArmLength, TargetZoomFactor, 0.01f, ZoomSpeed);
 		if (FMath::Abs(SpringArm->TargetArmLength - TargetZoomFactor) < 0.1f) {
 			GetWorldTimerManager().ClearTimer(ZoomHandle);
+		}
+	}
+}
+
+void APPlayer::SpawnPuppy()
+{
+	if (CustomizationManager) {
+		TSubclassOf<APPuppyCharacter> PuppyClass = CustomizationManager->GetDogChoice();
+		if (PuppyClass) {
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			APPuppyCharacter* PuppySpawn = (APPuppyCharacter*)GetWorld()->SpawnActor<APPuppyCharacter>(PuppyClass, PuppyTransform, SpawnParams);
 		}
 	}
 }

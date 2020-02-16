@@ -9,9 +9,7 @@
 // Sets default values
 APCustomizationManager::APCustomizationManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	SelectedDogChoice = EDogChoice::EDefault;
 }
 
 void APCustomizationManager::PInit(APUmbrella* UmbrellaIn, UStaticMeshComponent* UIMesh)
@@ -42,6 +40,19 @@ void APCustomizationManager::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPatt
 	}
 }
 
+void APCustomizationManager::SelectDogChoice(EDogChoice DogChoice)
+{
+	if ((uint8)DogChoice < DogChoices.Num()) {
+		if (PPlayerState) {
+			if (PPlayerState->PlayerOwnsAsset(DogChoice)) {
+				SelectedDogChoice = DogChoice;
+				PPlayerState->SetLastSelected(DogChoice);
+				PPlayerState->SaveGame();
+			}
+		}
+	}
+}
+
 bool APCustomizationManager::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 {
 	if (PPlayerState) {
@@ -61,17 +72,18 @@ int32 APCustomizationManager::GetCost(EUmbrellaPattern UmbrellaPattern)
 	return 0;
 }
 
+TSubclassOf<class APPuppyCharacter> APCustomizationManager::GetDogChoice()
+{
+	if ((int32)SelectedDogChoice < DogChoices.Num() && DogChoices.Num() > 0) {
+		return DogChoices[(int32)SelectedDogChoice];
+	}
+	return nullptr;
+}
+
 // Called when the game starts or when spawned
 void APCustomizationManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void APCustomizationManager::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 

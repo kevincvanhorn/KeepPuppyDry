@@ -28,6 +28,7 @@ APPlayerState::APPlayerState() {
 	bShowAdOnNextRequest = false;
 	TriesBetweenInterstitialAds = 1;
 	LastSelected_UmbrellaPattern = -1;
+	LastSelected_Dog = 0;
 	SessionStartScore = 0;
 }
 
@@ -45,7 +46,9 @@ bool APPlayerState::LoadGame()
 		//bShowTutorial =  LoadedGame->bShowTutorial;
 		UmbrellaPatterns.Empty();
 		UmbrellaPatterns = LoadedGame->UPatterns;
+		DogChoices = LoadedGame->DogChoices;
 		LastSelected_UmbrellaPattern = LoadedGame->LS_UmbrellaPattern;
+		LastSelected_Dog = LoadedGame->LS_Dog;
 		
 		if (GetNumSessionLosses() > 0) bShowTutorial = false;
 
@@ -57,7 +60,8 @@ bool APPlayerState::LoadGame()
 
 bool APPlayerState::SaveGame()
 {
-	return UPSaveGame::SynchronousSave(PScore, bShowTutorial, UmbrellaPatterns, LastSelected_UmbrellaPattern);
+	return UPSaveGame::SynchronousSave(PScore, bShowTutorial, UmbrellaPatterns, LastSelected_UmbrellaPattern, 
+		DogChoices, LastSelected_Dog);
 }
 
 bool APPlayerState::PlayerOwnsAsset(EUmbrellaPattern Pattern)
@@ -65,11 +69,27 @@ bool APPlayerState::PlayerOwnsAsset(EUmbrellaPattern Pattern)
 	return UmbrellaPatterns.Contains((uint8)Pattern);
 }
 
+bool APPlayerState::PlayerOwnsAsset(EDogChoice DogChoice)
+{
+	return DogChoices.Contains((uint8)DogChoice);
+}
+
 bool APPlayerState::BuyAsset(EUmbrellaPattern UmbrellaPattern, int32 Cost)
 {
 	if (!PlayerOwnsAsset(UmbrellaPattern) && bCanAffordAsset(Cost)) {
 		PScore = PScore - Cost;
 		UmbrellaPatterns.Add((uint8)UmbrellaPattern);
+		SaveGame();
+		return true;
+	}
+	return false;
+}
+
+bool APPlayerState::BuyAsset(EDogChoice DogChoice, int32 Cost)
+{
+	if (!PlayerOwnsAsset(DogChoice) && bCanAffordAsset(Cost)) {
+		PScore = PScore - Cost;
+		DogChoices.Add((uint8)DogChoice);
 		SaveGame();
 		return true;
 	}
@@ -84,6 +104,11 @@ bool APPlayerState::bCanAffordAsset(int32 Cost)
 void APPlayerState::SetLastSelected(EUmbrellaPattern UmbrellaPattern)
 {
 	LastSelected_UmbrellaPattern = (int32)UmbrellaPattern;
+}
+
+void APPlayerState::SetLastSelected(EDogChoice DogChoice)
+{
+	LastSelected_Dog = (int32)DogChoice;
 }
 
 void APPlayerState::OnGameStart()

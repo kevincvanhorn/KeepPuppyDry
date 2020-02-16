@@ -12,7 +12,14 @@ enum class EUmbrellaPattern : uint8
 	EHearts 	UMETA(DisplayName = "Hearts"),
 	EGiraffe 	UMETA(DisplayName = "Giraffe"),
 	EZebra		UMETA(DisplayName = "Zebra"),
-	ETiger		UMETA(DisplayName = "Tiger")
+	ETiger		UMETA(DisplayName = "Tiger"),
+};
+
+UENUM(BlueprintType)
+enum class EDogChoice : uint8
+{
+	EDefault 	UMETA(DisplayName = "Default"),
+	EPug 	UMETA(DisplayName = "Pug"),
 };
 
 USTRUCT(BlueprintType)
@@ -53,9 +60,15 @@ public:
 		void SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
 	UFUNCTION(BlueprintCallable)
+		void SelectDogChoice(EDogChoice DogChoice);
+
+	UFUNCTION(BlueprintCallable)
 		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
 	int32 GetCost(EUmbrellaPattern UmbrellaPattern);
+
+	UFUNCTION(BlueprintCallable)
+		TSubclassOf<class APPuppyCharacter> GetDogChoice();
 
 protected:
 	// Called when the game starts or when spawned
@@ -64,14 +77,15 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<FUmbrellaMaterials> UmbrellaMaterials;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<TSubclassOf<class APPuppyCharacter>> DogChoices;
+
 	class APUmbrella* Umbrella;
 
 	class UStaticMeshComponent* UmbrellaMeshUI;
 
 	class APPlayerState* PPlayerState;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+private:
+	EDogChoice SelectedDogChoice;
 };

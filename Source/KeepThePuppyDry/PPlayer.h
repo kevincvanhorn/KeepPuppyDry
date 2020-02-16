@@ -176,4 +176,12 @@ private:
 
 	UFUNCTION()
 		void UpdateCameraZoom();
+
+	//-----
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		FTransform PuppyTransform;
+
+private:
+	void SpawnPuppy();
 };
