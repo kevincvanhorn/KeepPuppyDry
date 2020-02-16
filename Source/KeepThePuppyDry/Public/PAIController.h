@@ -41,6 +41,8 @@ class KEEPTHEPUPPYDRY_API APAIController : public AAIController
 public:
 	APAIController();
 
+	void SetPuppy(class APPuppyCharacter* PuppyIn);
+
 protected:
 	UFUNCTION()
 		void OnGameTutorial();

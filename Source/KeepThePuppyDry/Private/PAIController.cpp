@@ -19,6 +19,12 @@ APAIController::APAIController() {
 	bMovedLastAction = true; // enable sitting at beginning
 }
 
+void APAIController::SetPuppy(APPuppyCharacter* PuppyIn)
+{
+	Puppy = PuppyIn;
+	//UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation
+}
+
 void APAIController::OnGameTutorial()
 {
 	UPSwipeDelegates::PuppySitDelegate.Broadcast(); // Update Animation

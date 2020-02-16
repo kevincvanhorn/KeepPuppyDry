@@ -83,7 +83,6 @@ void APPlayer::OnGameTutorial() {
 		PUserWidget->UpdateHealth(PPlayerState->GetHealth());
 		PUserWidget->UpdateScore(PPlayerState->GetScore());
 	}
-	SpawnPuppy();
 
 	this->SetActorTickEnabled(false);
 }
@@ -152,6 +151,8 @@ void APPlayer::BeginPlay()
 	if (SpringArm) {
 		InZoomFactor = SpringArm->TargetArmLength;
 	}
+
+	SpawnPuppy();
 }
 
 void APPlayer::PostBeginPlay()

@@ -23,6 +23,8 @@ void UPAnimInstance::NativeInitializeAnimation()
 	UPSwipeDelegates::PuppySitDelegate.AddUObject(this, &UPAnimInstance::OnPuppySit);
 	UPSwipeDelegates::PuppyStandDelegate.AddUObject(this, &UPAnimInstance::OnPuppyStand);
 	UPSwipeDelegates::PostBeginPlayDelegate.AddUObject(this, &UPAnimInstance::PostBeginPlay);
+
+	//PostBeginPlay();
 }
 
 void UPAnimInstance::PostBeginPlay()

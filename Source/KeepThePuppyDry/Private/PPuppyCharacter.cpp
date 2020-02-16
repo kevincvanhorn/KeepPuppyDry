@@ -4,6 +4,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "PSwipeDelegates.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "PAIController.h"
 
 // Sets default values
 APPuppyCharacter::APPuppyCharacter()
@@ -22,8 +23,13 @@ APPuppyCharacter::APPuppyCharacter()
 void APPuppyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
 	MovementComponent = GetCharacterMovement();
+
+
+	APAIController* PController = (APAIController*)Controller;
+	if (PController) {
+		PController->SetPuppy(this);
+	}
 }
 
 
