@@ -86,6 +86,8 @@ public:
 
 	int32 GetNumSessionLosses() const { return NumSessionLosses; }
 
+	bool bGameServicesActivated;
+
 private:
 	int32 NumSessionLosses;
 

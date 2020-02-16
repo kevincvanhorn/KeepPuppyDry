@@ -23,11 +23,13 @@ void UPMainMenuWidget::NativeConstruct() {
 
 	bTutorialInProgress = false;
 	bVolumeOn = true;
+	bGameServicesActivated = false;
 
 	bSkipMenus = false;
 	PGameInstance = (UPGameInstance*)UGameplayStatics::GetGameInstance(GetWorld());
 	if (PGameInstance) {
 		bSkipMenus = PGameInstance->ShouldSkipToGameplay();
+		bGameServicesActivated = PGameInstance->bGameServicesActivated;
 	}
 
 	if (bSkipMenus) {
@@ -93,6 +95,14 @@ void UPMainMenuWidget::UpdateScore(int32 ScoreIn)
 	if (ScoreWidget_Shop) {
 		ScoreWidget_Shop->SetText(FText::AsNumber(ScoreIn));
 		this->OnUpdateScore_Shop();
+	}
+}
+
+void UPMainMenuWidget::OnActivateGameServices()
+{
+	if (PGameInstance) {
+		bGameServicesActivated = true;
+		PGameInstance->bGameServicesActivated = true;
 	}
 }
 

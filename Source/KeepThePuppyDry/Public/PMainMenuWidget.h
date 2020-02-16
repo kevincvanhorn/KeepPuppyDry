@@ -35,6 +35,12 @@ public:
 
 	void UpdateScore(int32 ScoreIn);
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		bool bGameServicesActivated;
+
+	UFUNCTION(BlueprintCallable)
+		void OnActivateGameServices();
+
 protected:
 	UFUNCTION()
 		void OnGameOver();

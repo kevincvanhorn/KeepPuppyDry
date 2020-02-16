@@ -12,6 +12,8 @@ UPGameInstance::UPGameInstance() {
 	NumSessionLosses = 0;
 	GlobalMusicVolume = 1.0f;
 	GlobalSFXVolume = 1.0f;
+
+	bGameServicesActivated = false;
 }
 
 void UPGameInstance::Init()
