@@ -31,6 +31,7 @@ public:
 	DECLARE_MULTICAST_DELEGATE(FLevelEventDelegate);
 
 	static FLevelEventDelegate PostBeginPlayDelegate;
+	static FLevelEventDelegate PostSpawnPuppyDelegate;
 
 	static FLevelEventDelegate PuppySitDelegate;
 	static FLevelEventDelegate PuppyStandDelegate;

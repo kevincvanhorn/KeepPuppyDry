@@ -18,6 +18,7 @@ UPSwipeDelegates::FTouchDelegate UPSwipeDelegates::SingleTapDelegate;
 UPSwipeDelegates::FTouchDelegate UPSwipeDelegates::DoubleTapDelegate;
 
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PostBeginPlayDelegate;
+UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PostSpawnPuppyDelegate;
 
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppySitDelegate;
 UPSwipeDelegates::FLevelEventDelegate UPSwipeDelegates::PuppyStandDelegate;

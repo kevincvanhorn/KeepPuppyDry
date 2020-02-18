@@ -84,6 +84,8 @@ void APPlayer::OnGameTutorial() {
 		PUserWidget->UpdateScore(PPlayerState->GetScore());
 	}
 
+	SpawnPuppy();
+
 	this->SetActorTickEnabled(false);
 }
 
@@ -152,7 +154,7 @@ void APPlayer::BeginPlay()
 		InZoomFactor = SpringArm->TargetArmLength;
 	}
 
-	SpawnPuppy();
+	//SpawnPuppy();
 }
 
 void APPlayer::PostBeginPlay()
@@ -288,10 +290,14 @@ void APPlayer::SpawnPuppy()
 {
 	if (CustomizationManager) {
 		TSubclassOf<APPuppyCharacter> PuppyClass = CustomizationManager->GetDogChoice();
+		APPuppyCharacter* SpawnedPuppy = nullptr;
 		if (PuppyClass) {
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			APPuppyCharacter* PuppySpawn = (APPuppyCharacter*)GetWorld()->SpawnActor<APPuppyCharacter>(PuppyClass, PuppyTransform, SpawnParams);
+			SpawnedPuppy = (APPuppyCharacter*)GetWorld()->SpawnActor<APPuppyCharacter>(PuppyClass, PuppyTransform, SpawnParams);
+		}
+		if (SpawnedPuppy) {
+			UPSwipeDelegates::PostSpawnPuppyDelegate.Broadcast();
 		}
 	}
 }

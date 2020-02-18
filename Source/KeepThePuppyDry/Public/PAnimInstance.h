@@ -41,7 +41,7 @@ protected:
 		void OnPuppyStand();
 
 	UFUNCTION()
-		void PostBeginPlay();
+		void PostSpawnPuppy();
 
 private:
 	float MaxMoveSpeed;

@@ -22,12 +22,12 @@ void UPAnimInstance::NativeInitializeAnimation()
 
 	UPSwipeDelegates::PuppySitDelegate.AddUObject(this, &UPAnimInstance::OnPuppySit);
 	UPSwipeDelegates::PuppyStandDelegate.AddUObject(this, &UPAnimInstance::OnPuppyStand);
-	UPSwipeDelegates::PostBeginPlayDelegate.AddUObject(this, &UPAnimInstance::PostBeginPlay);
+	UPSwipeDelegates::PostSpawnPuppyDelegate.AddUObject(this, &UPAnimInstance::PostSpawnPuppy);
 
 	//PostBeginPlay();
 }
 
-void UPAnimInstance::PostBeginPlay()
+void UPAnimInstance::PostSpawnPuppy()
 {
 	if (Puppy) {
 		UCharacterMovementComponent* MoveComp = Puppy->GetCharacterMovement();
