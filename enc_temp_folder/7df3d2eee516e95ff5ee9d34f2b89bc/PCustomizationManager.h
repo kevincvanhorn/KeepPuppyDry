@@ -52,7 +52,7 @@ public:
 	// Sets default values for this actor's properties
 	APCustomizationManager();
 
-	void PInit(class APUmbrella* UmbrellaIn, class UStaticMeshComponent* UIMesh, class USkeletalMeshComponent* UIPuppy);
+	void PInit(class APUmbrella* UmbrellaIn, class UStaticMeshComponent* UIMesh);
 
 	void SetPPlayerState(class APPlayerState* PPlayerStateIn) { PPlayerState = PPlayerStateIn; }
 
@@ -83,8 +83,6 @@ protected:
 	class APUmbrella* Umbrella;
 
 	class UStaticMeshComponent* UmbrellaMeshUI;
-
-	class USkeletalMeshComponent* PuppyMeshUI;
 
 	class APPlayerState* PPlayerState;
 

@@ -5,8 +5,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "PUmbrella.h"
 #include "PPlayerState.h"
-#include "PPuppyCharacter.h"
-#include "Components/SkeletalMeshComponent.h"
 
 // Sets default values
 APCustomizationManager::APCustomizationManager()
@@ -14,11 +12,10 @@ APCustomizationManager::APCustomizationManager()
 	SelectedDogChoice = EDogChoice::EDefault;
 }
 
-void APCustomizationManager::PInit(APUmbrella* UmbrellaIn, UStaticMeshComponent* UIMesh, class USkeletalMeshComponent* UIPuppy)
+void APCustomizationManager::PInit(APUmbrella* UmbrellaIn, UStaticMeshComponent* UIMesh)
 {
 	Umbrella = UmbrellaIn;
 	UmbrellaMeshUI = UIMesh;
-	PuppyMeshUI = UIPuppy;
 }
 
 void APCustomizationManager::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
@@ -51,12 +48,6 @@ void APCustomizationManager::SelectDogChoice(EDogChoice DogChoice)
 				SelectedDogChoice = DogChoice;
 				PPlayerState->SetLastSelected(DogChoice);
 				PPlayerState->SaveGame();
-			}
-		}
-		if (PuppyMeshUI) {
-			if ((uint8)SelectedDogChoice < DogChoices.Num()) {
-				USkeletalMesh* Mesh = DogChoices[(uint8)SelectedDogChoice].GetDefaultObject()->GetMesh()->SkeletalMesh;
-				PuppyMeshUI->SetSkeletalMesh(Mesh);
 			}
 		}
 	}

@@ -20,7 +20,6 @@
 #include "PMainMenuWidget.h"
 #include "TimerManager.h"
 #include "PPuppyCharacter.h"
-#include "PPreviewPuppy.h"
 
 // Sets default values
 APPlayer::APPlayer()
@@ -144,14 +143,10 @@ void APPlayer::BeginPlay()
 		CustomizationManager = GetWorld()->SpawnActor<APCustomizationManager>(CustomizationManagerClass);
 		if (CustomizationManager) {
 			UStaticMeshComponent* UIMesh = nullptr;
-			USkeletalMeshComponent* UIPuppy = nullptr;
 			if (UmbrellaMeshUIActor) {
 				UIMesh = UmbrellaMeshUIActor->GetStaticMeshComponent();
 			}
-			if (PreviewPuppy) {
-				UIPuppy = PreviewPuppy->GetSkeletalMeshComponent();
-			}
-			CustomizationManager->PInit(Umbrella, UIMesh, UIPuppy);
+			CustomizationManager->PInit(Umbrella, UIMesh);
 		}
 	}
 

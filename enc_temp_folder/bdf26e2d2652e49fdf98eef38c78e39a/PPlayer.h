@@ -103,9 +103,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		class AStaticMeshActor* UmbrellaMeshUIActor;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		class APPreviewPuppy* PreviewPuppy;
-
 private:
 	FVector StartLoc;
 
