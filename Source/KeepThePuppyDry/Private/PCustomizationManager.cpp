@@ -54,8 +54,9 @@ void APCustomizationManager::SelectDogChoice(EDogChoice DogChoice)
 			}
 		}
 		if (PuppyMeshUI) {
-			if ((uint8)SelectedDogChoice < DogChoices.Num()) {
-				USkeletalMesh* Mesh = DogChoices[(uint8)SelectedDogChoice].GetDefaultObject()->GetMesh()->SkeletalMesh;
+			if ((uint8)DogChoice < DogSkeletalMeshes.Num()) {
+				//USkeletalMesh* Mesh = DogChoices[(uint8)SelectedDogChoice].GetDefaultObject()->GetMesh()->SkeletalMesh;
+				USkeletalMesh* Mesh = DogSkeletalMeshes[(uint8)DogChoice];
 				PuppyMeshUI->SetSkeletalMesh(Mesh);
 			}
 		}
@@ -73,10 +74,29 @@ bool APCustomizationManager::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern
 	return false;
 }
 
+bool APCustomizationManager::BuyDog(EDogChoice DogChoice)
+{
+	if (PPlayerState) {
+		if ((uint8)DogChoice < DogCosts.Num()) {
+			int32 Cost = DogCosts[(uint8)DogChoice];
+			return PPlayerState->BuyAsset(DogChoice, Cost);
+		}
+	}
+	return false;
+}
+
 int32 APCustomizationManager::GetCost(EUmbrellaPattern UmbrellaPattern)
 {
 	if ((uint8)UmbrellaPattern < UmbrellaMaterials.Num()) {
 		return UmbrellaMaterials[(uint8)UmbrellaPattern].Cost;
+	}
+	return 0;
+}
+
+int32 APCustomizationManager::GetCost(EDogChoice DogChoice)
+{
+	if ((uint8)DogChoice < DogCosts.Num()) {
+		return DogCosts[(uint8)DogChoice];
 	}
 	return 0;
 }

@@ -65,7 +65,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
+	UFUNCTION(BlueprintCallable)
+		bool BuyDog(EDogChoice DogChoice);
+
 	int32 GetCost(EUmbrellaPattern UmbrellaPattern);
+	int32 GetCost(EDogChoice DogChoice);
 
 	UFUNCTION(BlueprintCallable)
 		TSubclassOf<class APPuppyCharacter> GetDogChoice();
@@ -78,7 +82,13 @@ protected:
 		TArray<FUmbrellaMaterials> UmbrellaMaterials;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<int32> DogCosts;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<TSubclassOf<class APPuppyCharacter>> DogChoices;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<USkeletalMesh*> DogSkeletalMeshes;
 
 	class APUmbrella* Umbrella;
 

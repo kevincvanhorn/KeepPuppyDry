@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
+	UFUNCTION(BlueprintCallable)
+		void SelectDogChoice(EDogChoice DogChoice);
+
 	void SetCustomizationManager(class APCustomizationManager* ManagerIn) { CustomizationManager = ManagerIn; }
 
 	void UpdateScore(int32 ScoreIn);
@@ -170,7 +173,13 @@ protected:
 		bool BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern);
 
 	UFUNCTION(BlueprintCallable)
+		bool BuyDog(EDogChoice DogChoice);
+
+	UFUNCTION(BlueprintCallable)
 		TArray<EUmbrellaPattern> GetLoadedUmbrellaPatterns();
+
+	UFUNCTION(BlueprintCallable)
+		TArray<EDogChoice> GetLoadedDogs();
 
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 		class UTextBlock* ShoppingCostText;

@@ -114,6 +114,14 @@ void UPMainMenuWidget::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 	}
 }
 
+void UPMainMenuWidget::SelectDogChoice(EDogChoice DogChoice)
+{
+	if (CustomizationManager) {
+		CustomizationManager->SelectDogChoice(DogChoice);
+		ShoppingCostText->SetText(FText::AsNumber(CustomizationManager->GetCost(DogChoice)));
+	}
+}
+
 void UPMainMenuWidget::OnGameOver()
 {
 	if (PGameInstance) {
@@ -250,9 +258,21 @@ bool UPMainMenuWidget::OnMuteButtonPressedBP()
 bool UPMainMenuWidget::BuyUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 {
 	bool bBuySuccess = false;
-	UE_LOG(LogTemp, Warning, TEXT("Message"));
 	if (CustomizationManager) {
 		bBuySuccess = CustomizationManager->BuyUmbrellaPattern(UmbrellaPattern);
+		if (bBuySuccess && PPlayerState) {
+			UpdateScore(PPlayerState->GetScore());
+		}
+	}
+
+	return bBuySuccess;
+}
+
+bool UPMainMenuWidget::BuyDog(EDogChoice DogChoice)
+{
+	bool bBuySuccess = false;
+	if (CustomizationManager) {
+		bBuySuccess = CustomizationManager->BuyDog(DogChoice);
 		if (bBuySuccess && PPlayerState) {
 			UpdateScore(PPlayerState->GetScore());
 		}
@@ -270,4 +290,15 @@ TArray<EUmbrellaPattern> UPMainMenuWidget::GetLoadedUmbrellaPatterns()
 		}
 	}
 	return Patterns;
+}
+
+TArray<EDogChoice> UPMainMenuWidget::GetLoadedDogs()
+{
+	TArray<EDogChoice> Dogs;
+	if (PPlayerState) {
+		for (uint8 Dog : PPlayerState->GetDogChoices()) {
+			Dogs.Add((EDogChoice)Dog);
+		}
+	}
+	return Dogs;
 }
