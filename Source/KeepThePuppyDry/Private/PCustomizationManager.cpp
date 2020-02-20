@@ -59,6 +59,11 @@ void APCustomizationManager::SelectDogChoice(EDogChoice DogChoice)
 				USkeletalMesh* Mesh = DogSkeletalMeshes[(uint8)DogChoice];
 				PuppyMeshUI->SetSkeletalMesh(Mesh);
 			}
+			if ((uint8)DogChoice < DogAnimations.Num()) {
+				UAnimationAsset* DogAnimation = DogAnimations[(uint8)DogChoice];
+				//PuppyMeshUI->SetAnimation(DogAnimation);
+				//PuppyMeshUI->PlayAnimation(DogAnimation, true);
+			}
 		}
 	}
 }

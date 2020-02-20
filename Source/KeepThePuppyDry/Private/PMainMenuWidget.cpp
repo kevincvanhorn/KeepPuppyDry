@@ -117,8 +117,8 @@ void UPMainMenuWidget::SelectUmbrellaPattern(EUmbrellaPattern UmbrellaPattern)
 void UPMainMenuWidget::SelectDogChoice(EDogChoice DogChoice)
 {
 	if (CustomizationManager) {
-		CustomizationManager->SelectDogChoice(DogChoice);
 		ShoppingCostText->SetText(FText::AsNumber(CustomizationManager->GetCost(DogChoice)));
+		CustomizationManager->SelectDogChoice(DogChoice);
 	}
 }
 

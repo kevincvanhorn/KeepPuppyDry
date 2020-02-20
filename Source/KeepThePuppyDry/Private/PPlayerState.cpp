@@ -49,6 +49,10 @@ bool APPlayerState::LoadGame()
 		DogChoices = LoadedGame->DogChoices;
 		LastSelected_UmbrellaPattern = LoadedGame->LS_UmbrellaPattern;
 		LastSelected_Dog = LoadedGame->LS_Dog;
+
+		if (!PlayerOwnsAsset(EDogChoice::EDefault)) {
+			DogChoices.Add((uint8)EDogChoice::EDefault);
+		}
 		
 		if (GetNumSessionLosses() > 0) bShowTutorial = false;
 

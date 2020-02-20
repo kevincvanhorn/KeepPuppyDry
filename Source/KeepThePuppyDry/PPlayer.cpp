@@ -168,6 +168,9 @@ void APPlayer::PostBeginPlay()
 		if (PPlayerState->LastSelected_UmbrellaPattern >= 0) { // -1 is none
 			CustomizationManager->SelectUmbrellaPattern((EUmbrellaPattern)PPlayerState->LastSelected_UmbrellaPattern);
 		}
+		if (PPlayerState->LastSelected_Dog >= 0) {
+			CustomizationManager->SelectDogChoice((EDogChoice)PPlayerState->LastSelected_Dog);
+		}
 	}
 	if (PMenuWidget) {
 		PMenuWidget->SetCustomizationManager(CustomizationManager);

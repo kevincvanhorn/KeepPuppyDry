@@ -90,6 +90,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 		TArray<USkeletalMesh*> DogSkeletalMeshes;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+		TArray<UAnimationAsset*> DogAnimations;
+
 	class APUmbrella* Umbrella;
 
 	class UStaticMeshComponent* UmbrellaMeshUI;
