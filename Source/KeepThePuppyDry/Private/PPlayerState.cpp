@@ -10,7 +10,7 @@
 #include "PGameInstance.h"
 #include "PSwipeDelegates.h"
 
-//#define IOS
+#define IOS
 
 #ifdef IOS
 #include "EasyAdsLibrary.h"
@@ -125,6 +125,7 @@ void APPlayerState::ResetLocalGameSave()
 	PScore = 0;
 	bShowTutorial =  true;
 	UmbrellaPatterns.Empty();
+	DogChoices.Empty();
 	SaveGame();
 }
 
