@@ -10,7 +10,7 @@
 #include "PGameInstance.h"
 #include "PSwipeDelegates.h"
 
-#define IOS
+//#define IOS
 
 #ifdef IOS
 #include "EasyAdsLibrary.h"

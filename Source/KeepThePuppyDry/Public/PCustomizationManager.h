@@ -88,10 +88,10 @@ protected:
 		TArray<TSubclassOf<class APPuppyCharacter>> DogChoices;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		TArray<USkeletalMesh*> DogSkeletalMeshes;
+		TArray<class USkeletalMesh*> DogSkeletalMeshes;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-		TArray<UAnimationAsset*> DogAnimations;
+		TArray<class UAnimationAsset*> DogAnimations;
 
 	class APUmbrella* Umbrella;
 

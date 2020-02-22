@@ -7,6 +7,8 @@
 #include "PPlayerState.h"
 #include "PPuppyCharacter.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "Animation/AnimationAsset.h"
 
 // Sets default values
 APCustomizationManager::APCustomizationManager()
